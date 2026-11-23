@@ -15,10 +15,63 @@ You start with **€500, 5 days, 100 energy and 50 happiness**.
    5. **Night.** You pay for your bed and recover energy. If you can't afford it, you sleep on a bench. Going to bed exhausted costs happiness.
 
    If energy or happiness hits 0, the holiday ends immediately in **Tourist Disaster**.
-3. **Ending.** The first matching ending in this order wins: Tourist Disaster, Croatia Legend, Island Explorer, Local Insider, Budget Master, Fjaka Champion, Happy Holidaymaker.
+3. **Ending.** The first matching ending wins (ten endings; see below).
 4. **Score screen.** It shows a transparent breakdown, achievements, the tips found and a share card (Story 9:16 or Post 4:5).
 
 Tracked throughout and always visible in the HUD: money, energy, happiness, adventure ★, local insider 🗝️, tips found, the day and time of day (morning, afternoon, evening), and destination progress (7 dots).
+
+## Personality, story memory and consequences
+
+**Duje, the narrator:** a witty local friend from Split, named after Sveti Duje, the city's patron saint (a real and very common Split name). He voices every prompt, reacts to every decision (a test enforces that every choice has a Duje line or a tip), and says goodnight differently depending on your base and your day. He's fiction, and his tips link to real Local Insider cards.
+
+**Story memory:** text fields can depend on the state, so the story remembers you:
+- the day-2 prompt mentions your fish invoice or the wedding aunts;
+- return visits get new lines;
+- event stories change with your base (Marija, Luka or Igor).
+
+**Consequences come back.** Some choices set flags that trigger callback events later, and pending callbacks take priority over ordinary events, so bad decisions reliably return:
+
+| Earlier choice | Later in the holiday |
+|---|---|
+| Point at the three-kilo fish | Waiters along the coast recognise you, which can lead to the *Three-Kilo Fish Legend* ending |
+| Squeeze the rental car through a Roman lane | The rental company calls about the mirror (pay, charm them in Croatian, or blame a goat) |
+| Order peka for tomorrow | Your peka is ready, which is awkward if you're now on another island |
+| Dance at the wedding | The aunt finds you, leading to a "small lunch" for 31 people and the *Adopted by Dalmatia* ending |
+| Ignore the sunburn | The backpack strap of doom (pharmacy or towel cape) |
+| Step on a sea urchin | The long staircase |
+| Board the party boat | The morning after (burek cure or sleep till noon) |
+| Listen to the pirate grandpa | His nephew on the ferry, then a secret cove from the napkin map |
+| Your base | Marija's cousin network, Luka the busker, or Igor's "exclusive experience" |
+
+**Hidden discoveries:** rare events such as the beach with no name, match night for Hajduk, the cathedral tour with "the other Duje" and the old mills upriver from Omiš. They're marked 🔎.
+
+**When you're broke,** the important events have their own funny broke outcome (sympathy sardines, a mirror IOU, free peka in foil) instead of a generic one.
+
+## Endings and the holiday report card
+
+There are ten endings: Tourist Disaster, Croatia Legend, **Adopted by Dalmatia**, **The Three-Kilo Fish Legend**, **Professional Ferry Hostage**, Island Explorer, Local Insider, Budget Master, Fjaka Champion and Happy Holidaymaker.
+
+The end screen and share card lead with the funny part:
+- Duje's one-line **verdict**;
+- your top three **moments**, ranked from your own choices (e.g. "Lost a wing mirror to a 1,700-year-old wall", "Blamed a broken mirror on a goat (and was customer #38 to do so)");
+- fun stats (coffee hours, rakija toasts, hidden places).
+
+Every run produces a different story to share.
+
+## Play-test log
+
+Seven scripted playthroughs (`node scripts/adventure-transcript.mjs <seed> <first|last|cheap|fun|local|bad|car|island>`) were read in full before and after this pass.
+
+| Problem found | Fix |
+|---|---|
+| Nothing referenced earlier choices; Marija and the guitarist vanished | Callback events, state-aware prompts, base storylines |
+| Bad decisions never came back (in 2 of 5 runs) | Pending consequences take priority over random events |
+| "Decline", "cheer from the side" and "rush off" did nothing | Every choice now has a trade-off plus a Duje reaction or a tip |
+| Broke players saw a generic "improvise" during big payoffs | Event-specific broke outcomes |
+| Broke on a travel day produced a blank route | Fixed: you stay where you are |
+| Bus-ticket tip awarded twice; narrator lines repeated every night | De-duplicated; night lines vary by base, day and events |
+| Careful players got one highlight; picigin dominated every report | Good choices leave moments too; ranks rebalanced |
+| Two narrator jokes stated wrong facts (Napoleon visiting; "Pakleni = hellish") | Corrected or removed |
 
 ## Daily challenge
 
@@ -26,7 +79,7 @@ The daily seed is `daily-YYYY-MM-DD`, using the same puzzle day as the original 
 
 ## Local Insider tips
 
-There are 47 collectible cards in 7 categories: Local Secrets, Tourist Traps, Dalmatian Life, Food & Drinks, Island Life, Survival Mode and Hidden Croatia. Every card has the tip, **why it matters**, and an accuracy label:
+There are 56 collectible cards in 7 categories: Local Secrets, Tourist Traps, Dalmatian Life, Food & Drinks, Island Life, Survival Mode and Hidden Croatia. Every card has the tip, **why it matters**, and an accuracy label:
 
 | Label | Meaning | Rules |
 |---|---|---|

@@ -9,6 +9,8 @@ import { renderAdventureCard, buildAdventureShareText } from '../services/shareC
 import { shareImage, copyText, FORMATS } from '../../services/shareImage.js';
 import { SITE_URL } from '../../config.js';
 import { useCountUp } from '../../ui/hooks.js';
+import { reportCard } from '../engine/report.js';
+import Duje from './Duje.jsx';
 
 const PART_LABEL = {
   happiness: '🙂 Happiness × 4',
@@ -23,6 +25,7 @@ const PART_LABEL = {
 export default function EndingScreen({ state, daily, progress, onAgain, onCollection, onMenu }) {
   const ending = ENDINGS.find((e) => e.id === state.ending);
   const score = useMemo(() => computeScore(state), [state]);
+  const report = useMemo(() => reportCard(state), [state]);
   const shown = useCountUp(score.total, { duration: 1400, delay: 300 });
   const [format, setFormat] = useState('story');
   const [preview, setPreview] = useState({ url: '', blob: null, format: '' });
@@ -75,6 +78,28 @@ export default function EndingScreen({ state, daily, progress, onAgain, onCollec
       <section className="adv-card">
         <p className="adv-label">Story</p>
         <p className="adv-story__text">{ending.epilogue}</p>
+      </section>
+
+      <section className="adv-card adv-report" data-testid="adv-report">
+        <h2 className="adv-h2">Holiday report card</h2>
+        <Duje testId="adv-verdict">“{report.verdict}”</Duje>
+        <ol className="adv-highlights" data-testid="adv-highlights">
+          {report.highlights.map((h) => (
+            <li key={h}>{h}</li>
+          ))}
+        </ol>
+        {report.stats.length > 0 && (
+          <ul className="adv-funstats">
+            {report.stats.map((x) => (
+              <li key={x.label}>
+                <b>
+                  {x.icon} {x.value}
+                </b>
+                <span>{x.label}</span>
+              </li>
+            ))}
+          </ul>
+        )}
       </section>
 
       <section className="adv-card">

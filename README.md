@@ -12,7 +12,7 @@ You pick 4 of 8 experiences, drag them into order, and get a score out of 100 th
 
 ## New: Croatia Adventure (prototype)
 
-A five-day narrative holiday game with humour, branching choices, seven endings, achievements and 47 collectible **real-world Local Insider tips**. Open it at `/#adventure`, or from the card on the puzzle's intro. It's a separate mode, and the puzzle below is unchanged. Design, rules and accuracy policy: [docs/ADVENTURE.md](docs/ADVENTURE.md).
+A five-day narrative holiday game with humour, branching choices, ten endings, a narrator who remembers your mistakes, achievements and 56 collectible **real-world Local Insider tips**. Open it at `/#adventure`, or from the card on the puzzle's intro. It's a separate mode, and the puzzle below is unchanged. Design, rules and accuracy policy: [docs/ADVENTURE.md](docs/ADVENTURE.md).
 
 ## Quick start
 

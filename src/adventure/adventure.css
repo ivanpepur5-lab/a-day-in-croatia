@@ -887,3 +887,140 @@
 @keyframes toastSlide {
   from { transform: translateY(12px); opacity: 0; }
 }
+
+/* ─────────── Duje, the narrator */
+.duje {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  animation: cardIn 0.45s var(--ease) both;
+}
+.duje__avatar {
+  flex: none;
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  font-family: var(--serif);
+  font-weight: 700;
+  font-size: 1.1rem;
+  color: var(--ink);
+  background: linear-gradient(145deg, #f3d9b8, var(--sun));
+  box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.15);
+}
+.duje__bubble {
+  position: relative;
+  padding: 10px 14px 12px;
+  border-radius: 4px 18px 18px 18px;
+  background: rgba(243, 217, 184, 0.1);
+  border: 1px solid rgba(243, 217, 184, 0.22);
+}
+.duje__name {
+  display: block;
+  font-size: 0.7rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #f3d9b8;
+  margin-bottom: 2px;
+}
+.duje__name small {
+  font-weight: 600;
+  letter-spacing: 0;
+  text-transform: none;
+  color: var(--adv-muted);
+}
+.duje__bubble p {
+  font-family: var(--serif);
+  font-size: 1.08rem;
+  line-height: 1.45;
+}
+.duje--compact {
+  margin-top: 12px;
+  animation-delay: 0.35s;
+}
+.duje--compact .duje__avatar {
+  width: 30px;
+  height: 30px;
+  font-size: 0.9rem;
+}
+.duje--compact .duje__bubble p {
+  font-size: 0.95rem;
+  font-style: italic;
+}
+.adv-card .duje {
+  margin-bottom: 12px;
+}
+
+/* consequence & discovery markers */
+.adv-label--callback {
+  color: var(--ink);
+  background: var(--sun);
+  border: 0;
+}
+.adv-label--hidden {
+  color: #fff;
+  background: #6f5fb0;
+  border: 0;
+}
+.adv-moment {
+  margin-top: 12px;
+  padding: 8px 12px;
+  border-radius: var(--r-sm);
+  border: 1px dashed rgba(243, 217, 184, 0.4);
+  font-size: 0.82rem;
+  color: #f3d9b8;
+  animation: toastSlide 0.5s var(--ease) both 0.5s;
+}
+
+/* report card */
+.adv-highlights {
+  display: grid;
+  gap: 8px;
+  counter-reset: hl;
+}
+.adv-highlights li {
+  counter-increment: hl;
+  position: relative;
+  padding: 10px 12px 10px 42px;
+  border-radius: var(--r-sm);
+  background: rgba(255, 255, 255, 0.06);
+  font-weight: 700;
+  font-size: 0.92rem;
+}
+.adv-highlights li::before {
+  content: counter(hl);
+  position: absolute;
+  left: 12px;
+  top: 10px;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  font-size: 0.72rem;
+  background: var(--coral);
+  color: #fff;
+}
+.adv-funstats {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 6px;
+  margin-top: 12px;
+  text-align: center;
+}
+.adv-funstats li {
+  padding: 8px 4px;
+  border-radius: var(--r-sm);
+  background: rgba(255, 255, 255, 0.05);
+}
+.adv-funstats b {
+  display: block;
+  font-family: var(--serif);
+  font-size: 1.15rem;
+}
+.adv-funstats span {
+  font-size: 0.66rem;
+  color: var(--adv-muted);
+}

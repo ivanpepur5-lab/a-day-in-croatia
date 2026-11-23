@@ -70,6 +70,8 @@ try {
     check((await page.getByTestId('hud-energy').innerText()) === '100', 'starts with 100 energy');
     check((await page.getByTestId('hud-happiness').innerText()) === '50', 'starts with happiness 50');
 
+    check(await page.getByTestId('adv-prompt').locator('.duje__avatar').isVisible(), 'Duje narrates the prompt');
+    let dujeReactions = 0;
     let decisions = 0;
     let tipsSeen = 0;
     let nights = 0;
@@ -96,15 +98,20 @@ try {
         }
       }
       if (await page.getByTestId('adv-night').count()) nights++;
+      if (await page.getByTestId('adv-duje-reaction').count()) dujeReactions++;
       await page.getByTestId('adv-continue').click();
     }
     check(decisions >= 14 && decisions <= 16, `full five-day loop played (${decisions} decisions)`);
     check(nights === 4, `four nights slept (${nights})`);
     check(tipsSeen >= 5, `local tips revealed during play (${tipsSeen})`);
+    check(dujeReactions >= decisions - 1, `Duje reacts to (almost) every decision (${dujeReactions}/${decisions})`);
 
     await page.getByTestId('adv-ending').waitFor();
     const endingTitle = await page.getByTestId('adv-ending-title').innerText();
     check(endingTitle.length > 3, `reached an ending: ${endingTitle}`);
+    const highlights = await page.getByTestId('adv-highlights').locator('li').count();
+    check(highlights >= 1 && highlights <= 3, `report card shows ${highlights} highlight(s)`);
+    check((await page.getByTestId('adv-verdict').innerText()).length > 20, 'Duje gives a verdict');
     const score = Number(await page.getByTestId('adv-score').getAttribute('data-score'));
     check(score > 0, `final score ${score}`);
     await page.getByTestId('adv-share-preview').waitFor({ timeout: 10000 });
@@ -122,7 +129,9 @@ try {
       const drawn = await page.evaluate(() => window.__canvasText);
       check(!drawn.some((t) => LOCAL.test(t)), 'no localhost on the exported cards');
       check(drawn.includes(endingTitle), 'card shows the ending title');
-      check(!LOCAL.test(await page.getByTestId('adv-share-text').innerText()), 'no localhost in share text');
+      const st = await page.getByTestId('adv-share-text').innerText();
+      check(!LOCAL.test(st), 'no localhost in share text');
+      check(/“.+”/.test(st) && /• /.test(st), 'share text leads with the verdict and highlights');
     }
 
     // overflow

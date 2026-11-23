@@ -61,7 +61,7 @@ These are game values. The app always shows them with “≈” / “est.”, ne
 - **Travel times** for every leg (distance model in `src/engine/travel.js`, not timetables).
 - **Time on site** for every location.
 
-## Croatia Adventure — editorial tips for periodic review (36)
+## Croatia Adventure — editorial tips for periodic review (46)
 
 These tips are general knowledge (culture, language, food, practical habits). They contain no prices, times or schedules (a test enforces this), but a human should re-read them from time to time. Tips with prices or rules use verified sources instead.
 
@@ -103,3 +103,13 @@ These tips are general knowledge (culture, language, food, practical habits). Th
 | Stari Grad Plain | Hidden Croatia | On Hvar, the Stari Grad Plain — an agricultural landscape laid out by ancient Greek colonists — is a UNESCO World Heritage Site. |
 | Lokrum and its peacocks | Hidden Croatia | Lokrum, the wooded island facing Dubrovnik’s old town, is reached by boat from the old harbour — and is famous for its free-roaming peacocks. |
 | The Pelješac Bridge | Hidden Croatia | Since 2022, the Pelješac Bridge connects the Dubrovnik area with the rest of the Croatian mainland, so road traffic no longer has to cross the border at Neum. |
+| Ljekarna = pharmacy | Survival Mode | Look for “ljekarna” and the green cross. Pharmacists are a good first stop for sunburn, insect bites, blisters and sea-urchin mishaps. |
+| The pekara breakfast | Food & Drinks | Bakeries (“pekara”) sell burek, bread and pastries all day. Burek with a cup of drinking yoghurt is a classic quick breakfast. |
+| Ask for “domaće” | Local Secrets | “Domaće” means home-made. Asking for domaće wine, olive oil or rakija in family-run places often gets you the house’s own — and a proud story with it. |
+| Check the “kuver” | Tourist Traps | Some restaurants add a cover charge (“kuver”) for bread and the table setting. It should be listed on the menu — check, or ask before the bread basket arrives. |
+| June and September are the sweet spot | Tourist Traps | Early summer and September usually bring warm sea, long days and far fewer crowds than July and August. |
+| Stock up in the main town | Island Life | Small island villages may have only a shop or two, and not every place has a cash machine. Get cash and supplies in the main town before heading to remote coves. |
+| Plavac mali | Food & Drinks | Plavac mali is Dalmatia’s signature red grape, grown on sunny slopes on islands such as Hvar and on the Pelješac peninsula. |
+| Hajduk is a religion | Dalmatian Life | HNK Hajduk Split is the city’s beloved football club. On match nights the city turns white and blue — and wearing a rival club’s shirt in Split is a very bold life choice. |
+| Sveti Duje | Dalmatian Life | Saint Domnius — Sveti Duje — is Split’s patron saint. His feast day in May (Sudamja) is the city’s biggest celebration, and Duje is a very common Split name. |
+| The castles of Kaštela | Hidden Croatia | Between Split and Trogir lies Kaštela, a string of seaside villages that grew around old fortified castles built along the shore. |

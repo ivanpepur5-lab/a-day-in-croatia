@@ -12,7 +12,7 @@ import {
   START,
 } from '../src/adventure/data/story.js';
 import { TIPS, TIPS_BY_ID, TIP_CATEGORIES } from '../src/adventure/data/tips.js';
-import { newGame, getStep, choose, computeScore, rng, pickEvent, BALANCE } from '../src/adventure/engine/game.js';
+import { newGame, getStep, choose, computeScore, rng, pickEvent, BALANCE, txt } from '../src/adventure/engine/game.js';
 import { loadProgress, collect, recordRun, saveCurrent } from '../src/adventure/services/progress.js';
 import { buildAdventureShareText } from '../src/adventure/services/shareCard.js';
 import TRAVEL_DATA from '../src/data/travel-data.json' with { type: 'json' };
@@ -55,16 +55,27 @@ describe('content', () => {
     expect(START).toMatchObject({ money: 500, energy: 100, happiness: 50, days: 5 });
   });
 
+  // a state in which every story callback has something to talk about
+  const sample = {
+    ...newGame({ seed: 'sample' }),
+    day: 3,
+    location: 'hvar',
+    base: 'apartment',
+    route: ['split', 'trogir', 'hvar'],
+    visited: ['split', 'trogir', 'hvar'],
+    flags: { marija: true, pekaOrdered: true, pekaDay: 2, pekaPlace: 'trogir', bigFish: true, phrases: 1 },
+  };
+
   it('every event offers 2–3 choices, and every choice has a result and consequences', () => {
     for (const e of EVENTS) {
       expect(e.choices.length, e.id).toBeGreaterThanOrEqual(2);
       expect(e.choices.length, e.id).toBeLessThanOrEqual(3);
-      expect(e.story.length).toBeGreaterThan(40);
+      expect(txt(e.story, sample).length, e.id).toBeGreaterThan(40);
     }
     for (const c of allChoices()) {
       const branches = c.chance ? [c.chance.success, c.chance.fail] : [c];
       for (const b of branches) {
-        expect(b.result?.length, c.id).toBeGreaterThan(20);
+        expect(txt(b.result, sample)?.length, c.id).toBeGreaterThan(20);
         expect(Object.keys(b.effects ?? {}).length + Object.keys(b.flags ?? {}).length, `${c.id} has no consequence`).toBeGreaterThan(0);
       }
     }
@@ -197,7 +208,7 @@ describe('engine', () => {
     s = choose(s, 'bus').state;
     s = choose(s, getStep(s).choices.find((c) => c.cost === 0).id).state;
     s = { ...s, money: 10 };
-    const ok = getStep(s).choices.filter((c) => !c.disabled && c.cost === 0);
+    const ok = getStep(s).choices.filter((c) => !c.disabled).sort((a, b) => a.cost - b.cost);
     const r = choose(s, ok[0].id);
     expect(r.outcome.night.rough).toBe(true);
   });
@@ -286,5 +297,93 @@ describe('progress & sharing', () => {
     expect(text).toMatch(/^Croatia Adventure #23/);
     expect(text).toContain('1000 pts');
     expect(text).not.toMatch(/localhost|http/);
+  });
+});
+
+describe('story memory and consequences', () => {
+  /** Force specific choices where available, otherwise take the first affordable one. */
+  function playWith(seed, prefer) {
+    let s = newGame({ seed });
+    const seen = [];
+    for (let i = 0; i < 40 && !s.ended; i++) {
+      const step = getStep(s);
+      const ok = step.choices.filter((c) => !c.disabled);
+      const c = ok.find((x) => prefer.includes(x.id)) ?? ok[0];
+      if (step.phase === 'event') seen.push(step.event.id);
+      s = choose(s, c.id).state;
+    }
+    return { s, seen };
+  }
+
+  it('a bad decision comes back later: the three-kilo fish is remembered along the coast', () => {
+    let hits = 0;
+    for (let i = 0; i < 60; i++) {
+      const { s, seen } = playWith(`fish-${i}`, ['apartment', 'bus', 'palace', 'point-big', 'to-trogir', 'own-it']);
+      if (s.flags.bigFish) {
+        if (seen.includes('fish-reunion')) hits++;
+      }
+    }
+    expect(hits).toBeGreaterThan(0);
+  });
+
+  it('a scraped mirror leads to a call from the rental company', () => {
+    let calls = 0;
+    for (let i = 0; i < 60; i++) {
+      const { s, seen } = playWith(`car-${i}`, ['hostel', 'car', 'push-on', 'goat']);
+      if (s.flags.mirror && seen.includes('mirror-inspection')) calls++;
+    }
+    expect(calls).toBeGreaterThan(0);
+  });
+
+  it('Duje’s lines change with your history', () => {
+    const base = { ...newGame({ seed: 'm' }), day: 2, phase: 'travel', base: 'apartment', location: 'split', visited: ['split'], route: ['split'] };
+    const plain = getStep(base).prompt;
+    const afterFish = getStep({ ...base, flags: { bigFish: true } }).prompt;
+    expect(plain).toMatch(/Marija next door/);
+    expect(afterFish).toMatch(/fish invoice/);
+    expect(afterFish).not.toBe(plain);
+  });
+
+  it('memorable choices land on the holiday report card, ranked', async () => {
+    const { reportCard } = await import('../src/adventure/engine/report.js');
+    const s = {
+      ...newGame({ seed: 'r' }),
+      ended: true,
+      ending: 'fish',
+      moments: [
+        { id: 'urchin', text: 'Stepped on a sea urchin', rank: 6, day: 2 },
+        { id: 'big-fish', text: 'Ordered a fish the size of a toddler', rank: 10, day: 1 },
+        { id: 'graz', text: 'Lost a splash fight', rank: 4, day: 3 },
+        { id: 'rakija', text: 'Accepted rakija', rank: 4, day: 4 },
+      ],
+      flags: { coffeeHours: 3, rakija: 1 },
+    };
+    const r = reportCard(s);
+    expect(r.highlights).toEqual(['Ordered a fish the size of a toddler', 'Stepped on a sea urchin', 'Lost a splash fight']);
+    expect(r.verdict.length).toBeGreaterThan(20);
+    expect(r.stats.find((x) => x.icon === '☕').value).toBe(3);
+  });
+
+  it('every ending has a shareable verdict and every choice that matters has Duje’s reaction or a tip', () => {
+    for (const e of ENDINGS) expect(e.verdict?.length, e.id).toBeGreaterThan(20);
+    const silent = allChoices().filter((c) => !c.duje && !c.tip);
+    expect(silent.map((c) => c.id)).toEqual([]);
+  });
+
+  it('running out of money on a travel day keeps you where you are (no broken route)', () => {
+    let s = newGame({ seed: 'broke-travel' });
+    s = choose(s, 'boutique').state;
+    s = choose(s, 'bus').state;
+    s = choose(s, getStep(s).choices.filter((c) => !c.disabled)[0].id).state;
+    s = choose(s, getStep(s).choices.filter((c) => !c.disabled).sort((a, b) => a.cost - b.cost)[0].id).state;
+    s = { ...s, money: 0 };
+    const step = getStep(s);
+    expect(step.phase).toBe('travel');
+    const broke = step.choices.find((c) => c.id === 'broke');
+    expect(broke).toBeTruthy();
+    const next = choose(s, 'broke').state;
+    expect(next.route.at(-1)).toBe('split');
+    expect(next.route.every(Boolean)).toBe(true);
+    expect(next.phase).toBe('activity');
   });
 });

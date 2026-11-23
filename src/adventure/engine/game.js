@@ -11,6 +11,9 @@ import {
   EVENTS,
   ACHIEVEMENTS,
   ENDINGS,
+  NARRATOR,
+  ARRIVAL,
+  nightLine,
 } from '../data/story.js';
 import { TIPS_BY_ID } from '../data/tips.js';
 
@@ -44,7 +47,8 @@ const clamp = (v, lo, hi) => Math.min(hi, Math.max(lo, v));
  * a little harder, and going to bed exhausted costs happiness.
  */
 export const BALANCE = { happyGain: 0.85, happyCeiling: 120, energyCost: 1.25, tiredAtNight: 35, tiredPenalty: 8 };
-const HOST = { hostel: 'The hostel guitarist', apartment: 'Marija next door', boutique: 'The concierge' };
+/** Story text can be a string or a function of the state (that's how the story remembers you). */
+export const txt = (v, s) => (typeof v === 'function' ? v(s) : v);
 
 /* ────────────────────────────────────────────────────── STATE ── */
 export function newGame({ seed, mode = 'free' } = {}) {
@@ -67,6 +71,7 @@ export function newGame({ seed, mode = 'free' } = {}) {
     currentEvent: null,
     flags: {},
     tipsFound: [],
+    moments: [], // memorable things for the holiday report card
     achievements: [],
     choices: [], // [{day, phase, id}]
     ended: false,
@@ -144,9 +149,14 @@ function eligibleEvents(s) {
   );
 }
 
-/** Deterministic weighted pick of today's event. */
+/**
+ * Deterministic weighted pick of today's event. Pending consequences
+ * (priority callbacks) always come first, so decisions reliably come back.
+ */
 export function pickEvent(s) {
-  const pool = eligibleEvents(s);
+  const eligible = eligibleEvents(s);
+  const urgent = eligible.filter((e) => e.priority);
+  const pool = urgent.length ? urgent : eligible;
   if (pool.length === 0) return null;
   const total = pool.reduce((a, e) => a + (e.weight ?? 1), 0);
   let r = rng(s.seed, 'event', s.day, s.location) * total;
@@ -168,6 +178,13 @@ const BROKE = {
   hint: 'Free, but not exactly fun',
   effects: { happiness: -8, energy: -5 },
   result: 'You sit on a bench and watch everyone else have fun. The view is still free. Your stomach files a formal complaint.',
+  duje: 'I would lend you money, but I spent mine on coffee. We are the same now.',
+};
+const BROKE_TRAVEL = {
+  ...BROKE,
+  label: 'Out of money: stay where you are',
+  to: '@stay',
+  result: 'No ticket money, so you stay put and explore on foot. Free, sweaty, and surprisingly beautiful.',
 };
 
 /** What the player sees and can choose right now. */
@@ -179,30 +196,34 @@ export function getStep(s) {
   let event = null;
   if (s.phase === 'base') {
     title = 'Before you go';
-    prompt = 'Five days, €500, one suitcase of optimism. First, where will you sleep? (You can’t change it later — choose wisely.)';
+    prompt = `${NARRATOR.intro} First things first: where are you sleeping? (You can’t change it later.)`;
     raw = BASES.map((b) => ({ ...b, effects: { ...b.effects } }));
   } else if (s.phase === 'travel') {
     title = TRAVEL[s.day].title;
-    prompt = TRAVEL[s.day].prompt.replace('Marija/the hostel guitarist/the concierge', HOST[s.base] ?? 'Everyone');
+    prompt = txt(TRAVEL[s.day].prompt, s);
     raw = travelChoices(s);
   } else if (s.phase === 'activity') {
     const d = DESTINATIONS[s.location];
     title = `Day ${s.day} · ${d.name}`;
-    prompt = `${d.blurb} What will you do?`;
+    const returning = s.route.slice(0, -1).includes(s.location);
+    prompt = txt(returning ? ARRIVAL[s.location].again : ARRIVAL[s.location].first, s);
     raw = activityChoices(s);
   } else {
     event = EVENTS.find((e) => e.id === s.currentEvent);
     title = event.title;
-    prompt = event.story;
+    prompt = txt(event.story, s);
     raw = event.choices;
   }
   const choices = raw.map((c) => {
     const cost = -Math.min(0, worstMoney(c));
     const affordable = s.money - cost >= 0;
-    return { ...c, cost, disabled: !affordable, reason: affordable ? '' : 'Not enough money' };
+    return { ...c, label: txt(c.label, s), cost, disabled: !affordable, reason: affordable ? '' : 'Not enough money' };
   });
-  if (choices.length && choices.every((c) => c.disabled)) choices.push({ ...BROKE, cost: 0, disabled: false, reason: '' });
-  return { phase: s.phase, day: s.day, title, prompt, choices, event, location: s.location };
+  if (choices.length && choices.every((c) => c.disabled)) {
+    const fallback = s.phase === 'travel' ? BROKE_TRAVEL : { ...BROKE, ...(event?.broke ?? {}) };
+    choices.push({ ...fallback, cost: 0, disabled: false, reason: '' });
+  }
+  return { phase: s.phase, day: s.day, title, prompt, choices, event, location: s.location, kind: event?.kind ?? null };
 }
 
 /* ─────────────────────────────────────────────────── SCORING ── */
@@ -247,7 +268,9 @@ function applyEffects(s, effects = {}, flags = {}) {
   s.adventure += effects.adventure ?? 0;
   s.local += effects.local ?? 0;
   for (const [k, v] of Object.entries(flags)) {
-    if (typeof v === 'number') s.flags[k] = (s.flags[k] ?? 0) + v;
+    if (v === '@day') s.flags[k] = s.day;
+    else if (v === '@here') s.flags[k] = s.location;
+    else if (typeof v === 'number') s.flags[k] = (s.flags[k] ?? 0) + v;
     else s.flags[k] = v;
   }
   return Object.fromEntries(
@@ -268,7 +291,7 @@ function finish(s) {
  * outcome: { text, deltas, tip, newTip, achievements, night, ending }
  */
 export function choose(state, choiceId) {
-  const s = structuredClone({ ...state, currentEventRef: undefined });
+  const s = structuredClone(state);
   const step = getStep(s);
   const choice = step.choices.find((c) => c.id === choiceId);
   if (!choice) throw new Error(`Unknown choice "${choiceId}" in phase ${s.phase}`);
@@ -278,16 +301,18 @@ export function choose(state, choiceId) {
   // resolve chance outcomes deterministically
   let effects = choice.effects;
   let flags = choice.flags ?? {};
-  let text = choice.result;
+  let text = txt(choice.result, state);
   let lucky = null;
   if (choice.chance) {
     const roll = rng(s.seed, 'chance', s.day, s.currentEvent ?? s.phase, choice.id);
-    lucky = roll < choice.chance.p;
+    lucky = roll < txt(choice.chance.p, state);
     const branch = lucky ? choice.chance.success : choice.chance.fail;
     effects = branch.effects;
     flags = { ...flags, ...(branch.flags ?? {}) };
-    text = branch.result;
+    text = txt(branch.result, state);
   }
+  const duje = txt(choice.duje, state) ?? null;
+  const eventKind = step.kind;
 
   // phase-specific bookkeeping
   if (s.phase === 'base') {
@@ -304,6 +329,10 @@ export function choose(state, choiceId) {
   }
 
   const deltas = applyEffects(s, effects, flags);
+  if (choice.moment && !s.moments.some((m) => m.id === choice.moment.id)) {
+    s.moments.push({ ...choice.moment, day: s.day });
+  }
+  if (eventKind === 'hidden') s.flags.secrets = (s.flags.secrets ?? 0) + 1;
 
   let tip = null;
   let newTip = false;
@@ -313,7 +342,20 @@ export function choose(state, choiceId) {
     if (newTip) s.tipsFound.push(tip.id);
   }
 
-  const outcome = { text, deltas, tip, newTip, lucky, achievements: [], night: null, ending: null, choice: { id: choice.id, label: choice.label } };
+  const outcome = {
+    text,
+    duje,
+    deltas,
+    tip,
+    newTip,
+    lucky,
+    kind: eventKind,
+    moment: choice.moment ?? null,
+    achievements: [],
+    night: null,
+    ending: null,
+    choice: { id: choice.id, label: choice.label },
+  };
 
   // collapse = immediate disaster
   if (s.energy <= 0 || s.happiness <= 0) {
@@ -373,11 +415,14 @@ function night(s) {
   if (s.money >= base.nightly) {
     s.money -= base.nightly;
     s.energy = clamp(s.energy + base.recover, 0, 100);
-    return { paid: base.nightly, recovered: base.recover, rough: false, tired };
+    const n = { paid: base.nightly, recovered: base.recover, rough: false, tired };
+    return { ...n, line: nightLine(s, n) };
   }
   s.energy = clamp(s.energy + 5, 0, 100);
   s.happiness = clamp(s.happiness - 10, 0, 100);
-  return { paid: 0, recovered: 5, rough: true, tired };
+  if (!s.moments.some((m) => m.id === 'bench')) s.moments.push({ id: 'bench', text: 'Slept on a bench by the sea (budget-related)', rank: 8, day: s.day });
+  const n = { paid: 0, recovered: 5, rough: true, tired };
+  return { ...n, line: nightLine(s, n) };
 }
 
 export const isIsland = (id) => ISLANDS.includes(id);

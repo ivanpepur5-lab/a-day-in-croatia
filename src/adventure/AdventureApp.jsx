@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import './adventure.css';
 import Hud from './ui/Hud.jsx';
+import Duje from './ui/Duje.jsx';
 import TipCard from './ui/TipCard.jsx';
 import EndingScreen from './ui/EndingScreen.jsx';
 import Collection from './ui/Collection.jsx';
@@ -61,9 +62,13 @@ function Title({ progress, daily, onDaily, onFree, onResume, onCollection }) {
             <span>happiness</span>
           </li>
         </ul>
+        <Duje>
+          Bok! I’m Duje, from Split. For five days I’ll be your local friend, your guide and your harshest critic. Every
+          choice costs money, energy or happiness — and I remember everything. So does Dalmatia.
+        </Duje>
         <p className="adv-intro">
-          Survive — and enjoy — a five-day Dalmatian holiday. Every choice costs money, energy or happiness. Collect real
-          local tips along the way. Seven possible endings.
+          Survive — and enjoy — a five-day holiday. Collect real local tips, discover hidden places, and find one of ten
+          endings.
         </p>
         {progress.current && !progress.current.ended && (
           <button type="button" className="btn btn--primary btn--block btn--lg" onClick={onResume} data-testid="adv-resume">
@@ -105,13 +110,18 @@ function Outcome({ outcome, newTip, newAch, onContinue, last }) {
   return (
     <div className="adv-outcome" role="dialog" aria-modal="true" aria-labelledby="adv-outcome-title">
       <div className="adv-outcome__panel" ref={ref} tabIndex={-1}>
-        <p className="adv-label">Story</p>
+        <p className="adv-label">{outcome.kind === 'hidden' ? '🔎 Hidden discovery' : outcome.kind === 'callback' ? '↩ Consequences' : 'Story'}</p>
         <h2 id="adv-outcome-title" className="adv-outcome__title">
           {outcome.lucky === true ? 'Lucky!' : outcome.lucky === false ? 'Not this time…' : outcome.choice.label}
         </h2>
         <p className="adv-outcome__text" data-testid="adv-result">
           {outcome.text}
         </p>
+        {outcome.duje && (
+          <Duje compact testId="adv-duje-reaction">
+            {outcome.duje}
+          </Duje>
+        )}
         {Object.keys(outcome.deltas).length > 0 && (
           <ul className="adv-deltas" data-testid="adv-deltas">
             {Object.entries(outcome.deltas).map(([k, v], i) => (
@@ -128,6 +138,12 @@ function Outcome({ outcome, newTip, newAch, onContinue, last }) {
               ? 'You couldn’t afford your bed and slept on a bench by the sea. ⚡ +5, 🙂 −10.'
               : `Night: −€${outcome.night.paid} for your bed, ⚡ +${outcome.night.recovered} after sleep.`}
             {outcome.night.tired && ' You went to bed exhausted (🙂 −8).'}
+          </p>
+        )}
+        {outcome.night?.line && <Duje compact>{outcome.night.line}</Duje>}
+        {outcome.moment && (
+          <p className="adv-moment" data-testid="adv-moment">
+            📝 Added to your holiday report: <em>{outcome.moment.text}</em>
           </p>
         )}
         {outcome.tip && (
@@ -170,10 +186,18 @@ function Play({ state, onChoose }) {
         </div>
       </section>
       <section className="adv-story">
-        <p className="adv-label">Story</p>
-        <p className="adv-story__text" data-testid="adv-prompt">
-          {step.prompt}
-        </p>
+        {step.phase === 'event' ? (
+          <>
+            <p className={`adv-label ${step.kind ? `adv-label--${step.kind}` : ''}`} data-testid="adv-event-kind">
+              {step.kind === 'callback' ? '↩ Consequences of your choices' : step.kind === 'hidden' ? '🔎 Hidden discovery' : 'Story'}
+            </p>
+            <p className="adv-story__text" data-testid="adv-prompt">
+              {step.prompt}
+            </p>
+          </>
+        ) : (
+          <Duje testId="adv-prompt">{step.prompt}</Duje>
+        )}
       </section>
       <ul className="adv-choices" data-testid="adv-choices">
         {step.choices.map((c, i) => (
