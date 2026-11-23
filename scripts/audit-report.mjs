@@ -15,6 +15,7 @@ import { displayState, formatCheckDate } from '../src/data/verification.js';
 import { LOCATIONS } from '../src/data/locations.js';
 import { PROMET_FARES, FARE_SOURCE, MUNICIPALITY } from '../src/data/fares.js';
 import { dateKey } from '../src/engine/daily.js';
+import { TIPS, TIP_CATEGORIES } from '../src/adventure/data/tips.js';
 
 const arg = (name) => process.argv.find((a) => a.startsWith(`--${name}`));
 const today = arg('today')?.split('=')[1] ?? dateKey(new Date());
@@ -30,6 +31,27 @@ const result = auditTravelData(TRAVEL, { today, locationIds: LOCATIONS.map((l) =
 const C = { red: '\x1b[31m', yellow: '\x1b[33m', green: '\x1b[32m', dim: '\x1b[2m', off: '\x1b[0m' };
 console.log(`Travel data audit as of ${today}\n`);
 for (const i of result.issues) {
+  const col = i.level === 'error' ? C.red : C.yellow;
+  console.log(`${col}${i.level.toUpperCase().padEnd(7)}${C.off} ${i.code.padEnd(20)} ${i.where}\n        ${C.dim}${i.message}${C.off}`);
+}
+
+// ---------------------------------------------------------------- Croatia Adventure tips
+const tipIssues = [];
+for (const t of TIPS) {
+  const v = t.verification;
+  if (v.status === 'verified') {
+    for (const id of [v.source, ...(v.alsoSources ?? [])]) {
+      if (!TRAVEL.sources[id]) tipIssues.push({ level: 'error', code: 'TIP_SOURCE_UNKNOWN', where: `adventure tip ${t.id}`, message: `Unknown source "${id}".` });
+    }
+    const st = displayState({ status: 'verified', verifiedOn: v.verifiedOn, validUntil: v.validUntil }, opts);
+    if (st.state === 'stale') tipIssues.push({ level: 'warning', code: 'TIP_STALE', where: `adventure tip ${t.id}`, message: `Verified ${v.verifiedOn}: ${st.reason}.` });
+  } else if (v.status !== 'editorial') {
+    tipIssues.push({ level: 'error', code: 'TIP_STATUS', where: `adventure tip ${t.id}`, message: 'Tip status must be "verified" or "editorial".' });
+  }
+}
+for (const i of tipIssues) {
+  result.issues.push(i);
+  (i.level === 'error' ? result.errors : result.warnings).push(i);
   const col = i.level === 'error' ? C.red : C.yellow;
   console.log(`${col}${i.level.toUpperCase().padEnd(7)}${C.off} ${i.code.padEnd(20)} ${i.where}\n        ${C.dim}${i.message}${C.off}`);
 }
@@ -76,6 +98,9 @@ for (const a of places) for (const b of places) {
 }
 u += `\n### Bus journeys without an official fare (estimated in game)\n\n${[...missing].sort().map((m) => `- ${m}`).join('\n')}\n`;
 u += `\n### Always estimated\n\n- **Travel times** for every leg (distance model in \`src/engine/travel.js\`, not timetables).\n- **Time on site** for every location.\n`;
+const editorial = TIPS.filter((t) => t.verification.status === 'editorial');
+u += `\n## Croatia Adventure — editorial tips for periodic review (${editorial.length})\n\nThese tips are general knowledge (culture, language, food, practical habits). They contain no prices, times or schedules (a test enforces this), but a human should re-read them from time to time. Tips with prices or rules use verified sources instead.\n\n| Tip | Category | Text |\n|---|---|---|\n`;
+for (const t of editorial) u += `| ${esc(t.title)} | ${TIP_CATEGORIES[t.category].label} | ${esc(t.tip)} |\n`;
 writeFileSync(`${root}UNVERIFIED.md`, u);
 
 // ---------------------------------------------------------------- VERIFIED_SOURCES.md

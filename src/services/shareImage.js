@@ -16,15 +16,15 @@ export const FORMATS = {
   post: { id: 'post', label: 'Post', ratio: '4:5', w: 1080, h: 1350 },
 };
 
-const SERIF = '"Fraunces Variable", Georgia, serif';
-const SANS = '"Manrope Variable", system-ui, sans-serif';
-const NAVY = '#0e2f45';
+export const SERIF = '"Fraunces Variable", Georgia, serif';
+export const SANS = '"Manrope Variable", system-ui, sans-serif';
+export const NAVY = '#0e2f45';
 const NAVY_DEEP = '#0a2233';
-const SAND = '#f3d9b8';
-const CORAL = '#ffb48a';
+export const SAND = '#f3d9b8';
+export const CORAL = '#ffb48a';
 
 const imageCache = new Map();
-function loadImage(src) {
+export function loadImage(src) {
   if (!imageCache.has(src)) {
     imageCache.set(
       src,
@@ -40,7 +40,7 @@ function loadImage(src) {
   return imageCache.get(src);
 }
 
-async function loadFonts() {
+export async function loadFonts() {
   if (!document.fonts?.load) return;
   await Promise.allSettled([
     document.fonts.load(`700 200px ${SERIF}`),
@@ -51,7 +51,7 @@ async function loadFonts() {
   ]);
 }
 
-function roundRectPath(ctx, x, y, w, h, r) {
+export function roundRectPath(ctx, x, y, w, h, r) {
   ctx.beginPath();
   ctx.moveTo(x + r, y);
   ctx.arcTo(x + w, y, x + w, y + h, r);
@@ -61,14 +61,14 @@ function roundRectPath(ctx, x, y, w, h, r) {
   ctx.closePath();
 }
 
-function fillRoundRect(ctx, x, y, w, h, r, fill) {
+export function fillRoundRect(ctx, x, y, w, h, r, fill) {
   roundRectPath(ctx, x, y, w, h, r);
   ctx.fillStyle = fill;
   ctx.fill();
 }
 
 /** Draw an image "object-fit: cover" into a (rounded) box. */
-function drawCover(ctx, img, x, y, w, h, r = 0, focusY = 0.5) {
+export function drawCover(ctx, img, x, y, w, h, r = 0, focusY = 0.5) {
   ctx.save();
   if (r) {
     roundRectPath(ctx, x, y, w, h, r);
@@ -89,7 +89,7 @@ function drawCover(ctx, img, x, y, w, h, r = 0, focusY = 0.5) {
 }
 
 /** Fit text to a max width by shrinking the font size. */
-function fitFont(ctx, text, weightFamily, size, maxWidth, min = 18) {
+export function fitFont(ctx, text, weightFamily, size, maxWidth, min = 18) {
   let s = size;
   ctx.font = `${weightFamily.replace('{s}', s)}`;
   while (ctx.measureText(text).width > maxWidth && s > min) {
@@ -99,7 +99,7 @@ function fitFont(ctx, text, weightFamily, size, maxWidth, min = 18) {
   return s;
 }
 
-function background(ctx, w, h, flatUntil = 0) {
+export function background(ctx, w, h, flatUntil = 0) {
   // Flat NAVY behind the photo band so its fade has no visible seam.
   const bg = ctx.createLinearGradient(0, 0, 0, h);
   bg.addColorStop(0, NAVY);
@@ -111,7 +111,7 @@ function background(ctx, w, h, flatUntil = 0) {
 }
 
 /** Soft shadow for text drawn over photographs. */
-function withTextShadow(ctx, fn) {
+export function withTextShadow(ctx, fn) {
   ctx.save();
   ctx.shadowColor = 'rgba(0,0,0,0.55)';
   ctx.shadowBlur = 14;
@@ -121,7 +121,7 @@ function withTextShadow(ctx, fn) {
 }
 
 /** Header photo band that fades into the navy background. */
-function heroBand(ctx, img, w, bandH) {
+export function heroBand(ctx, img, w, bandH) {
   drawCover(ctx, img, 0, 0, w, bandH, 0, 0.55);
   const fade = ctx.createLinearGradient(0, 0, 0, bandH);
   fade.addColorStop(0, 'rgba(10,34,51,0.78)');
@@ -133,7 +133,7 @@ function heroBand(ctx, img, w, bandH) {
   ctx.fillRect(0, 0, w, bandH);
 }
 
-function brandLine(ctx, x, y, size = 30) {
+export function brandLine(ctx, x, y, size = 30) {
   ctx.fillStyle = SAND;
   ctx.font = `800 ${size}px ${SANS}`;
   ctx.letterSpacing = `${Math.round(size * 0.22)}px`;
@@ -145,7 +145,7 @@ function brandLine(ctx, x, y, size = 30) {
  * The route: one photo tile per stop, numbered, with its short name,
  * joined by a dashed line — readable at a glance on a phone.
  */
-function routeTiles(ctx, stops, images, { x, y, w, tileH, gap = 22, radius = 26, nameSize = 30 }) {
+export function routeTiles(ctx, stops, images, { x, y, w, tileH, gap = 22, radius = 26, nameSize = 30 }) {
   const n = stops.length;
   const tileW = (w - gap * (n - 1)) / n;
   // connector
@@ -236,12 +236,12 @@ function scoreBlock(ctx, result, x, baseline, size) {
 }
 
 /** Footer block starting at a separator line at `top`. */
-function footer(ctx, w, top, pad, fallback) {
+export function footer(ctx, w, top, pad, fallback, question = 'Can you plan a better day?') {
   ctx.fillStyle = 'rgba(255,255,255,0.12)';
   ctx.fillRect(pad, top, w - pad * 2, 2);
   ctx.fillStyle = 'rgba(255,255,255,0.85)';
   ctx.font = `600 34px ${SERIF}`;
-  ctx.fillText('Can you plan a better day?', pad, top + 64);
+  ctx.fillText(question, pad, top + 64);
   ctx.font = `600 28px ${SANS}`;
   ctx.fillStyle = SAND;
   if (SITE_DISPLAY) {

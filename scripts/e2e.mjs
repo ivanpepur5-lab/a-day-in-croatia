@@ -303,7 +303,7 @@ try {
 
       // credits sheet
       await page.getByTestId('open-credits').click();
-      check((await page.getByTestId('photo-credits').locator('li').count()) === 9, 'credits list all 9 photographs');
+      check((await page.getByTestId('photo-credits').locator('li').count()) === 12, 'credits list all 12 photographs');
       await page.waitForTimeout(600);
       await page.screenshot({ path: `${SHOTS}${width}-7-credits.png` });
       await page.getByRole('button', { name: 'Close' }).click();

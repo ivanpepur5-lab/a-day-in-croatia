@@ -1864,6 +1864,41 @@ button:disabled {
   list-style: disc;
 }
 
+/* Entry point to the Croatia Adventure prototype */
+.advpromo {
+  display: grid;
+  gap: 2px;
+  margin: 16px var(--gutter) 0;
+  padding: 16px 18px;
+  border-radius: var(--r-lg);
+  background: linear-gradient(135deg, var(--sea-deep), #1d5470);
+  color: #fff;
+  text-decoration: none;
+  box-shadow: var(--shadow);
+}
+.advpromo strong {
+  font-family: var(--serif);
+  font-size: 1.3rem;
+}
+.advpromo span {
+  font-size: 0.86rem;
+  opacity: 0.9;
+}
+.advpromo__tag {
+  font-size: 0.66rem !important;
+  font-weight: 800;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--sun);
+  opacity: 1 !important;
+}
+@media (min-width: 640px) {
+  .advpromo {
+    max-width: 680px;
+    margin: 16px auto 0;
+  }
+}
+
 /* ==========================================================================
    LARGER SCREENS
    ========================================================================== */

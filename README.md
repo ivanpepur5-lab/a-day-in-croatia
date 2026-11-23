@@ -10,6 +10,10 @@ You pick 4 of 8 experiences, drag them into order, and get a score out of 100 th
 >
 > **Updating prices, hours or transport:** edit `src/data/travel-data.json` (no code changes needed), then run `npm run audit`. Guide: [docs/EDITING_DATA.md](docs/EDITING_DATA.md). Open items: [docs/UNVERIFIED.md](docs/UNVERIFIED.md).
 
+## New: Croatia Adventure (prototype)
+
+A five-day narrative holiday game with humour, branching choices, seven endings, achievements and 47 collectible **real-world Local Insider tips**. Open it at `/#adventure`, or from the card on the puzzle's intro. It's a separate mode, and the puzzle below is unchanged. Design, rules and accuracy policy: [docs/ADVENTURE.md](docs/ADVENTURE.md).
+
 ## Quick start
 
 ```bash
@@ -19,6 +23,7 @@ npm run audit      # validate travel data (missing sources, stale dates) and reg
 npm run audit:check  # same, exits 1 on errors (use before deploying)
 npm test           # unit tests (Vitest); timezone tests also re-run under TZ=America/Los_Angeles and TZ=Pacific/Kiritimati
 npm run build
+node scripts/e2e-adventure.mjs   # Croatia Adventure phone playthrough (after a build)
 npm run test:e2e   # plays the game at 360/390/430 px widths with real touch drag, against the build (needs Playwright on the machine)
 # to check that the share domain appears on images:
 VITE_SITE_URL=https://play.example.org npm run build && E2E_SITE_URL=https://play.example.org npm run test:e2e

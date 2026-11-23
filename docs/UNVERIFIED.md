@@ -60,3 +60,46 @@ These are game values. The app always shows them with “≈” / “est.”, ne
 
 - **Travel times** for every leg (distance model in `src/engine/travel.js`, not timetables).
 - **Time on site** for every location.
+
+## Croatia Adventure — editorial tips for periodic review (36)
+
+These tips are general knowledge (culture, language, food, practical habits). They contain no prices, times or schedules (a test enforces this), but a human should re-read them from time to time. Tips with prices or rules use verified sources instead.
+
+| Tip | Category | Text |
+|---|---|---|
+| Five words that open doors | Survival Mode | Dobar dan (good day), hvala (thank you), molim (please / you’re welcome), bok (hi / bye), živjeli (cheers). |
+| Pack water shoes | Survival Mode | Many Dalmatian beaches are pebbly or rocky, and sea urchins like to sit on the rocks in shallow water. |
+| Refill, don’t rebuy | Survival Mode | Tap water in Croatia is generally safe to drink. Carry a refillable bottle, especially on hot summer days. |
+| Old towns are for feet | Survival Mode | The historic centres of Split, Trogir and Dubrovnik are largely pedestrian. Park outside the centre and walk in. |
+| Euros, cards — and a little cash | Survival Mode | Croatia uses the euro (since 2023). Cards are widely accepted, but a little cash helps at small konobas, markets and beach kiosks. |
+| Fish is priced by the kilo | Tourist Traps | Fresh fish is often listed per kilogram. Ask how much the fish you choose weighs — and what the total will be — before it goes on the grill. |
+| Walk two streets back | Tourist Traps | Restaurants right on the busiest squares, with laminated photo menus in many languages, tend to charge more. A couple of streets away you often find family-run places with short daily menus. |
+| Beat the crowd (and the heat) | Tourist Traps | In summer, the most famous sights — Dubrovnik’s walls, Krka’s waterfalls, Diocletian’s Palace — are calmest early in the morning and late in the day. |
+| Mind the cruise-ship rhythm | Tourist Traps | Dubrovnik’s old town gets busiest when cruise passengers arrive. Early mornings and evenings are far more relaxed. |
+| The beach is (usually) for everyone | Local Secrets | Most of the Croatian coast is maritime domain (pomorsko dobro), generally open to the public. On many beaches you pay for sunbeds and umbrellas, not for access to the sea. |
+| Pazar: Split’s open-air market | Local Secrets | Pazar, the green market just outside the eastern side of Diocletian’s Palace, is where locals buy fruit, vegetables and figs. Go in the morning for the best choice. |
+| Hvar from above | Local Secrets | The Spanish Fortress (Fortica) on the hill above Hvar Town looks down over the harbour and the Pakleni islands. |
+| Yes, that was King’s Landing | Local Secrets | Dubrovnik’s old town and walls were a filming location for Game of Thrones. |
+| “Idemo na kavu” | Dalmatian Life | “Let’s go for coffee” is a social ritual, not a quick caffeine stop. One coffee can last a very long, very pleasant time — nobody will rush you off the table. |
+| Fjaka is a state of mind | Dalmatian Life | Fjaka is the Dalmatian word for a blissful, sun-drenched state of doing absolutely nothing — especially on hot summer afternoons. |
+| Pomalo | Dalmatian Life | “Pomalo” — roughly “take it easy”, “slowly does it” — is something you will hear constantly in Dalmatia. |
+| Klapa singing | Dalmatian Life | Klapa is traditional Dalmatian multipart a cappella singing, inscribed on UNESCO’s list of Intangible Cultural Heritage. |
+| Picigin | Dalmatian Life | Picigin is Split’s beach game: keep a small ball in the air in shallow water, with as many dramatic dives as possible. Bačvice is its home. |
+| A palace people live in | Dalmatian Life | Diocletian’s Palace is not a museum behind glass — people still live, work and hang laundry inside its Roman walls. |
+| Marenda | Dalmatian Life | Marenda is the traditional hearty mid-morning meal. Some local places serve simple marenda dishes that are cheaper than their evening menu. |
+| Konoba = home cooking | Food & Drinks | A konoba is a traditional tavern, often family-run, serving local dishes — grilled fish, pašticada, octopus, home-made wine. |
+| Order peka in advance | Food & Drinks | Peka — meat or octopus slow-cooked under a bell-shaped lid covered in embers — takes hours, so many konobas ask you to order it ahead. Ask when you book. |
+| Pašticada | Food & Drinks | Pašticada is Dalmatia’s festive beef stew, slow-cooked with wine and dried plums, usually served with gnocchi. |
+| Soparnik | Food & Drinks | Soparnik is a thin Swiss-chard pie from the Poljica area around Omiš, traditionally baked on an open hearth. |
+| Fish “na gradele” with blitva | Food & Drinks | The classic Dalmatian plate: fish grilled “na gradele” with blitva — Swiss chard and potatoes with plenty of olive oil. |
+| The welcome rakija | Food & Drinks | Travarica (herbal rakija) is often offered to guests as a gesture of hospitality. |
+| Ferry or catamaran? | Island Life | Car ferries from Split go to ports such as Supetar (Brač) and Stari Grad (Hvar); faster passenger catamarans also sail to towns like Hvar. Check timetables with the operators — in summer, buy tickets early. |
+| Bura and jugo rule the sea | Island Life | Strong winds — the bura from the north-east and the jugo from the south — can disrupt sailings, especially fast catamarans. On windy days, check the operator’s notices and keep a plan B. |
+| The beach that moves | Island Life | Zlatni rat near Bol on Brač is a long pebble spit whose tip shifts with the wind and currents. |
+| Hvar smells of lavender | Island Life | Hvar is famous for lavender: fields bloom in early summer, and lavender oil and sachets are classic island souvenirs. |
+| The Pakleni islands | Island Life | The Pakleni islands are a chain of small islands just off Hvar Town, reached by taxi boats from the harbour. |
+| Vidova Gora | Hidden Croatia | Vidova Gora on Brač is the highest peak of any Adriatic island, with a view straight down to Zlatni rat. |
+| The stonemasons of Pučišća | Hidden Croatia | Brač is famous for its white limestone, and the village of Pučišća is home to a stonemasonry school. |
+| Stari Grad Plain | Hidden Croatia | On Hvar, the Stari Grad Plain — an agricultural landscape laid out by ancient Greek colonists — is a UNESCO World Heritage Site. |
+| Lokrum and its peacocks | Hidden Croatia | Lokrum, the wooded island facing Dubrovnik’s old town, is reached by boat from the old harbour — and is famous for its free-roaming peacocks. |
+| The Pelješac Bridge | Hidden Croatia | Since 2022, the Pelješac Bridge connects the Dubrovnik area with the rest of the Croatian mainland, so road traffic no longer has to cross the border at Neum. |

@@ -96,6 +96,11 @@ export default function IntroScreen({ daily, hasPlayed, onStart, onViewResult, o
           Start and finish at {challenge.hub.name}. Visit and travel times are estimates; tap a card’s “i” for verified facts and sources.
         </p>
       </section>
+      <a className="advpromo" href="#adventure" data-testid="open-adventure">
+        <span className="advpromo__tag">New · prototype</span>
+        <strong>Croatia Adventure</strong>
+        <span>A five-day story game with real local tips →</span>
+      </a>
     </main>
   );
 }

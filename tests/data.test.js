@@ -63,7 +63,7 @@ describe('location data audit', () => {
 
 describe('photography', () => {
   it('has a licensed, attributed photo for every location and the hero', () => {
-    for (const id of ['split-hero', ...LOCATIONS.map((l) => l.id)]) {
+    for (const id of ['split-hero', 'hvar', 'brac', 'dubrovnik', ...LOCATIONS.map((l) => l.id)]) {
       const p = PHOTOS[id];
       expect(p, id).toBeTruthy();
       expect(p.author.length).toBeGreaterThan(1);
