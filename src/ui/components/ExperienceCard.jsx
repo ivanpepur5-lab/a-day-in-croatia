@@ -1,6 +1,7 @@
 import Media from './Media.jsx';
 import { CATEGORIES } from '../../data/locations.js';
-import { formatDuration, formatEuro } from '../../engine/itinerary.js';
+import { formatDuration } from '../../engine/itinerary.js';
+import { PriceTag } from './Status.jsx';
 
 /** Selectable destination card for the pick screen. */
 export default function ExperienceCard({ location, order, onToggle, onInfo, shake }) {
@@ -31,17 +32,12 @@ export default function ExperienceCard({ location, order, onToggle, onInfo, shak
         <dl className="xcard__meta">
           <div>
             <dt className="sr-only">Duration</dt>
-            <dd>⏱ {formatDuration(location.durationMin)}</dd>
+            <dd title="Estimated time on site">⏱ ≈{formatDuration(location.durationMin)}</dd>
           </div>
           <div>
             <dt className="sr-only">Cost per person</dt>
             <dd>
-              {location.costPerPerson === 0 ? 'Free' : `${formatEuro(location.costPerPerson)} pp`}
-              {location.costStatus === 'verified' ? (
-                <span className="tag tag--ok" title="Price verified on an official source">✓</span>
-              ) : (
-                <span className="tag" title="Game estimate — not a verified price">est.</span>
-              )}
+              <PriceTag rec={location.price} amount={location.costPerPerson} testId={`price-${location.id}`} />
             </dd>
           </div>
         </dl>

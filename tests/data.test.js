@@ -55,7 +55,8 @@ describe('location data audit', () => {
 
   it('labels visit times as estimates for every location', () => {
     for (const l of LOCATIONS) {
-      expect(l.facts.find((f) => f.field === 'Time on site')?.status).toBe('estimate');
+      expect(l.visit.status).toBe('estimate');
+      expect(l.visit.value).toBe(l.durationMin);
     }
   });
 });

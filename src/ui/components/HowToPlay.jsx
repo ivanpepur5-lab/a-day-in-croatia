@@ -1,6 +1,7 @@
 import { SCORING } from '../../engine/scoring.js';
 import { TRAVEL_MODEL } from '../../engine/travel.js';
 import { DATA_STATUS } from '../../data/locations.js';
+import { DataLegend } from './Status.jsx';
 
 /** Rules + a fully transparent scoring explanation. */
 export default function HowToPlay() {
@@ -63,6 +64,9 @@ export default function HowToPlay() {
         <strong>not timetables</strong>. Bus fares are the official Promet Split online / ticket-office fares (valid from
         1 June 2026) where the price list covers the journey, marked “fare ✓”; other fares are estimates, marked “est.”.
       </p>
+
+      <h3 className="howto__h">Verified vs. estimated</h3>
+      <DataLegend />
 
       <p className="notice">
         <strong>{DATA_STATUS.label}.</strong> {DATA_STATUS.note}

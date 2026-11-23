@@ -1,6 +1,8 @@
-# Data audit — 23 November 2026 (round 3)
+# Data audit — 23 November 2026 (round 4)
 
-> Complete, auto-generated lists: **[VERIFIED_SOURCES.md](VERIFIED_SOURCES.md)** (21 verified facts, each with source URL and date) and **[UNVERIFIED.md](UNVERIFIED.md)** (12 unverified facts plus all game estimates). Regenerate them with `npm run audit`.
+> **Round 4:** all editable data moved to `src/data/travel-data.json` (guide: [EDITING_DATA.md](EDITING_DATA.md)). `npm run audit` now validates sources, dates and validity periods. The app shows four states: ✓ Verified · ⚠ Needs re-check · ? Unverified · ≈ Estimate.
+
+> Complete, auto-generated lists: **[VERIFIED_SOURCES.md](VERIFIED_SOURCES.md)** (23 verified facts plus 9 official fares, each with source URL and date) and **[UNVERIFIED.md](UNVERIFIED.md)** (12 unverified facts plus all game estimates). Regenerate them with `npm run audit`.
 
 Every player-facing fact in `src/data/locations.js` has one of three statuses:
 

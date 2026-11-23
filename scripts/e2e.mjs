@@ -184,8 +184,9 @@ try {
     await page.getByRole('button', { name: 'About Salona' }).click();
     const dialog = page.getByRole('dialog');
     check((await dialog.locator('.fact--verified').count()) >= 2, 'Salona shows verified facts');
-    check(await dialog.getByRole('link', { name: /Archaeological Museum in Split — ticket prices/ }).isVisible(), 'verified fact links to its source');
-    check(await dialog.getByText(/checked 23 Nov 2026/).first().isVisible(), 'verified fact shows last-verified date');
+    check(await dialog.getByRole('link', { name: /Archaeological Museum in Split — ticket prices/ }).first().isVisible(), 'verified fact links to its source');
+    check(await dialog.getByText(/last verified 23 Nov 2026/).first().isVisible(), 'verified fact shows last-verified date');
+    check((await dialog.getByTestId('detail-price').locator('[data-state="verified"]').count()) >= 1, 'Salona price shown as verified');
     if (width === 390) {
       await page.waitForTimeout(600);
       await page.screenshot({ path: `${SHOTS}${width}-3-detail.png` });
@@ -196,10 +197,23 @@ try {
     await page.getByRole('button', { name: 'Close' }).click();
     await page.getByRole('button', { name: 'About Krka National Park' }).click();
     check((await dialog.locator('.fact--unverified').count()) >= 1, 'Krka shows unverified label');
+    const krkaPrice = await dialog.getByTestId('detail-price').innerText();
+    check(/≈€30/.test(krkaPrice) && /est\./.test(krkaPrice) && !krkaPrice.includes('✓'), `Krka game price is labelled an estimate (${krkaPrice.replace(/\s+/g, ' ')})`);
     await page.getByRole('button', { name: 'Close' }).click();
+
+    // every card: estimates carry "est.", only verified prices carry ✓
+    const cardPrices = await page.locator('[data-testid^="price-"]').evaluateAll((els) =>
+      els.map((e) => ({ id: e.dataset.testid, state: e.dataset.state, text: e.textContent })),
+    );
+    const mislabelled = cardPrices.filter((p) =>
+      p.state === 'verified' ? !p.text.includes('✓') || p.text.includes('≈') : !p.text.includes('est.') || p.text.includes('✓'),
+    );
+    check(cardPrices.length === 8 && mislabelled.length === 0, `card prices labelled verified/estimate correctly${mislabelled.length ? `: ${JSON.stringify(mislabelled)}` : ''}`);
 
     await page.getByTestId('to-arrange').click();
     await page.getByText('Order your day').waitFor();
+    const disclosure = await page.getByTestId('estimate-disclosure').innerText();
+    check(/includes €24 of estimated costs: Palace entry ≈€24/.test(disclosure), `estimate disclosure lists estimated costs (${disclosure.slice(0, 80)}…)`);
     const order = () => page.locator('[data-testid^="stop-"]').evaluateAll((els) => els.map((e) => e.dataset.id));
     check(JSON.stringify(await order()) === JSON.stringify(picks), 'stops start in pick order');
 
@@ -244,6 +258,7 @@ try {
     await page.getByTestId('final-score').waitFor();
     check(Number(await page.getByTestId('final-score').getAttribute('data-score')) === expected, `score ${expected} matches engine`);
     await page.getByTestId('rank').waitFor();
+    check(/Includes €24 of estimated costs/.test(await page.getByTestId('budget-estimate-note').innerText()), 'results disclose estimated costs');
     const rank = Number(await page.getByTestId('rank').getAttribute('data-rank'));
     const exp = rankOf(analysis, expected);
     check(rank === exp.rank, `exact rank ${rank} of ${analysis.count} matches engine`);

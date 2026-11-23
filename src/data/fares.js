@@ -1,58 +1,37 @@
 /**
- * Official Promet Split single-ticket fares, read from the operator's own
- * price list (PDF) on 2026-11-23:
- *   "Cjenik pojedinačnih karata … — vrijedi od 01.06.2026."
- *   https://www.promet-split.hr/cjenik/cjenik-putnih-karata
+ * Bus fares — loaded from the editable data file (src/data/travel-data.json → "fares").
+ * Edit fares there, not here. See docs/EDITING_DATA.md.
  *
- * Columns in the source:
- *   online    — "Vrijednosna, biljetarnica, online" (value card, ticket office, online)
- *   driver    — "Kod vozača (EUR)" (bought from the driver)
- *   validity  — "Valjanost od prve validacije" (minutes from first validation)
- *
- * Fares are per person, per single ticket, between municipalities (JLS).
- * Only pairs listed in the PDF are included; anything else stays an estimate.
- * Bus TIMES are not taken from timetables — they remain model estimates.
+ * Every fare is stored PER PERSON with both official columns:
+ *   online   — "Vrijednosna, biljetarnica, online" (value card, ticket office, online)
+ *   driver   — "Kod vozača" (bought from the driver)
+ * The game charges `gameColumn` (online) × party size.
  */
+import TRAVEL from './travel-data.json' with { type: 'json' };
+
+const F = TRAVEL.fares;
+const SRC = TRAVEL.sources[F.source];
+
 export const FARE_SOURCE = {
-  label: 'Promet Split — single-ticket price list (valid from 1 Jun 2026)',
-  url: 'https://www.promet-split.hr/cjenik/cjenik-putnih-karata',
-  validFrom: '2026-06-01',
-  verifiedOn: '2026-11-23',
+  id: F.source,
+  label: SRC.label,
+  url: SRC.url,
+  validFrom: F.validFrom,
+  verifiedOn: F.verifiedOn,
+  reviewDays: F.reviewDays,
 };
 
-/** The game uses the ticket-office / online fare. */
-export const FARE_COLUMN = 'online';
+export const FARE_COLUMN = F.gameColumn;
 
 const pair = (a, b) => [a, b].sort().join('|');
 
 /** @type {Record<string, {online:number, driver:number, validityMin:number}>} */
-export const PROMET_FARES = {
-  [pair('Split', 'Split')]: { online: 1.5, driver: 3.0, validityMin: 60 },
-  [pair('Split', 'Solin')]: { online: 1.75, driver: 3.5, validityMin: 75 },
-  [pair('Split', 'Klis')]: { online: 2.0, driver: 4.0, validityMin: 90 },
-  [pair('Split', 'Trogir')]: { online: 2.5, driver: 5.0, validityMin: 105 },
-  [pair('Split', 'Omiš')]: { online: 2.5, driver: 5.0, validityMin: 105 },
-  [pair('Solin', 'Klis')]: { online: 1.75, driver: 3.5, validityMin: 75 },
-  [pair('Solin', 'Trogir')]: { online: 2.0, driver: 4.0, validityMin: 90 },
-  [pair('Solin', 'Omiš')]: { online: 2.0, driver: 4.0, validityMin: 90 },
-  [pair('Omiš', 'Klis')]: { online: 1.75, driver: 3.5, validityMin: 75 },
-};
+export const PROMET_FARES = Object.fromEntries(
+  F.pairs.map((p) => [pair(...p.between), { online: p.online, driver: p.driver, validityMin: p.validityMinutes }]),
+);
 
-/**
- * Municipality (JLS) of each place, as used by the fare list.
- * Krka (Skradin) is outside Promet Split's fare area.
- */
-export const MUNICIPALITY = {
-  'split-riva': 'Split',
-  'diocletians-palace': 'Split',
-  marjan: 'Split',
-  bacvice: 'Split',
-  salona: 'Solin',
-  klis: 'Klis',
-  trogir: 'Trogir',
-  omis: 'Omiš',
-  krka: null,
-};
+/** Municipality (JLS) of each place, as used by the fare list (null = outside the fare area). */
+export const MUNICIPALITY = F.municipalities;
 
 /** Official fare for a leg between two place ids, or null if not published. */
 export function officialFare(fromId, toId) {

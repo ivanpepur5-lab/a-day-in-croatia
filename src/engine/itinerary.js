@@ -80,6 +80,8 @@ export function buildItinerary(challenge, orderedIds, legFn = estimateLeg) {
 
   const totalMinutes = clock - start;
   const totalCost = money(experienceCost + transportCost);
+  const entryVerified = money(stops.filter((st) => st.location.costStatus === 'verified').reduce((a, st) => a + st.cost, 0));
+  const entryEstimated = money(stops.filter((st) => st.location.costStatus !== 'verified').reduce((a, st) => a + st.cost, 0));
   const transportVerified = money(legs.filter((l) => l.fareStatus === 'verified').reduce((a, l) => a + l.cost, 0));
   const transportEstimated = money(legs.filter((l) => l.fareStatus === 'estimate').reduce((a, l) => a + l.cost, 0));
   const overrunMinutes = Math.max(0, totalMinutes - challenge.availableMinutes);
@@ -99,6 +101,9 @@ export function buildItinerary(challenge, orderedIds, legFn = estimateLeg) {
       freeMinutes: Math.max(0, challenge.availableMinutes - totalMinutes),
       experienceCost: money(experienceCost),
       transportCost: money(transportCost),
+      entryVerified, // entry costs from official prices (whole party)
+      entryEstimated, // entry costs that are game estimates (whole party)
+      estimatedCost: money(entryEstimated + transportEstimated), // everything in totalCost that is an estimate
       transportVerified, // sum of legs priced with official fares (whole party)
       transportEstimated, // sum of legs priced with estimated fares (whole party)
       totalCost,

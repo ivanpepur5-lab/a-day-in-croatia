@@ -6,13 +6,17 @@ A mobile-first daily travel puzzle. Everyone gets the same challenge each day, f
 
 You pick 4 of 8 experiences, drag them into order, and get a score out of 100 that shows exactly how it was worked out. Then you can share the result.
 
-> **Partly verified data.** Every fact is labelled *verified* (checked on an official source, with URL and date), *unverified*, or *estimate* (a game value). Visit times and travel times are always estimates. See [docs/DATA_AUDIT.md](docs/DATA_AUDIT.md).
+> **Partly verified data.** Every price, hour and transport fact is labelled **✓ Verified** (official source, link and last-verified date), **⚠ Needs re-check** (an old verification or an expired price list), **? Unverified**, or **≈ Estimate** (a game value, never shown as an official price). Visit times and travel times are always estimates.
+>
+> **Updating prices, hours or transport:** edit `src/data/travel-data.json` (no code changes needed), then run `npm run audit`. Guide: [docs/EDITING_DATA.md](docs/EDITING_DATA.md). Open items: [docs/UNVERIFIED.md](docs/UNVERIFIED.md).
 
 ## Quick start
 
 ```bash
 npm install
 npm run dev        # http://localhost:5173
+npm run audit      # validate travel data (missing sources, stale dates) and regenerate docs/UNVERIFIED.md
+npm run audit:check  # same, exits 1 on errors (use before deploying)
 npm test           # unit tests (Vitest); timezone tests also re-run under TZ=America/Los_Angeles and TZ=Pacific/Kiritimati
 npm run build
 npm run test:e2e   # plays the game at 360/390/430 px widths with real touch drag, against the build (needs Playwright on the machine)

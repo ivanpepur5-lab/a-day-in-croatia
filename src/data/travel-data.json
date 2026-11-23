@@ -1,0 +1,670 @@
+{
+  "$schema": "See docs/EDITING_DATA.md",
+  "meta": {
+    "auditDate": "2026-11-23",
+    "defaultReviewDays": 180
+  },
+  "sources": {
+    "armus-directions": {
+      "label": "Archaeological Museum in Split — how to reach us",
+      "url": "https://www.armus.hr/muzej/posjet/kako-do-muzeja-zbirki",
+      "publisher": "Archaeological Museum in Split",
+      "official": true
+    },
+    "armus-hours": {
+      "label": "Archaeological Museum in Split — opening hours",
+      "url": "https://www.armus.hr/muzej/posjet",
+      "publisher": "Archaeological Museum in Split",
+      "official": true
+    },
+    "armus-prices": {
+      "label": "Archaeological Museum in Split — ticket prices",
+      "url": "https://www.armus.hr/muzej/posjet/cijena-ulaznica-i-strucnog-vodstva",
+      "publisher": "Archaeological Museum in Split",
+      "official": true
+    },
+    "armus-salona-sites": {
+      "label": "Archaeological Museum in Split — Salona sites",
+      "url": "https://www.armus.hr/muzej/povijest-muzeja/prirucna-zbirka-i-lokalitet-salona/lokaliteti-salona",
+      "publisher": "Archaeological Museum in Split",
+      "official": true
+    },
+    "klis-fortress-site": {
+      "label": "Klis Fortress (reported official site)",
+      "url": "https://www.tvrdavaklis.com/",
+      "publisher": "Klis Fortress (reported official site)",
+      "official": true
+    },
+    "krka-prices-2026": {
+      "label": "Krka National Park — entrance ticket prices for 2026 (PDF)",
+      "url": "https://www.np-krka.hr/wp-content/uploads/CJENIK-2026.-ENG.pdf",
+      "publisher": "Public Institution Krka National Park",
+      "official": true
+    },
+    "krka-site": {
+      "label": "Krka National Park",
+      "url": "https://npkrka.hr/",
+      "publisher": "Public Institution Krka National Park",
+      "official": true
+    },
+    "marjan-park": {
+      "label": "Marjan Forest Park (public institution)",
+      "url": "https://www.marjan-parksuma.hr/",
+      "publisher": "Javna ustanova Park šuma Marjan",
+      "official": true
+    },
+    "promet-fares-2026": {
+      "label": "Promet Split — single-ticket price list (valid from 1 Jun 2026)",
+      "url": "https://www.promet-split.hr/cjenik/cjenik-putnih-karata",
+      "publisher": "Promet d.o.o. Split",
+      "official": true
+    },
+    "promet-line-12": {
+      "label": "Promet Split — line 12 Sv. Frane – Bene timetable (valid from 27 Oct 2026)",
+      "url": "https://www.promet-split.hr/vozni-red/split/linijaid/61864",
+      "publisher": "Promet d.o.o. Split",
+      "official": true
+    },
+    "promet-line-22": {
+      "label": "Promet Split — line 22 Split – Klis timetable (valid from 7 Sep 2026)",
+      "url": "https://www.promet-split.hr/vozni-red/urbano-podrucje/linijaid/61877",
+      "publisher": "Promet d.o.o. Split",
+      "official": true
+    },
+    "promet-network": {
+      "label": "Promet Split — network of suburban lines",
+      "url": "https://www.promet-split.hr/linije/mreza-linija-prigradskog-prometa",
+      "publisher": "Promet d.o.o. Split",
+      "official": true
+    },
+    "unesco-split": {
+      "label": "UNESCO World Heritage List",
+      "url": "https://whc.unesco.org/en/list/97",
+      "publisher": "UNESCO World Heritage Centre",
+      "official": true
+    },
+    "visitomis-1-day": {
+      "label": "Omiš Tourist Board — Omiš in 1 day",
+      "url": "https://www.visitomis.hr/omis-u-1-3-ili-7-dana/omis-u-1-dan",
+      "publisher": "Omiš Tourist Board",
+      "official": true
+    },
+    "visitomis-cetina": {
+      "label": "Omiš Tourist Board — Cetina river canyon",
+      "url": "https://www.visitomis.hr/kanjon-rijeke-cetine",
+      "publisher": "Omiš Tourist Board",
+      "official": true
+    },
+    "visitomis-info": {
+      "label": "Omiš Tourist Board — useful information",
+      "url": "https://www.visitomis.hr/korisne-informacije",
+      "publisher": "Omiš Tourist Board",
+      "official": true
+    },
+    "visitsplit": {
+      "label": "Split Tourist Board",
+      "url": "https://visitsplit.com/en/",
+      "publisher": "Split Tourist Board",
+      "official": true
+    },
+    "visitsplit-marjan-notice": {
+      "label": "Split Tourist Board — notice on visitor access to Marjan",
+      "url": "https://visitsplit.com/hr/7391/important-notice-visitor-access-in-marjan-forest-park",
+      "publisher": "Split Tourist Board",
+      "official": true
+    },
+    "visitsplit-palace": {
+      "label": "Split Tourist Board — Diocletian Palace",
+      "url": "https://visitsplit.com/en/448/diocletian-palace",
+      "publisher": "Split Tourist Board",
+      "official": true
+    },
+    "visittrogir-faq": {
+      "label": "Trogir Tourist Board — FAQ",
+      "url": "https://www.visittrogir.hr/en/tourist/faq",
+      "publisher": "Trogir Tourist Board",
+      "official": true
+    },
+    "visittrogir-kamerlengo": {
+      "label": "Trogir Tourist Board — Kamerlengo Fortress",
+      "url": "https://www.visittrogir.hr/en/tourist/attractions/kamerlengo-fortress",
+      "publisher": "Trogir Tourist Board",
+      "official": true
+    }
+  },
+  "locations": {
+    "diocletians-palace": {
+      "price": {
+        "perPerson": 12,
+        "status": "estimate",
+        "note": "Estimated spend on paid sights inside the palace; ticket prices were not verified.",
+        "checkAt": [
+          "visitsplit-palace"
+        ]
+      },
+      "visitMinutes": {
+        "value": 90,
+        "status": "estimate",
+        "note": "Game estimate of a typical visit; not an official recommendation."
+      },
+      "facts": [
+        {
+          "id": "entry-to-palace-streets",
+          "type": "access",
+          "label": "Entry to palace streets",
+          "value": "Free (unverified)",
+          "status": "unverified",
+          "checkAt": [
+            "visitsplit-palace"
+          ],
+          "note": "Not confirmed: the official page uses a bot check that this audit could not pass."
+        },
+        {
+          "id": "cathedral-substructure-tickets-and-hours",
+          "type": "price",
+          "label": "Cathedral & substructure tickets and hours",
+          "value": "Not verified",
+          "status": "unverified",
+          "checkAt": [
+            "visitsplit-palace"
+          ],
+          "note": "mgst.net, previously used for the Split City Museum, now hosts an unofficial travel blog and was not used."
+        },
+        {
+          "id": "unesco-world-heritage-status",
+          "type": "info",
+          "label": "UNESCO World Heritage status",
+          "value": "Historical Complex of Split with the Palace of Diocletian (unverified in this audit)",
+          "status": "unverified",
+          "checkAt": [
+            "unesco-split"
+          ],
+          "note": "UNESCO’s site refused automated access during the audit."
+        }
+      ]
+    },
+    "marjan": {
+      "price": {
+        "perPerson": 0,
+        "status": "estimate",
+        "note": "Assumed free to walk",
+        "checkAt": [
+          "marjan-park"
+        ]
+      },
+      "visitMinutes": {
+        "value": 90,
+        "status": "estimate",
+        "note": "Game estimate of a typical visit; not an official recommendation."
+      },
+      "facts": [
+        {
+          "id": "access-rules",
+          "type": "access",
+          "label": "Access rules",
+          "value": "Free to walk (unverified); park rules not verified",
+          "status": "unverified",
+          "checkAt": [
+            "marjan-park",
+            "visitsplit-marjan-notice"
+          ],
+          "note": "The Split Tourist Board has published a visitor-access notice for Marjan; its content could not be read (bot check)."
+        },
+        {
+          "id": "parking",
+          "type": "access",
+          "label": "Parking",
+          "value": "Not verified",
+          "status": "unverified",
+          "checkAt": [
+            "marjan-park"
+          ]
+        },
+        {
+          "id": "public-transport",
+          "type": "transport",
+          "label": "Public transport",
+          "value": "Promet Split line 12: Sv. Frane – Obala kneza Branimira – Šetalište Ivana Meštrovića (Kaštelet and Kašjuni beaches) – Mediteranski institut – Bene",
+          "status": "verified",
+          "source": "promet-line-12",
+          "verifiedOn": "2026-11-23",
+          "note": "In the game you reach Marjan on foot from the Riva. Whether line 12 suits the Vidilica walk was not verified."
+        }
+      ]
+    },
+    "bacvice": {
+      "price": {
+        "perPerson": 0,
+        "status": "estimate",
+        "note": "Assumed free public beach (sunbed hire extra)",
+        "checkAt": [
+          "visitsplit"
+        ]
+      },
+      "visitMinutes": {
+        "value": 90,
+        "status": "estimate",
+        "note": "Game estimate of a typical visit; not an official recommendation."
+      },
+      "facts": [
+        {
+          "id": "access",
+          "type": "access",
+          "label": "Access",
+          "value": "Public beach, free (unverified)",
+          "status": "unverified",
+          "checkAt": [
+            "visitsplit"
+          ],
+          "note": "The tourist board site uses a bot check that this audit did not bypass."
+        },
+        {
+          "id": "facilities-sunbed-hire",
+          "type": "access",
+          "label": "Facilities & sunbed hire",
+          "value": "Not verified",
+          "status": "unverified",
+          "checkAt": [
+            "visitsplit"
+          ]
+        }
+      ]
+    },
+    "salona": {
+      "price": {
+        "perPerson": 8,
+        "status": "verified",
+        "note": "Official adult ticket, Archaeological Museum in Split / Salona",
+        "source": "armus-prices",
+        "verifiedOn": "2026-11-23",
+        "fact": "adult-ticket"
+      },
+      "visitMinutes": {
+        "value": 75,
+        "status": "estimate",
+        "note": "Game estimate of a typical visit; not an official recommendation."
+      },
+      "facts": [
+        {
+          "id": "adult-ticket",
+          "type": "price",
+          "label": "Adult ticket",
+          "value": "€8 (combined ticket with the Archaeological Museum in Split: €10, valid 7 days)",
+          "status": "verified",
+          "source": "armus-prices",
+          "verifiedOn": "2026-11-23",
+          "note": "The page gives no year; prices as published on the verification date."
+        },
+        {
+          "id": "opening-hours-tusculum-salona-site",
+          "type": "hours",
+          "label": "Opening hours (Tusculum / Salona site)",
+          "value": "1 Jun–30 Sep: daily 9:00–20:00 · 1 Oct–31 May: daily 9:00–18:00 · closed on public holidays",
+          "status": "verified",
+          "source": "armus-hours",
+          "verifiedOn": "2026-11-23"
+        },
+        {
+          "id": "getting-there",
+          "type": "transport",
+          "label": "Getting there",
+          "value": "A few minutes on foot from the Hotel Salona Palace bus stop (bus line 1)",
+          "status": "verified",
+          "source": "armus-directions",
+          "verifiedOn": "2026-11-23",
+          "note": "Travel time not verified; the game uses an estimate."
+        },
+        {
+          "id": "highlights",
+          "type": "info",
+          "label": "Highlights",
+          "value": "Amphitheatre (built in the second half of the 2nd century) and the early-Christian complex at Manastirine",
+          "status": "verified",
+          "source": "armus-salona-sites",
+          "verifiedOn": "2026-11-23"
+        }
+      ]
+    },
+    "klis": {
+      "price": {
+        "perPerson": 10,
+        "status": "estimate",
+        "note": "Estimated fortress entry; the official price was not verified.",
+        "checkAt": [
+          "klis-fortress-site"
+        ]
+      },
+      "visitMinutes": {
+        "value": 60,
+        "status": "estimate",
+        "note": "Game estimate of a typical visit; not an official recommendation."
+      },
+      "facts": [
+        {
+          "id": "ticket-price",
+          "type": "price",
+          "label": "Ticket price",
+          "value": "Not verified",
+          "status": "unverified",
+          "checkAt": [
+            "klis-fortress-site"
+          ],
+          "note": "The official site could not be reached from the audit environment."
+        },
+        {
+          "id": "opening-hours",
+          "type": "hours",
+          "label": "Opening hours",
+          "value": "Not verified",
+          "status": "unverified",
+          "checkAt": [
+            "klis-fortress-site"
+          ]
+        },
+        {
+          "id": "public-transport",
+          "type": "transport",
+          "label": "Public transport",
+          "value": "Promet Split line 22: Terminal Sukoišan – Ul. Domovinskog rata – ZNG – Solin – Đurini – Gornja Rupotina – Megdan – Klis; departure times are given from HNK",
+          "status": "verified",
+          "source": "promet-line-22",
+          "verifiedOn": "2026-11-23",
+          "note": "The line starts from the HNK/Sukoišan area, not the Riva. Which stop is nearest the fortress and the ride time were not verified."
+        }
+      ]
+    },
+    "trogir": {
+      "price": {
+        "perPerson": 7,
+        "status": "verified",
+        "note": "Official adult ticket, Kamerlengo Fortress (Trogir Tourist Board)",
+        "source": "visittrogir-kamerlengo",
+        "verifiedOn": "2026-11-23",
+        "fact": "kamerlengo-adult-ticket"
+      },
+      "visitMinutes": {
+        "value": 90,
+        "status": "estimate",
+        "note": "Game estimate of a typical visit; not an official recommendation."
+      },
+      "facts": [
+        {
+          "id": "kamerlengo-adult-ticket",
+          "type": "price",
+          "label": "Kamerlengo adult ticket",
+          "value": "€7 (students / children 5–16: €3; under 5 free)",
+          "status": "verified",
+          "source": "visittrogir-kamerlengo",
+          "verifiedOn": "2026-11-23",
+          "note": "Published as an image on the official page; it states no year (uploaded March 2025). Check before travelling."
+        },
+        {
+          "id": "kamerlengo-opening-hours",
+          "type": "hours",
+          "label": "Kamerlengo opening hours",
+          "value": "Apr 10:00–18:00 · May 9:00–20:00 · Jun–Aug 9:00–22:00 · Sep 9:00–20:00 · Oct–Nov 10:00–18:00 (daily)",
+          "status": "verified",
+          "source": "visittrogir-kamerlengo",
+          "verifiedOn": "2026-11-23",
+          "note": "No hours are listed for December–March. Same image as the ticket price (no year stated)."
+        },
+        {
+          "id": "unesco-world-heritage-status",
+          "type": "info",
+          "label": "UNESCO World Heritage status",
+          "value": "Trogir was inscribed on UNESCO’s World Heritage List in 1997",
+          "status": "verified",
+          "source": "visittrogir-faq",
+          "verifiedOn": "2026-11-23",
+          "note": "Confirmed on the official tourist board; UNESCO’s own site refused automated access."
+        },
+        {
+          "id": "public-transport",
+          "type": "transport",
+          "label": "Public transport",
+          "value": "Promet Split line 37 runs Split – Airport – Trogir",
+          "status": "verified",
+          "source": "promet-network",
+          "verifiedOn": "2026-11-23",
+          "note": "Travel time not verified."
+        }
+      ]
+    },
+    "omis": {
+      "price": {
+        "perPerson": 30,
+        "status": "estimate",
+        "note": "Estimated guided kayak trip; private operators set prices.",
+        "checkAt": [
+          "visitomis-cetina"
+        ]
+      },
+      "visitMinutes": {
+        "value": 150,
+        "status": "estimate",
+        "note": "Game estimate of a typical visit; not an official recommendation."
+      },
+      "facts": [
+        {
+          "id": "activities",
+          "type": "info",
+          "label": "Activities",
+          "value": "The Omiš tourist board lists kayaking, rafting, canyoning and zipline in the Cetina canyon",
+          "status": "verified",
+          "source": "visitomis-cetina",
+          "verifiedOn": "2026-11-23"
+        },
+        {
+          "id": "location-buses",
+          "type": "transport",
+          "label": "Location & buses",
+          "value": "Omiš is 25 km south-east of Split; from Split’s main bus station a direct line to Omiš leaves on average every half hour",
+          "status": "verified",
+          "source": "visitomis-info",
+          "verifiedOn": "2026-11-23",
+          "note": "Average frequency as stated by the tourist board; it is not a timetable."
+        },
+        {
+          "id": "highlight",
+          "type": "info",
+          "label": "Highlight",
+          "value": "The 14th-century Mirabela fortress, about 5 minutes’ walk from the central square, overlooks Omiš and the island of Brač",
+          "status": "verified",
+          "source": "visitomis-1-day",
+          "verifiedOn": "2026-11-23"
+        },
+        {
+          "id": "public-transport",
+          "type": "transport",
+          "label": "Public transport",
+          "value": "Promet Split line 60 runs Split – Omiš – Ravnički most",
+          "status": "verified",
+          "source": "promet-network",
+          "verifiedOn": "2026-11-23",
+          "note": "Travel time not verified."
+        }
+      ]
+    },
+    "krka": {
+      "price": {
+        "perPerson": 30,
+        "status": "estimate",
+        "note": "Game estimate. Official 2026 adult entry is €7–€40 depending on the month; the game has no seasons, so it uses one estimated price.",
+        "checkAt": [
+          "krka-prices-2026"
+        ]
+      },
+      "visitMinutes": {
+        "value": 180,
+        "status": "estimate",
+        "note": "Game estimate of a typical visit; not an official recommendation."
+      },
+      "facts": [
+        {
+          "id": "adult-entrance-2026-all-land-sites",
+          "type": "price",
+          "label": "Adult entrance 2026 (all land sites)",
+          "value": "Jan–Mar & Nov–Dec €7 · Apr, May & Oct €20 · Jun–Sep €40 (€30 after 15:00)",
+          "status": "verified",
+          "source": "krka-prices-2026",
+          "verifiedOn": "2026-11-23",
+          "note": "Price list created 16 Nov 2026; a 2027 list is also published. The park reserves the right to change prices.",
+          "validUntil": "2026-12-31"
+        },
+        {
+          "id": "children-7-18-2026-all-land-sites",
+          "type": "price",
+          "label": "Children 7–18, 2026 (all land sites)",
+          "value": "Jan–Mar & Nov–Dec €4 · Apr, May & Oct €12 · Jun–Sep €15 (€11.25 after 15:00) · under 7 free",
+          "status": "verified",
+          "source": "krka-prices-2026",
+          "verifiedOn": "2026-11-23",
+          "validUntil": "2026-12-31"
+        },
+        {
+          "id": "included-in-the-ticket",
+          "type": "price",
+          "label": "Included in the ticket",
+          "value": "Boat Skradin – Skradinski buk – Skradin and bus Lozovac – Skradinski buk – Lozovac (both 1 Apr – 31 Oct)",
+          "status": "verified",
+          "source": "krka-prices-2026",
+          "verifiedOn": "2026-11-23",
+          "validUntil": "2026-12-31"
+        },
+        {
+          "id": "opening-hours",
+          "type": "hours",
+          "label": "Opening hours",
+          "value": "Not verified",
+          "status": "unverified",
+          "checkAt": [
+            "krka-site"
+          ],
+          "note": "Opening hours are not in the price list, and the park’s web pages could not be read from the audit environment."
+        },
+        {
+          "id": "public-transport-from-split",
+          "type": "transport",
+          "label": "Public transport from Split",
+          "value": "Not verified",
+          "status": "unverified",
+          "checkAt": [
+            "krka-site"
+          ],
+          "note": "No Promet Split line serves Skradin or Lozovac (checked against the official line list)."
+        },
+        {
+          "id": "recommended-visit-duration",
+          "type": "info",
+          "label": "Recommended visit duration",
+          "value": "Not verified",
+          "status": "unverified",
+          "checkAt": [
+            "krka-site"
+          ],
+          "note": "The game uses 3h as an estimate."
+        }
+      ]
+    }
+  },
+  "fares": {
+    "source": "promet-fares-2026",
+    "verifiedOn": "2026-11-23",
+    "validFrom": "2026-06-01",
+    "gameColumn": "online",
+    "municipalities": {
+      "split-riva": "Split",
+      "diocletians-palace": "Split",
+      "marjan": "Split",
+      "bacvice": "Split",
+      "salona": "Solin",
+      "klis": "Klis",
+      "trogir": "Trogir",
+      "omis": "Omiš",
+      "krka": null
+    },
+    "pairs": [
+      {
+        "between": [
+          "Split",
+          "Split"
+        ],
+        "online": 1.5,
+        "driver": 3,
+        "validityMinutes": 60
+      },
+      {
+        "between": [
+          "Solin",
+          "Split"
+        ],
+        "online": 1.75,
+        "driver": 3.5,
+        "validityMinutes": 75
+      },
+      {
+        "between": [
+          "Klis",
+          "Split"
+        ],
+        "online": 2,
+        "driver": 4,
+        "validityMinutes": 90
+      },
+      {
+        "between": [
+          "Split",
+          "Trogir"
+        ],
+        "online": 2.5,
+        "driver": 5,
+        "validityMinutes": 105
+      },
+      {
+        "between": [
+          "Omiš",
+          "Split"
+        ],
+        "online": 2.5,
+        "driver": 5,
+        "validityMinutes": 105
+      },
+      {
+        "between": [
+          "Klis",
+          "Solin"
+        ],
+        "online": 1.75,
+        "driver": 3.5,
+        "validityMinutes": 75
+      },
+      {
+        "between": [
+          "Solin",
+          "Trogir"
+        ],
+        "online": 2,
+        "driver": 4,
+        "validityMinutes": 90
+      },
+      {
+        "between": [
+          "Omiš",
+          "Solin"
+        ],
+        "online": 2,
+        "driver": 4,
+        "validityMinutes": 90
+      },
+      {
+        "between": [
+          "Klis",
+          "Omiš"
+        ],
+        "online": 1.75,
+        "driver": 3.5,
+        "validityMinutes": 75
+      }
+    ]
+  }
+}

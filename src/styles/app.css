@@ -1625,6 +1625,113 @@ button:disabled {
 .badge--estimate {
   background: var(--paper-2);
   color: var(--ink-2);
+  border: 1px dashed var(--line-2);
+}
+.badge--stale {
+  background: #fff1cc;
+  color: #7a5200;
+}
+.badge {
+  white-space: nowrap;
+}
+.tag--stale {
+  color: #7a5200;
+  background: #fff1cc;
+}
+.price {
+  white-space: nowrap;
+}
+.price--estimate,
+.price--unverified {
+  font-style: italic;
+}
+.fact--stale {
+  border-left-color: #e0a100;
+}
+.fact--estimate {
+  border-left-style: dashed;
+}
+.fact__stale {
+  color: #7a5200;
+}
+.pricebox {
+  margin: 4px 0 14px;
+  padding: 12px 14px;
+  border-radius: var(--r-sm);
+  background: var(--paper);
+  border-left: 3px solid var(--good);
+}
+.pricebox--estimate,
+.pricebox--unverified {
+  border-left: 3px dashed var(--line-2);
+}
+.pricebox--stale {
+  border-left-color: #e0a100;
+}
+.pricebox__head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 6px;
+  font-size: 0.88rem;
+}
+.legend {
+  display: grid;
+  gap: 6px;
+  margin: 12px 0 4px;
+  font-size: 0.76rem;
+  color: var(--ink-2);
+}
+.legend .badge {
+  margin-right: 4px;
+}
+.disclose {
+  font-size: 0.76rem;
+  color: var(--ink-2);
+  line-height: 1.5;
+  padding: 8px 10px;
+  border-radius: var(--r-sm);
+  background: var(--paper);
+  border: 1px dashed var(--line-2);
+}
+.disclose .badge {
+  margin-right: 4px;
+}
+.bd__est {
+  margin-top: 6px;
+  font-size: 0.78rem;
+}
+.quality {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 6px;
+  text-align: center;
+  font-size: 0.72rem;
+  font-weight: 700;
+}
+.quality li {
+  padding: 8px 4px;
+  border-radius: var(--r-sm);
+  background: var(--paper);
+}
+.quality strong {
+  display: block;
+  font-family: var(--serif);
+  font-size: 1.4rem;
+}
+.quality--verified strong {
+  color: var(--good);
+}
+.quality--stale strong {
+  color: #b07a00;
+}
+.quality--unverified strong {
+  color: #8a5a07;
+}
+.credits__date {
+  color: var(--muted);
+  font-size: 0.78rem;
 }
 .detail > .btn {
   position: sticky;

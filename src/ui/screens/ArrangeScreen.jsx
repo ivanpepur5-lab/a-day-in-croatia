@@ -21,6 +21,12 @@ import { CATEGORIES } from '../../data/locations.js';
 import { buildItinerary, formatClock, formatDuration, formatEuro } from '../../engine/itinerary.js';
 import { describeRequirement, requirementMet } from '../../engine/requirements.js';
 import { MODE_LABELS } from '../../engine/travel.js';
+import { PriceTag } from '../components/Status.jsx';
+import { FARE_SOURCE } from '../../data/fares.js';
+import { formatCheckDate } from '../../data/verification.js';
+import { getLocation, SPLIT_HUB } from '../../data/locations.js';
+
+const placeName = (id) => (id === SPLIT_HUB.id ? SPLIT_HUB.short : getLocation(id).short);
 
 function Leg({ leg, dim }) {
   const mode = MODE_LABELS[leg.mode];
@@ -46,7 +52,11 @@ function Leg({ leg, dim }) {
         ) : (
           ' · free'
         )}
-        {leg.fareStatus === 'verified' && <span className="tag tag--ok">fare ✓</span>}
+        {leg.fareStatus === 'verified' && (
+          <span className="tag tag--ok" title={`Official fare, last verified ${formatCheckDate(FARE_SOURCE.verifiedOn)}`}>
+            fare ✓
+          </span>
+        )}
         {leg.fareStatus === 'estimate' && <span className="tag">est.</span>}
       </span>
     </li>
@@ -86,8 +96,8 @@ function StopCard({ stop, index, count, onMove }) {
         </p>
         <h3 className="stop__name">{location.name}</h3>
         <p className="stop__meta">
-          {CATEGORIES[location.category].emoji} {formatDuration(location.durationMin)} ·{' '}
-          {stop.cost === 0 ? 'Free' : formatEuro(stop.cost)}
+          {CATEGORIES[location.category].emoji} ≈{formatDuration(location.durationMin)} ·{' '}
+          <PriceTag rec={location.price} amount={stop.cost} suffix="" />
         </p>
       </div>
       <div className="stop__arrows">
@@ -174,6 +184,21 @@ export default function ArrangeScreen({ challenge, selection, practice, onMove, 
           )}{' '}
           · for {challenge.partySize}
         </p>
+        {totals.estimatedCost > 0 && (
+          <p className="disclose" data-testid="estimate-disclosure">
+            <span className="badge badge--estimate">≈ Estimate</span> This plan includes{' '}
+            {formatEuro(totals.estimatedCost)} of estimated costs:{' '}
+            {[
+              ...stops
+                .filter((st) => st.location.costStatus !== 'verified' && st.cost > 0)
+                .map((st) => `${st.location.short} entry ≈${formatEuro(st.cost)}`),
+              ...itinerary.legs
+                .filter((l) => l.fareStatus === 'estimate')
+                .map((l) => `bus ${placeName(l.fromId)}→${placeName(l.toId)} ≈${formatEuro(l.cost)}`),
+            ].join(', ')}
+            . The game can be played as normal; check official prices before travelling.
+          </p>
+        )}
         <ul className="checks">
           {challenge.requirements.map((r) => {
             const ok = requirementMet(r, selection);

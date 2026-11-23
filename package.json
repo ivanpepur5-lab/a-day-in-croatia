@@ -12,7 +12,8 @@
     "test:watch": "vitest",
     "test:e2e": "node scripts/e2e.mjs",
     "og": "node scripts/og.mjs",
-    "audit": "node scripts/audit-report.mjs"
+    "audit": "node scripts/audit-report.mjs",
+    "audit:check": "node scripts/audit-report.mjs --check"
   },
   "engines": {
     "node": ">=20"

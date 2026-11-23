@@ -3,7 +3,7 @@ import ScoreRing from '../components/ScoreRing.jsx';
 import RouteMap from '../components/RouteMap.jsx';
 import { scorePlan } from '../../engine/scoring.js';
 import { analyzeChallenge, rankOf } from '../../engine/analysis.js';
-import { formatClock, formatDuration } from '../../engine/itinerary.js';
+import { formatClock, formatDuration, formatEuro } from '../../engine/itinerary.js';
 import { describeRequirement } from '../../engine/requirements.js';
 import { buildShareText } from '../../engine/share.js';
 import { msUntilNextPuzzle, formatPuzzleDate } from '../../engine/daily.js';
@@ -28,7 +28,7 @@ function Countdown() {
   );
 }
 
-function Breakdown({ component, delay }) {
+function Breakdown({ component, delay, estimatedCost = 0 }) {
   const reduced = usePrefersReducedMotion();
   const [grown, setGrown] = useState(reduced);
   useEffect(() => {
@@ -51,6 +51,12 @@ function Breakdown({ component, delay }) {
         <div className="bd__fill" style={{ width: grown ? `${pct}%` : 0 }} />
       </div>
       <p className="bd__detail">{component.detail}</p>
+      {component.id === 'budget' && estimatedCost > 0 && (
+        <p className="bd__detail bd__est" data-testid="budget-estimate-note">
+          <span className="badge badge--estimate">≈ Estimate</span> Includes {formatEuro(estimatedCost)} of estimated
+          costs (not official prices).
+        </p>
+      )}
       {component.id === 'mission' && (
         <ul className="checks checks--inline">
           {component.data.checks.map((c) => (
@@ -188,7 +194,7 @@ export default function ResultsScreen({ daily, selection, practice, stats, onPra
         <h2 className="panel__title">Score breakdown</h2>
         <ul className="breakdown">
           {result.components.map((c, i) => (
-            <Breakdown key={c.id} component={c} delay={500 + i * 180} />
+            <Breakdown key={c.id} component={c} delay={500 + i * 180} estimatedCost={result.itinerary.totals.estimatedCost} />
           ))}
         </ul>
       </section>
