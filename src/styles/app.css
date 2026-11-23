@@ -1067,6 +1067,15 @@ button:disabled {
   color: var(--muted);
   transition: opacity 0.2s;
 }
+.leg__text {
+  line-height: 1.5;
+}
+.costsplit {
+  margin-top: -6px;
+  font-size: 0.76rem;
+  color: var(--muted);
+  font-variant-numeric: tabular-nums;
+}
 .leg.is-dim {
   opacity: 0.25;
 }

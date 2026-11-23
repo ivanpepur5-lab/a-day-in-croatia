@@ -80,6 +80,8 @@ export function buildItinerary(challenge, orderedIds, legFn = estimateLeg) {
 
   const totalMinutes = clock - start;
   const totalCost = money(experienceCost + transportCost);
+  const transportVerified = money(legs.filter((l) => l.fareStatus === 'verified').reduce((a, l) => a + l.cost, 0));
+  const transportEstimated = money(legs.filter((l) => l.fareStatus === 'estimate').reduce((a, l) => a + l.cost, 0));
   const overrunMinutes = Math.max(0, totalMinutes - challenge.availableMinutes);
   const overBudget = money(Math.max(0, totalCost - challenge.budget));
 
@@ -97,6 +99,8 @@ export function buildItinerary(challenge, orderedIds, legFn = estimateLeg) {
       freeMinutes: Math.max(0, challenge.availableMinutes - totalMinutes),
       experienceCost: money(experienceCost),
       transportCost: money(transportCost),
+      transportVerified, // sum of legs priced with official fares (whole party)
+      transportEstimated, // sum of legs priced with estimated fares (whole party)
       totalCost,
     },
     constraints: {
@@ -130,10 +134,12 @@ function makeLeg(from, to, legFn, party) {
     toId: to.id,
     mode: est.mode,
     km: est.km,
-    minutes: est.minutes,
-    costPerPerson,
-    cost: money(costPerPerson * party),
-    fareStatus,
+    minutes: est.minutes, // always a model estimate
+    party,
+    costPerPerson, // EUR per person (online / ticket-office fare when verified)
+    cost: money(costPerPerson * party), // EUR for the whole party
+    driverFarePerPerson: fare ? fare.driver : null, // official fare if bought from the driver
+    fareStatus, // 'verified' | 'estimate' | 'free'
     fare,
   };
 }

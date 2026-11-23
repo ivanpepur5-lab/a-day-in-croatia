@@ -66,6 +66,19 @@ const fareFact = (key, label) => {
   };
 };
 
+const KRKA_PRICES = {
+  label: 'Krka National Park — entrance ticket prices for 2026 (PDF)',
+  url: 'https://www.np-krka.hr/wp-content/uploads/CJENIK-2026.-ENG.pdf',
+};
+const LINE_22 = {
+  label: 'Promet Split — line 22 Split – Klis timetable (valid from 7 Sep 2026)',
+  url: 'https://www.promet-split.hr/vozni-red/urbano-podrucje/linijaid/61877',
+};
+const LINE_12 = {
+  label: 'Promet Split — line 12 Sv. Frane – Bene timetable (valid from 27 Oct 2026)',
+  url: 'https://www.promet-split.hr/vozni-red/split/linijaid/61864',
+};
+
 const verified = (field, value, source, note) => ({
   field,
   value,
@@ -139,9 +152,12 @@ export const LOCATIONS = [
       unverified('Entry to palace streets', 'Free (unverified)', [
         { label: 'Split Tourist Board — Diocletian Palace', url: 'https://visitsplit.com/en/448/diocletian-palace' },
       ], 'Not confirmed: the official page uses a bot check that this audit could not pass.'),
-      unverified('Cathedral & substructure tickets', 'Not verified', [
+      unverified('Cathedral & substructure tickets and hours', 'Not verified', [
         { label: 'Split Tourist Board — Diocletian Palace', url: 'https://visitsplit.com/en/448/diocletian-palace' },
       ], 'mgst.net, previously used for the Split City Museum, now hosts an unofficial travel blog and was not used.'),
+      unverified('UNESCO World Heritage status', 'Historical Complex of Split with the Palace of Diocletian (unverified in this audit)', [
+        { label: 'UNESCO World Heritage List', url: 'https://whc.unesco.org/en/list/97' },
+      ], 'UNESCO’s site refused automated access during the audit.'),
       estimate('Time on site', '1h 30m', VISIT_TIME_NOTE),
     ],
   },
@@ -163,9 +179,19 @@ export const LOCATIONS = [
     photo: PHOTOS.marjan,
     lastReviewed: AUDIT_DATE,
     facts: [
-      unverified('Access', 'Free to walk (unverified)', [
+      unverified('Access rules', 'Free to walk (unverified); park rules not verified', [
+        { label: 'Marjan Forest Park (public institution)', url: 'https://www.marjan-parksuma.hr/' },
+        { label: 'Split Tourist Board — notice on visitor access to Marjan', url: 'https://visitsplit.com/hr/7391/important-notice-visitor-access-in-marjan-forest-park' },
+      ], 'The Split Tourist Board has published a visitor-access notice for Marjan; its content could not be read (bot check).'),
+      unverified('Parking', 'Not verified', [
         { label: 'Marjan Forest Park (public institution)', url: 'https://www.marjan-parksuma.hr/' },
       ]),
+      verified(
+        'Public transport',
+        'Promet Split line 12: Sv. Frane – Obala kneza Branimira – Šetalište Ivana Meštrovića (Kaštelet and Kašjuni beaches) – Mediteranski institut – Bene',
+        LINE_12,
+        'In the game you reach Marjan on foot from the Riva. Whether line 12 suits the Vidilica walk was not verified.',
+      ),
       estimate('Time on site', '1h 30m', VISIT_TIME_NOTE),
     ],
   },
@@ -189,7 +215,8 @@ export const LOCATIONS = [
     facts: [
       unverified('Access', 'Public beach, free (unverified)', [
         { label: 'Split Tourist Board', url: 'https://visitsplit.com/en/' },
-      ]),
+      ], 'The tourist board site uses a bot check that this audit did not bypass.'),
+      unverified('Facilities & sunbed hire', 'Not verified', [{ label: 'Split Tourist Board', url: 'https://visitsplit.com/en/' }]),
       estimate('Time on site', '1h 30m', VISIT_TIME_NOTE),
     ],
   },
@@ -262,11 +289,18 @@ export const LOCATIONS = [
     lastReviewed: AUDIT_DATE,
     facts: [
       estimate('Entry', '≈ €10 per person', 'Game estimate; ticket price not verified.'),
-      unverified('Ticket price & opening hours', 'Not verified', [
+      unverified('Ticket price', 'Not verified', [
         { label: 'Klis Fortress (reported official site)', url: 'https://www.tvrdavaklis.com/' },
-      ], 'Official site could not be reached from the audit environment.'),
-      verified('Public transport', 'Promet Split line 22 runs Split – Klis', PROMET_LINES,
-        'Travel time not verified.'),
+      ], 'The official site could not be reached from the audit environment.'),
+      unverified('Opening hours', 'Not verified', [
+        { label: 'Klis Fortress (reported official site)', url: 'https://www.tvrdavaklis.com/' },
+      ]),
+      verified(
+        'Public transport',
+        'Promet Split line 22: Terminal Sukoišan – Ul. Domovinskog rata – ZNG – Solin – Đurini – Gornja Rupotina – Megdan – Klis; departure times are given from HNK',
+        LINE_22,
+        'The line starts from the HNK/Sukoišan area, not the Riva. Which stop is nearest the fortress and the ride time were not verified.',
+      ),
       fareFact('Klis|Split', 'Split – Klis'),
       estimate('Time on site', '1h', VISIT_TIME_NOTE),
     ],
@@ -367,18 +401,38 @@ export const LOCATIONS = [
     durationMin: 180,
     costPerPerson: 30,
     costStatus: 'estimate',
-    costNote: 'Estimated park entry (official prices vary by season)',
+    costNote: 'Game estimate — official 2026 adult entry is €7–€40 depending on the month (seasons are not modelled)',
     coords: { lat: 43.8169, lng: 15.9225 },
     photo: PHOTOS.krka,
     lastReviewed: AUDIT_DATE,
     facts: [
-      estimate('Park entry', '≈ €30 per person', 'Game estimate. Official prices are seasonal and were not verified.'),
-      unverified('Ticket prices & opening hours', 'Not verified', [
-        { label: 'Krka National Park (np-krka.hr now redirects here)', url: 'https://npkrka.hr/' },
-      ], 'The official site could not be read from the audit environment.'),
-      unverified('Public transport from Split', 'Not verified', [
-        { label: 'Krka National Park', url: 'https://npkrka.hr/' },
-      ], 'Not served by Promet Split’s suburban network.'),
+      verified(
+        'Adult entrance 2026 (all land sites)',
+        'Jan–Mar & Nov–Dec €7 · Apr, May & Oct €20 · Jun–Sep €40 (€30 after 15:00)',
+        KRKA_PRICES,
+        'Price list created 16 Nov 2026; a 2027 list is also published. The park reserves the right to change prices.',
+      ),
+      verified(
+        'Children 7–18, 2026 (all land sites)',
+        'Jan–Mar & Nov–Dec €4 · Apr, May & Oct €12 · Jun–Sep €15 (€11.25 after 15:00) · under 7 free',
+        KRKA_PRICES,
+      ),
+      verified(
+        'Included in the ticket',
+        'Boat Skradin – Skradinski buk – Skradin and bus Lozovac – Skradinski buk – Lozovac (both 1 Apr – 31 Oct)',
+        KRKA_PRICES,
+      ),
+      estimate(
+        'Game cost',
+        '≈ €30 per person',
+        'The game has no seasons, so it keeps one estimated price. Official 2026 adult prices are listed above.',
+      ),
+      unverified('Opening hours', 'Not verified', [{ label: 'Krka National Park', url: 'https://npkrka.hr/' }],
+        'Opening hours are not in the price list, and the park’s web pages could not be read from the audit environment.'),
+      unverified('Public transport from Split', 'Not verified', [{ label: 'Krka National Park', url: 'https://npkrka.hr/' }],
+        'No Promet Split line serves Skradin or Lozovac (checked against the official line list).'),
+      unverified('Recommended visit duration', 'Not verified', [{ label: 'Krka National Park', url: 'https://npkrka.hr/' }],
+        'The game uses 3h as an estimate.'),
       estimate('Time on site', '3h', VISIT_TIME_NOTE),
     ],
   },

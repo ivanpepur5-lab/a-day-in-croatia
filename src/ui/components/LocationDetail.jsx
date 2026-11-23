@@ -3,6 +3,7 @@ import { CATEGORIES } from '../../data/locations.js';
 import { creditLine } from '../../data/photos.js';
 import { formatDuration, formatEuro } from '../../engine/itinerary.js';
 import { estimateLeg, MODE_LABELS } from '../../engine/travel.js';
+import { officialFare } from '../../data/fares.js';
 
 const STATUS_LABEL = { verified: 'Verified', unverified: 'Unverified', estimate: 'Estimate' };
 
@@ -18,6 +19,7 @@ function formatDate(key) {
 
 export default function LocationDetail({ location, hub, selected, canAdd, onToggle }) {
   const fromHub = estimateLeg(hub.coords, location.coords);
+  const fare = fromHub.mode === 'transit' ? officialFare(hub.id, location.id) : null;
   const costVerified = location.costStatus === 'verified';
   return (
     <div className="detail">
@@ -53,9 +55,15 @@ export default function LocationDetail({ location, hub, selected, canAdd, onTogg
         <div>
           <dt>From {hub.short}</dt>
           <dd>
-            {MODE_LABELS[fromHub.mode].emoji} {formatDuration(fromHub.minutes)}
+            {MODE_LABELS[fromHub.mode].emoji} ≈{formatDuration(fromHub.minutes)}
           </dd>
-          <dd className="detail__status">estimate</dd>
+          <dd className="detail__status">
+            {fromHub.mode === 'walk'
+              ? 'time est. · free'
+              : fare
+                ? `time est. · fare ${formatEuro(fare.online)} pp ✓`
+                : `time est. · fare ≈${formatEuro(fromHub.costPerPerson)} pp`}
+          </dd>
         </div>
       </dl>
 

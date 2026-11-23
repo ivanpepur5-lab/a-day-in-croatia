@@ -30,17 +30,24 @@ function Leg({ leg, dim }) {
       <span className="leg__text">
         <span aria-hidden="true">{mode.emoji}</span> {mode.label} ·{' '}
         <span title="Estimated travel time (not a timetable)">≈{formatDuration(leg.minutes)}</span>
-        {leg.cost > 0 ? ` · ${formatEuro(leg.cost)}` : ' · free'}
-        {leg.fareStatus === 'verified' && (
-          <span className="tag tag--ok" title="Official Promet Split fare (online / ticket office), for the whole party">
-            fare ✓
+        {leg.cost > 0 ? (
+          <span
+            className="leg__fare"
+            title={
+              leg.fareStatus === 'verified'
+                ? `Official Promet Split fare: ${formatEuro(leg.costPerPerson)} per person online / at a ticket office (${formatEuro(leg.driverFarePerPerson)} from the driver)`
+                : 'Estimated fare — not an official tariff'
+            }
+          >
+            {' '}
+            · {leg.party} × {leg.fareStatus === 'estimate' ? '≈' : ''}
+            {formatEuro(leg.costPerPerson)} = {formatEuro(leg.cost)}
           </span>
+        ) : (
+          ' · free'
         )}
-        {leg.fareStatus === 'estimate' && (
-          <span className="tag" title="Estimated fare — not an official tariff">
-            est.
-          </span>
-        )}
+        {leg.fareStatus === 'verified' && <span className="tag tag--ok">fare ✓</span>}
+        {leg.fareStatus === 'estimate' && <span className="tag">est.</span>}
       </span>
     </li>
   );
@@ -156,6 +163,17 @@ export default function ArrangeScreen({ challenge, selection, practice, onMove, 
           limitText={formatEuro(challenge.budget)}
           testId="meter-budget"
         />
+        <p className="costsplit" data-testid="cost-split">
+          Entry {formatEuro(totals.experienceCost)} · Bus {formatEuro(totals.transportCost)}
+          {totals.transportCost > 0 && (
+            <>
+              {' '}
+              ({formatEuro(totals.transportVerified)} official fares
+              {totals.transportEstimated > 0 && <> + {formatEuro(totals.transportEstimated)} est.</>})
+            </>
+          )}{' '}
+          · for {challenge.partySize}
+        </p>
         <ul className="checks">
           {challenge.requirements.map((r) => {
             const ok = requirementMet(r, selection);

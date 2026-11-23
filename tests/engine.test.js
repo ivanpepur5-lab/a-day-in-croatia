@@ -218,6 +218,41 @@ describe('official bus fares', () => {
     expect(walk.fareStatus).toBe('free');
     expect(walk.cost).toBe(0);
   });
+  it('stores fares per person and totals them for the whole party', () => {
+    for (const order of [
+      ['salona', 'klis', 'bacvice', 'marjan'],
+      ['trogir', 'omis', 'krka', 'klis'],
+      ['diocletians-palace', 'bacvice', 'salona', 'marjan'],
+    ]) {
+      const it = buildItinerary(classic, order);
+      let verified = 0;
+      let estimated = 0;
+      for (const l of it.legs) {
+        expect(l.party).toBe(2);
+        expect(l.cost).toBeCloseTo(l.costPerPerson * 2, 10);
+        if (l.fareStatus === 'verified') {
+          verified += l.cost;
+          expect(l.driverFarePerPerson).toBe(l.fare.driver);
+          expect(l.costPerPerson).toBe(l.fare.online);
+        } else {
+          expect(l.driverFarePerPerson).toBeNull();
+          if (l.fareStatus === 'estimate') estimated += l.cost;
+          else expect(l.cost).toBe(0);
+        }
+      }
+      expect(it.totals.transportVerified).toBeCloseTo(verified, 10);
+      expect(it.totals.transportEstimated).toBeCloseTo(estimated, 10);
+      expect(it.totals.transportCost).toBeCloseTo(verified + estimated, 10);
+    }
+  });
+
+  it('prices a Riva → Salona → Klis → Riva bus day exactly from the official list (party of 2)', () => {
+    const it = buildItinerary(classic, ['salona', 'klis', 'bacvice', 'marjan']);
+    // Riva→Salona (Split–Solin 1.75) + Salona→Klis (Solin–Klis 1.75) + Klis→Bačvice (Split–Klis 2.00); rest walks
+    expect(it.legs.map((l) => l.fareStatus)).toEqual(['verified', 'verified', 'verified', 'free', 'free']);
+    expect(it.totals.transportCost).toBe((1.75 + 1.75 + 2.0) * 2);
+  });
+
   it('lists only the fares printed in the official PDF', async () => {
     const { PROMET_FARES, FARE_SOURCE } = await import('../src/data/fares.js');
     expect(FARE_SOURCE.url).toMatch(/^https:\/\/www\.promet-split\.hr\//);
