@@ -59,8 +59,9 @@ export default function HowToPlay() {
       <h3 className="howto__h">Travel estimates</h3>
       <p className="howto__p">
         No car: legs up to {T.WALK_MAX_KM} km are walked (free). Longer legs are estimated bus trips: {T.WAIT_MIN} min of
-        waiting and connections plus ride time, with an estimated fare (not an official tariff). Distances use straight-line km × {T.DETOUR_FACTOR}.
-        These are <strong>not timetables</strong>.
+        waiting and connections plus ride time. Distances use straight-line km × {T.DETOUR_FACTOR}. These times (shown with “≈”) are{' '}
+        <strong>not timetables</strong>. Bus fares are the official Promet Split online / ticket-office fares (valid from
+        1 June 2026) where the price list covers the journey, marked “fare ✓”; other fares are estimates, marked “est.”.
       </p>
 
       <p className="notice">

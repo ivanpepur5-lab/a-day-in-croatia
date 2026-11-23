@@ -589,6 +589,7 @@ button:disabled {
   margin-top: 2px;
 }
 .xcard__meta {
+  padding-right: 30px;
   display: flex;
   flex-wrap: wrap;
   gap: 4px 10px;
@@ -1450,6 +1451,9 @@ button:disabled {
 .media--photo img {
   position: absolute;
   inset: 0;
+}
+.media--photo picture {
+  display: contents;
 }
 .media--photo {
   isolation: isolate;

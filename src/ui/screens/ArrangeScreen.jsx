@@ -28,8 +28,19 @@ function Leg({ leg, dim }) {
     <li className={`leg leg--${leg.mode} ${dim ? 'is-dim' : ''}`}>
       <span className="leg__line" aria-hidden="true" />
       <span className="leg__text">
-        <span aria-hidden="true">{mode.emoji}</span> {mode.label} · {formatDuration(leg.minutes)}
+        <span aria-hidden="true">{mode.emoji}</span> {mode.label} ·{' '}
+        <span title="Estimated travel time (not a timetable)">≈{formatDuration(leg.minutes)}</span>
         {leg.cost > 0 ? ` · ${formatEuro(leg.cost)}` : ' · free'}
+        {leg.fareStatus === 'verified' && (
+          <span className="tag tag--ok" title="Official Promet Split fare (online / ticket office), for the whole party">
+            fare ✓
+          </span>
+        )}
+        {leg.fareStatus === 'estimate' && (
+          <span className="tag" title="Estimated fare — not an official tariff">
+            est.
+          </span>
+        )}
       </span>
     </li>
   );

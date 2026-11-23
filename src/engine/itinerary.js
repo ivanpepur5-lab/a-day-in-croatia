@@ -1,5 +1,6 @@
 import { getLocation } from '../data/locations.js';
 import { estimateLeg } from './travel.js';
+import { officialFare, FARE_COLUMN } from '../data/fares.js';
 
 /** "09:30" → 570 */
 export function parseClock(hhmm) {
@@ -107,15 +108,32 @@ export function buildItinerary(challenge, orderedIds, legFn = estimateLeg) {
   };
 }
 
+/**
+ * A leg's time always comes from the (estimated) travel model. Its fare is
+ * the official Promet Split fare when the municipality pair is published,
+ * otherwise the model's estimate. Walking is free.
+ */
 function makeLeg(from, to, legFn, party) {
   const est = legFn(from.coords, to.coords);
+  let costPerPerson = est.costPerPerson;
+  let fareStatus = est.mode === 'walk' ? 'free' : 'estimate';
+  let fare = null;
+  if (est.mode === 'transit' && legFn === estimateLeg) {
+    fare = officialFare(from.id, to.id);
+    if (fare) {
+      costPerPerson = fare[FARE_COLUMN];
+      fareStatus = 'verified';
+    }
+  }
   return {
     fromId: from.id,
     toId: to.id,
     mode: est.mode,
     km: est.km,
     minutes: est.minutes,
-    costPerPerson: est.costPerPerson,
-    cost: money(est.costPerPerson * party),
+    costPerPerson,
+    cost: money(costPerPerson * party),
+    fareStatus,
+    fare,
   };
 }

@@ -1,7 +1,7 @@
 /* A Day in Croatia — service worker.
  * Navigation: network-first (fresh daily puzzle), falling back to the cached shell.
  * Same-origin assets: stale-while-revalidate (hashed Vite assets are immutable). */
-const CACHE = 'adic-v2';
+const CACHE = 'adic-v3';
 const SHELL = ['/', '/index.html', '/manifest.webmanifest', '/icons/icon.svg'];
 
 self.addEventListener('install', (event) => {

@@ -24,26 +24,26 @@ export const PHOTOS = {
   'diocletians-palace': {
     src: '/images/photos/diocletians-palace-1200.jpg',
     thumb: '/images/photos/diocletians-palace-480.jpg',
-    alt: "Bell tower of the Cathedral of Saint Domnius, Diocletian’s Palace",
-    title: "Cathedral_of_Saint_Domnius_-_Bell_tower_01.jpg",
-    author: "Bernard Gagnon",
+    alt: "The Peristyle of Diocletian’s Palace with the Protiron, Split",
+    title: "Split_BW_2024-10-02_11-16-50.jpg",
+    author: "Berthold Werner",
     license: 'CC BY-SA 4.0',
     licenseUrl: "https://creativecommons.org/licenses/by-sa/4.0/",
-    sourceUrl: "https://commons.wikimedia.org/wiki/File:Cathedral_of_Saint_Domnius_-_Bell_tower_01.jpg",
-    originalSize: '3456×5184',
+    sourceUrl: "https://commons.wikimedia.org/wiki/File:Split_BW_2024-10-02_11-16-50.jpg",
+    originalSize: '3651×5492',
     qualityImage: true,
   },
   'marjan': {
     src: '/images/photos/marjan-1200.jpg',
     thumb: '/images/photos/marjan-480.jpg',
-    alt: "Cross on Marjan hill above Split",
-    title: "Cross_on_Marjan_hill,_Split.jpg",
-    author: "Bernard Gagnon",
+    alt: "View over Split and its harbour from the pine-covered Marjan hill",
+    title: "Split-Marjan-01.jpg",
+    author: "SchiDD",
     license: 'CC BY-SA 4.0',
     licenseUrl: "https://creativecommons.org/licenses/by-sa/4.0/",
-    sourceUrl: "https://commons.wikimedia.org/wiki/File:Cross_on_Marjan_hill,_Split.jpg",
-    originalSize: '3375×5063',
-    qualityImage: true,
+    sourceUrl: "https://commons.wikimedia.org/wiki/File:Split-Marjan-01.jpg",
+    originalSize: '5237×2228',
+    qualityImage: false,
   },
   'bacvice': {
     src: '/images/photos/bacvice-1200.jpg',
@@ -118,6 +118,9 @@ export const PHOTOS = {
     qualityImage: true,
   },
 };
+
+/** WebP sibling of a JPEG path (all photos ship in both formats). */
+export const webpOf = (src) => src.replace(/\.jpg$/, '.webp');
 
 /** Short attribution line, e.g. "Photo: Bernard Gagnon · CC BY-SA 4.0". */
 export function creditLine(photo) {

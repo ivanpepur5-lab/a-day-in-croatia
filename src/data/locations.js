@@ -1,4 +1,5 @@
 import { PHOTOS } from './photos.js';
+import { FARE_SOURCE, PROMET_FARES } from './fares.js';
 
 /**
  * Location data for the Split & Dalmatia region.
@@ -51,6 +52,18 @@ export const SPLIT_HUB = {
 const PROMET_LINES = {
   label: 'Promet Split — network of suburban lines',
   url: 'https://www.promet-split.hr/linije/mreza-linija-prigradskog-prometa',
+};
+
+const fareFact = (key, label) => {
+  const f = PROMET_FARES[key];
+  return {
+    field: 'Bus fare from Split',
+    value: `€${f.online.toFixed(2)} per person online / at a ticket office, €${f.driver.toFixed(2)} from the driver (${label}, ticket valid ${f.validityMin} min)`,
+    status: 'verified',
+    source: { label: FARE_SOURCE.label, url: FARE_SOURCE.url },
+    verifiedOn: FARE_SOURCE.verifiedOn,
+    note: 'Prices valid from 1 Jun 2026. The game uses the online / ticket-office fare.',
+  };
 };
 
 const verified = (field, value, source, note) => ({
@@ -212,8 +225,21 @@ export const LOCATIONS = [
         '1 Jun–30 Sep: daily 9:00–20:00 · 1 Oct–31 May: daily 9:00–18:00 · closed on public holidays',
         { label: 'Archaeological Museum in Split — opening hours', url: 'https://www.armus.hr/muzej/posjet' },
       ),
-      verified('Public transport', 'Promet Split line 5A lists Solin on its route', PROMET_LINES,
-        'Stop nearest the site and travel time not verified.'),
+      verified(
+        'Getting there',
+        'A few minutes on foot from the Hotel Salona Palace bus stop (bus line 1)',
+        { label: 'Archaeological Museum in Split — how to reach us', url: 'https://www.armus.hr/muzej/posjet/kako-do-muzeja-zbirki' },
+        'Travel time not verified; the game uses an estimate.',
+      ),
+      fareFact('Solin|Split', 'Split – Solin'),
+      verified(
+        'Highlights',
+        'Amphitheatre (built in the second half of the 2nd century) and the early-Christian complex at Manastirine',
+        {
+          label: 'Archaeological Museum in Split — Salona sites',
+          url: 'https://www.armus.hr/muzej/povijest-muzeja/prirucna-zbirka-i-lokalitet-salona/lokaliteti-salona',
+        },
+      ),
       estimate('Time on site', '1h 15m', VISIT_TIME_NOTE),
     ],
   },
@@ -241,6 +267,7 @@ export const LOCATIONS = [
       ], 'Official site could not be reached from the audit environment.'),
       verified('Public transport', 'Promet Split line 22 runs Split – Klis', PROMET_LINES,
         'Travel time not verified.'),
+      fareFact('Klis|Split', 'Split – Klis'),
       estimate('Time on site', '1h', VISIT_TIME_NOTE),
     ],
   },
@@ -251,27 +278,38 @@ export const LOCATIONS = [
     area: 'Trogir',
     tagline: 'A medieval island town of stone lanes and loggias.',
     description:
-      'Cross the bridge to a compact old town on a small island, then walk the waterfront to the Kamerlengo fortress.',
+      'Cross the bridge to a compact, UNESCO-listed old town on a small island, then walk the waterfront to the Kamerlengo fortress.',
     category: 'culture',
     tags: ['culture', 'history'],
     durationMin: 90,
-    costPerPerson: 6,
-    costStatus: 'estimate',
-    costNote: 'Estimated fortress entry',
+    costPerPerson: 7,
+    costStatus: 'verified',
+    costNote: 'Official adult ticket, Kamerlengo Fortress (Trogir Tourist Board)',
     coords: { lat: 43.5167, lng: 16.2503 },
     photo: PHOTOS.trogir,
     lastReviewed: AUDIT_DATE,
     facts: [
-      estimate('Kamerlengo entry', '≈ €6 per person', 'Game estimate; ticket price not verified.'),
-      unverified('Kamerlengo ticket & hours', 'Not verified', [
-        { label: 'Trogir Town Museum', url: 'https://www.muzej-grada-trogira.hr/' },
-        { label: 'Trogir Tourist Board', url: 'https://www.visittrogir.hr/' },
-      ]),
-      unverified('UNESCO World Heritage status', 'Historic City of Trogir (unverified in this audit)', [
-        { label: 'UNESCO World Heritage List', url: 'https://whc.unesco.org/en/list/810' },
-      ], 'UNESCO’s site refused automated access during the audit.'),
+      verified(
+        'Kamerlengo adult ticket',
+        '€7 (students / children 5–16: €3; under 5 free)',
+        { label: 'Trogir Tourist Board — Kamerlengo Fortress', url: 'https://www.visittrogir.hr/en/tourist/attractions/kamerlengo-fortress' },
+        'Published as an image on the official page; it states no year (uploaded March 2025). Check before travelling.',
+      ),
+      verified(
+        'Kamerlengo opening hours',
+        'Apr 10:00–18:00 · May 9:00–20:00 · Jun–Aug 9:00–22:00 · Sep 9:00–20:00 · Oct–Nov 10:00–18:00 (daily)',
+        { label: 'Trogir Tourist Board — Kamerlengo Fortress', url: 'https://www.visittrogir.hr/en/tourist/attractions/kamerlengo-fortress' },
+        'No hours are listed for December–March. Same image as the ticket price (no year stated).',
+      ),
+      verified(
+        'UNESCO World Heritage status',
+        'Trogir was inscribed on UNESCO’s World Heritage List in 1997',
+        { label: 'Trogir Tourist Board — FAQ', url: 'https://www.visittrogir.hr/en/tourist/faq' },
+        'Confirmed on the official tourist board; UNESCO’s own site refused automated access.',
+      ),
       verified('Public transport', 'Promet Split line 37 runs Split – Airport – Trogir', PROMET_LINES,
         'Travel time not verified.'),
+      fareFact('Split|Trogir', 'Split – Trogir'),
       estimate('Time on site', '1h 30m', VISIT_TIME_NOTE),
     ],
   },
@@ -299,8 +337,20 @@ export const LOCATIONS = [
         { label: 'Omiš Tourist Board — Cetina river canyon', url: 'https://www.visitomis.hr/kanjon-rijeke-cetine' },
       ),
       estimate('Kayak trip price', '≈ €30 per person', 'Private operators set prices; not verified.'),
+      verified(
+        'Location & buses',
+        'Omiš is 25 km south-east of Split; from Split’s main bus station a direct line to Omiš leaves on average every half hour',
+        { label: 'Omiš Tourist Board — useful information', url: 'https://www.visitomis.hr/korisne-informacije' },
+        'Average frequency as stated by the tourist board; it is not a timetable.',
+      ),
+      verified(
+        'Highlight',
+        'The 14th-century Mirabela fortress, about 5 minutes’ walk from the central square, overlooks Omiš and the island of Brač',
+        { label: 'Omiš Tourist Board — Omiš in 1 day', url: 'https://www.visitomis.hr/omis-u-1-3-ili-7-dana/omis-u-1-dan' },
+      ),
       verified('Public transport', 'Promet Split line 60 runs Split – Omiš – Ravnički most', PROMET_LINES,
         'Travel time not verified.'),
+      fareFact('Omiš|Split', 'Split – Omiš'),
       estimate('Time on site', '2h 30m', VISIT_TIME_NOTE),
     ],
   },

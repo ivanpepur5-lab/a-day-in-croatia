@@ -70,5 +70,5 @@ export function estimateLeg(fromCoords, toCoords, model = TRAVEL_MODEL) {
 
 export const MODE_LABELS = {
   walk: { label: 'Walk', emoji: '🚶' },
-  transit: { label: 'Bus (est.)', emoji: '🚌' },
+  transit: { label: 'Bus', emoji: '🚌' },
 };

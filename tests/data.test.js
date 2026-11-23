@@ -71,6 +71,8 @@ describe('photography', () => {
       expect(p.alt.length).toBeGreaterThan(5);
       expect(existsSync(`${publicDir}${p.src}`), p.src).toBe(true);
       expect(existsSync(`${publicDir}${p.thumb}`), p.thumb).toBe(true);
+      expect(existsSync(`${publicDir}${p.src.replace('.jpg', '.webp')}`), 'webp').toBe(true);
+      expect(existsSync(`${publicDir}${p.thumb.replace('.jpg', '.webp')}`), 'webp thumb').toBe(true);
     }
     for (const l of LOCATIONS) expect(l.photo).toBe(PHOTOS[l.id]);
   });

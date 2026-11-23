@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import LocationArt from '../art/LocationArt.jsx';
-import { creditLine } from '../../data/photos.js';
+import { creditLine, webpOf } from '../../data/photos.js';
 
 /**
  * Destination imagery: a licensed photograph (see data/photos.js), falling
@@ -33,16 +33,23 @@ export default function Media({
     const sizes = variant === 'hero' ? '100vw' : variant === 'card' ? '(min-width: 960px) 25vw, 50vw' : undefined;
     return (
       <figure className={`media media--photo ${className}`}>
-        <img
-          src={src}
-          srcSet={srcSet}
-          sizes={srcSet ? sizes : undefined}
-          alt={label ?? photo.alt ?? location?.name ?? ''}
-          loading={priority ? 'eager' : 'lazy'}
-          fetchpriority={priority ? 'high' : undefined}
-          decoding="async"
-          onError={() => setFailed(true)}
-        />
+        <picture>
+          <source
+            type="image/webp"
+            srcSet={srcSet ? srcSet.replace(/\.jpg/g, '.webp') : webpOf(src)}
+            sizes={srcSet ? sizes : undefined}
+          />
+          <img
+            src={src}
+            srcSet={srcSet}
+            sizes={srcSet ? sizes : undefined}
+            alt={label ?? photo.alt ?? location?.name ?? ''}
+            loading={priority ? 'eager' : 'lazy'}
+            fetchpriority={priority ? 'high' : undefined}
+            decoding="async"
+            onError={() => setFailed(true)}
+          />
+        </picture>
         {credit && (
           <figcaption className="media__credit">
             <a href={photo.sourceUrl} target="_blank" rel="noopener noreferrer">

@@ -165,11 +165,11 @@ describe('itinerary', () => {
   });
 
   it('multiplies costs by party size', () => {
-    const order = ['diocletians-palace', 'salona', 'klis', 'trogir']; // 12+8+10+6 = 36 pp
+    const order = ['diocletians-palace', 'salona', 'klis', 'trogir']; // 12+8+10+7 = 37 pp
     const it = buildItinerary(mini, order, flatLeg);
-    expect(it.totals.experienceCost).toBe(72);
+    expect(it.totals.experienceCost).toBe(74);
     expect(it.totals.transportCost).toBe(10); // 5 legs × €1 × 2
-    expect(it.totals.totalCost).toBe(82);
+    expect(it.totals.totalCost).toBe(84);
   });
 
   it('flags time overrun and budget overspend', () => {
@@ -177,9 +177,9 @@ describe('itinerary', () => {
     const it = buildItinerary(mini, order, flatLeg);
     expect(it.constraints.timeOk).toBe(false);
     expect(it.constraints.overrunMinutes).toBe(510 + 50 - 400);
-    // (30+30+6+12)×2 + 10 = 166 → €66 over
+    // (30+30+7+12)×2 + 10 = 168 → €68 over
     expect(it.constraints.budgetOk).toBe(false);
-    expect(it.constraints.overBudget).toBe(66);
+    expect(it.constraints.overBudget).toBe(68);
   });
 
   it('handles an empty plan', () => {
@@ -192,6 +192,40 @@ describe('itinerary', () => {
     const it = buildItinerary(classic, ['diocletians-palace', 'bacvice', 'salona', 'marjan']);
     expect(it.legs[0].fromId).toBe(SPLIT_HUB.id);
     expect(it.legs.at(-1).toId).toBe(SPLIT_HUB.id);
+  });
+});
+
+describe('official bus fares', () => {
+  const leg = (order, i) => buildItinerary(classic, order).legs[i];
+  it('uses the published Promet Split online fare for listed municipality pairs', () => {
+    const toSalona = leg(['salona', 'klis', 'bacvice', 'marjan'], 0); // Riva (Split) → Salona (Solin)
+    expect(toSalona.mode).toBe('transit');
+    expect(toSalona.fareStatus).toBe('verified');
+    expect(toSalona.costPerPerson).toBe(1.75);
+    expect(toSalona.cost).toBe(3.5); // party of 2
+    const salonaKlis = leg(['salona', 'klis', 'bacvice', 'marjan'], 1); // Solin → Klis
+    expect(salonaKlis.costPerPerson).toBe(1.75);
+    const toTrogir = leg(['trogir', 'salona', 'bacvice', 'marjan'], 0);
+    expect(toTrogir.costPerPerson).toBe(2.5);
+  });
+  it('keeps estimates for pairs the price list does not publish, and walking is free', () => {
+    const trogirOmis = leg(['trogir', 'omis', 'bacvice', 'marjan'], 1);
+    expect(trogirOmis.fareStatus).toBe('estimate');
+    const toKrka = leg(['krka', 'omis', 'bacvice', 'marjan'], 0);
+    expect(toKrka.fareStatus).toBe('estimate');
+    const walk = leg(['diocletians-palace', 'bacvice', 'salona', 'marjan'], 0);
+    expect(walk.mode).toBe('walk');
+    expect(walk.fareStatus).toBe('free');
+    expect(walk.cost).toBe(0);
+  });
+  it('lists only the fares printed in the official PDF', async () => {
+    const { PROMET_FARES, FARE_SOURCE } = await import('../src/data/fares.js');
+    expect(FARE_SOURCE.url).toMatch(/^https:\/\/www\.promet-split\.hr\//);
+    expect(PROMET_FARES['Solin|Split']).toEqual({ online: 1.75, driver: 3.5, validityMin: 75 });
+    expect(PROMET_FARES['Klis|Split']).toEqual({ online: 2, driver: 4, validityMin: 90 });
+    expect(PROMET_FARES['Split|Trogir']).toEqual({ online: 2.5, driver: 5, validityMin: 105 });
+    expect(PROMET_FARES['Omiš|Split']).toEqual({ online: 2.5, driver: 5, validityMin: 105 });
+    for (const f of Object.values(PROMET_FARES)) expect(f.driver).toBe(f.online * 2);
   });
 });
 
