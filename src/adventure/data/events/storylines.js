@@ -31,6 +31,7 @@ export const STORYLINE_EVENTS = [
     choices: [
       {
         id: 'ante-special',
+        rel: { ante: 1 },
         label: 'Take the “family price”',
         effects: { money: -18, energy: 10, happiness: 5 },
         flags: { ante: 1 },
@@ -61,6 +62,7 @@ export const STORYLINE_EVENTS = [
     choices: [
       {
         id: 'ante-agree',
+        rel: { ante: 1, duje: 1 },
         label: 'Agree the price and the pick-up first',
         effects: { money: -20, energy: -4, happiness: 10, adventure: 3, local: 1 },
         flags: { ante: 1, anteBoat: true, hidden: 1 },
@@ -70,6 +72,7 @@ export const STORYLINE_EVENTS = [
       },
       {
         id: 'ante-after',
+        rel: { ante: 1 },
         label: 'Hop in and “discuss after”',
         effects: { money: -45, energy: -4, happiness: 7, adventure: 3 },
         flags: { ante: 1, anteBoat: true },
@@ -80,6 +83,7 @@ export const STORYLINE_EVENTS = [
       },
       {
         id: 'ante-swim',
+        rel: { ante: -1 },
         label: 'Decline and swim from the town beach',
         effects: { energy: 4, happiness: 4 },
         flags: { ante: 1, anteBoat: true },
@@ -101,6 +105,7 @@ export const STORYLINE_EVENTS = [
     choices: [
       {
         id: 'ante-dolphin',
+        rel: { ante: 1 },
         label: 'Buy the dolphin anyway (for Ante)',
         effects: { money: -15, happiness: 5 },
         flags: { ante: 1, anteShop: true, anteDolphin: true },
@@ -110,6 +115,7 @@ export const STORYLINE_EVENTS = [
       },
       {
         id: 'ante-real',
+        rel: { ante: 1 },
         label: 'Ask him where the REAL stone comes from',
         effects: { happiness: 6, local: 2 },
         flags: { ante: 1, anteShop: true },
@@ -124,7 +130,7 @@ export const STORYLINE_EVENTS = [
     kind: 'callback',
     priority: true,
     where: ['any'],
-    when: (s) => f(s, 'ante') >= 2 && s.day >= 3 && !s.flags.anteReveal,
+    when: (s) => (s.rel?.ante ?? 0) >= 2 && s.day >= 3 && !s.flags.anteReveal,
     weight: 6,
     title: 'The Ante Network',
     story:
@@ -132,6 +138,7 @@ export const STORYLINE_EVENTS = [
     choices: [
       {
         id: 'ante-family',
+        rel: { ante: 2 },
         label: 'Accept: “family only”',
         effects: { energy: -4, happiness: 12, adventure: 3, local: 3 },
         flags: { anteReveal: true, hidden: 1, adopted: 1, konoba: 1 },
@@ -174,6 +181,7 @@ export const STORYLINE_EVENTS = [
     choices: [
       {
         id: 'shirt-help',
+        rel: { brian: 1 },
         label: 'Gently explain where he is',
         effects: { happiness: 7, local: 1 },
         flags: { shirt: 1, shirtMet: '@day', shirtHelped: 1 },
@@ -182,6 +190,7 @@ export const STORYLINE_EVENTS = [
       },
       {
         id: 'shirt-film',
+        rel: { brian: -1 },
         label: 'Let him work it out (and film it)',
         effects: { happiness: 5, adventure: 1 },
         flags: { shirt: 1, shirtMet: '@day', shirtFilmed: true },
@@ -206,6 +215,7 @@ export const STORYLINE_EVENTS = [
     choices: [
       {
         id: 'brian-warn',
+        rel: { brian: 1 },
         label: 'Lean over: “Ask the weight first”',
         effects: { happiness: 6, local: 1 },
         flags: { shirtFish: true, shirtHelped: 1 },
@@ -231,13 +241,12 @@ export const STORYLINE_EVENTS = [
     id: 'shirt-finale',
     kind: 'callback',
     priority: true,
-    slot: 'day',
     where: ['any'],
-    when: (s) => s.day === 5 && s.flags.shirtMet !== undefined,
+    when: (s) => s.day >= 4 && before(s, 'shirtMet') && Boolean(s.flags.shirtFish),
     weight: 6,
     title: 'The Student Becomes the Teacher',
     story: (s) =>
-      `Last day in ${here(s)}. Across the square, a familiar voice is explaining Croatian etiquette to a group of new arrivals. It’s Brian, in a NEW Hawaiian shirt. This one has little fish on it.`,
+      `In ${here(s)}, a familiar voice is explaining Croatian etiquette to a group of new arrivals. It’s Brian, in a NEW Hawaiian shirt. This one has little fish on it.`,
     choices: [
       {
         id: 'brian-goodbye',
@@ -255,8 +264,14 @@ export const STORYLINE_EVENTS = [
         id: 'brian-listen',
         label: 'Hide behind a pillar and listen',
         effects: { happiness: 6, energy: 4 },
-        result: 'From behind a column you hear him: “Ask the weight of the fish, buy bus tickets before boarding, and never trust a sunbed man called Ante.” He learned everything. Some of it from you.',
-        duje: 'He’s quoting you. And me. Mostly me.',
+        result: (s) => {
+          const advice = ['“Ask the weight of the fish before it goes on the grill',
+            s.flags.busPro && 'buy your bus ticket before you board',
+            f(s, 'ante') && 'and never trust a sunbed man called Ante',
+            !f(s, 'ante') && 'and never, ever walk into a town square without greeting the grandmothers on the bench'].filter(Boolean).join(', ');
+          return `From behind a column you hear him: ${advice}.” ${f(s, 'shirtHelped') >= 1 ? 'He learned everything. Some of it from you.' : 'He learned everything. None of it from you, but quite a lot of it about you.'}`;
+        },
+        duje: (s) => (f(s, 'shirtHelped') >= 1 ? 'He’s quoting you. And me. Mostly me.' : 'You filmed him and he still turned into a tour guide. Brian is unstoppable.'),
       },
     ],
   },
@@ -274,6 +289,7 @@ export const STORYLINE_EVENTS = [
     choices: [
       {
         id: 'wingman',
+        rel: { duje: 1 },
         label: 'Tell Ivana that Duje talks about her bakery a lot',
         effects: { happiness: 8, local: 1 },
         flags: { ivana: true, wingman: true },
@@ -293,6 +309,7 @@ export const STORYLINE_EVENTS = [
       },
       {
         id: 'tease',
+        rel: { duje: -1 },
         label: 'Tease Duje about it all day',
         effects: { happiness: 7 },
         flags: { ivana: true, ivanaTease: true },
@@ -344,13 +361,13 @@ export const STORYLINE_EVENTS = [
     id: 'duje-date',
     kind: 'callback',
     priority: true,
-    slot: 'evening',
+    slot: 'day',
     where: ['any'],
     when: (s) => s.day === 5 && Boolean(s.flags.dujePlan),
     weight: 10,
     title: 'Did It Work?',
     story: (s) => {
-      const intro = s.location === 'split' ? 'Your last evening. Duje walks up to your table' : `Your last evening, in ${here(s)}. Your phone buzzes: a video call from Duje, who is standing`;
+      const intro = s.location === 'split' ? 'Your last afternoon. Duje walks up to your café table' : `Your last afternoon, in ${here(s)}. Your phone buzzes: a video call from Duje, who is standing`;
       return {
         coffee: `${intro} glowing like a lighthouse. Next to him: Ivana from the bakery, holding two coffees.`,
         picigin: `${intro} soaking wet, a scrape on one knee and a grin on his face. Next to him, laughing: Ivana from the bakery.`,
@@ -360,6 +377,7 @@ export const STORYLINE_EVENTS = [
     choices: [
       {
         id: 'toast-duje',
+        rel: { duje: 2 },
         label: 'Raise a glass to Duje',
         effects: { happiness: 12, local: 2 },
         flags: { dujeDate: true },
@@ -374,6 +392,7 @@ export const STORYLINE_EVENTS = [
       },
       {
         id: 'leave-them',
+        rel: { duje: 2 },
         label: 'Find an urgent reason to look at the sea, far away',
         effects: { happiness: 10, local: 1 },
         flags: { dujeDate: true },
@@ -397,6 +416,7 @@ export const STORYLINE_EVENTS = [
     choices: [
       {
         id: 'eat-peppers',
+        promise: 'container',
         label: 'Eat everything immediately',
         effects: { energy: 12, happiness: 7 },
         flags: { posuda: '@day' },
@@ -405,6 +425,8 @@ export const STORYLINE_EVENTS = [
       },
       {
         id: 'share-peppers',
+        promise: 'container',
+        rel: { marija: 1 },
         label: 'Share them with the neighbours on the stairs',
         effects: { happiness: 8, local: 2 },
         flags: { posuda: '@day' },
@@ -428,6 +450,8 @@ export const STORYLINE_EVENTS = [
     choices: [
       {
         id: 'posuda-full',
+        keep: 'container',
+        rel: { marija: 2 },
         label: 'Return it full of something sweet',
         effects: { money: -10, happiness: 9, local: 3 },
         flags: { posudaDone: true, adopted: 1 },
@@ -438,6 +462,7 @@ export const STORYLINE_EVENTS = [
       },
       {
         id: 'posuda-empty',
+        keep: 'container',
         label: 'Wash it carefully and return it empty',
         effects: { happiness: 2, local: 1 },
         flags: { posudaDone: true },
@@ -447,6 +472,8 @@ export const STORYLINE_EVENTS = [
       },
       {
         id: 'posuda-lost',
+        breaks: 'container',
+        rel: { marija: -1 },
         label: 'Confess you lost it',
         effects: { happiness: -3, local: 1 },
         flags: { posudaDone: true },
@@ -471,6 +498,7 @@ export const STORYLINE_EVENTS = [
     choices: [
       {
         id: 'bocce-play',
+        promise: 'bocce',
         label: 'Play (and try not to embarrass them)',
         chance: {
           p: (s) => lucky(s, s.flags.phrases ? 0.5 : 0.35),
@@ -492,11 +520,12 @@ export const STORYLINE_EVENTS = [
       },
       {
         id: 'bocce-referee',
+        promise: 'bocce',
         label: 'Offer to be the referee',
         effects: { happiness: 7, local: 2 },
         flags: { bocce: '@day', referee: true, boccePlace: '@here' },
         result: 'Every throw needs a measurement, and every measurement needs a debate. A man produces a tape measure from his sock. You rule in favour of the oldest player and are praised for your wisdom.',
-        duje: 'Ruling for the oldest. Very wise. You’d make a great judge in Split. Or a great diplomat. Same job.',
+        duje: 'Ruling for the oldest. Wise. You’d make a good judge in Split. Or a diplomat. Same job here.',
         tip: 'bocanje',
       },
     ],
@@ -517,15 +546,17 @@ export const STORYLINE_EVENTS = [
     choices: [
       {
         id: 'bocce-match',
+        keep: 'bocce',
         label: 'Accept the “international match”',
         effects: { energy: -6, happiness: 10, local: 3, adventure: 2 },
         flags: { bocceDone: true, adopted: 1 },
         result: 'The match lasts the afternoon. The result is disputed. The dispute lasts the evening. You are toasted, photographed and added to a WhatsApp group called “BOĆE 🔥”.',
-        duje: 'You are in a boće WhatsApp group. That’s more Dalmatian than I am.',
+        duje: 'You’re in a boće WhatsApp group. I’ve been trying to get into that group for years.',
         moment: { id: 'bocce-intl', text: 'Played an “international” boće match (the result is still disputed)', rank: 7, headline: 'The Disputed Boće Match' },
       },
       {
         id: 'bocce-heckle',
+        keep: 'bocce',
         label: 'Watch with a coffee and heckle gently',
         effects: { happiness: 7, energy: 6, local: 2 },
         flags: { bocceDone: true, phrases: 1 },
@@ -548,6 +579,7 @@ export const STORYLINE_EVENTS = [
     choices: [
       {
         id: 'follow-dog',
+        promise: 'fishing',
         label: 'Follow the dog',
         effects: { energy: -5, happiness: 9, local: 2, adventure: 2 },
         flags: { dog: '@day', dogFriend: true },
@@ -581,6 +613,7 @@ export const STORYLINE_EVENTS = [
     choices: [
       {
         id: 'go-fishing',
+        keep: 'fishing',
         label: 'Get up and go',
         effects: { energy: -8, happiness: 13, adventure: 4, local: 3 },
         flags: { fished: true, konoba: 1 },
@@ -594,6 +627,7 @@ export const STORYLINE_EVENTS = [
       },
       {
         id: 'snooze',
+        breaks: 'fishing',
         label: 'Stay on your sunbed',
         effects: { energy: 12, happiness: 1 },
         flags: { fished: true },
@@ -634,7 +668,7 @@ export const STORYLINE_EVENTS = [
             result: 'You dive, miss, dive again, and come up with a sea cucumber, a bottle cap and no sunglasses. The crowd applauds anyway.',
           },
         },
-        duje: 'Diving in your clothes. Very Dalmatian. We do it at weddings.',
+        duje: 'Diving in your clothes. People do that at weddings here, so you’re in good company.',
       },
       {
         id: 'let-go',
@@ -659,6 +693,7 @@ export const STORYLINE_EVENTS = [
     choices: [
       {
         id: 'stall-glasses',
+        rel: { ante: 1 },
         label: 'Buy sunglasses at the first stall',
         effects: { money: -12, happiness: 5 },
         flags: { squintDone: true, ante: 1 },
@@ -855,6 +890,7 @@ export const STORYLINE_EVENTS = [
     choices: [
       {
         id: 'play-song',
+        rel: { luka: 1 },
         label: 'Play the only song you know',
         chance: {
           p: 0.4,
@@ -869,6 +905,7 @@ export const STORYLINE_EVENTS = [
       },
       {
         id: 'guard-guitar',
+        rel: { luka: 1 },
         label: 'Guard it like treasure',
         effects: { happiness: 4, energy: 5 },
         flags: { lukaGuitar: true, lukaManager: true },

@@ -88,7 +88,17 @@ Duje is a witty Split local in his thirties. He is sarcastic about tourists but 
 - [ ] Is the **Ivana storyline** (he can't speak to the baker he likes) charming rather than awkward?
 - [ ] Is the **Sustipan scene**, where he drops the jokes for a moment, believable?
 
-## 6. Sign-off
+## 6. Added in the story-memory pass
+
+- [ ] **Duje's farewell** (`duje-farewell`): does the goodbye feel warm and Dalmatian rather than sentimental? Is “…Pomalo. That's all.” a good last line?
+- [ ] **Regional “next time” tips** — Zagreb (Upper Town, Dolac), Istria (Motovun, Rovinj, truffles, olive oil), Plitvice (UNESCO, no swimming), Zadar (Sea Organ, Greeting to the Sun). Accurate, and fair to each region?
+- [ ] Duje admitting Istrian olive oil “might be as good as ours” and Zagreb coffee being good: fun regional banter, or not?
+- [ ] **The Venetian actor** (`venetian-actor`): the paper lion of St Mark on the dessert, and the “Capitano” autograph.
+- [ ] **The Zagreb couple returning** (`zagreb-return`): “Classic Split. You are one of them now.”
+- [ ] **Duje's morning memories** (in `src/adventure/data/memory.js`): natural? Too many references to his mother?
+- [ ] **Promises in the report**, e.g. “Promised Grandpa in Omiš a briškula rematch. He is still on the bench.”
+
+## 7. Sign-off
 
 | Reviewer | From | Date | Sections reviewed | Notes |
 |---|---|---|---|---|

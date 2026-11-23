@@ -61,7 +61,7 @@ These are game values. The app always shows them with “≈” / “est.”, ne
 - **Travel times** for every leg (distance model in `src/engine/travel.js`, not timetables).
 - **Time on site** for every location.
 
-## Croatia Adventure — editorial tips for periodic review (71)
+## Croatia Adventure — editorial tips for periodic review (76)
 
 These tips are general knowledge (culture, language, food, practical habits). They contain no prices, times or schedules (a test enforces this), but a human should re-read them from time to time. Tips with prices use verified sources instead; tips stating rules or customs are flagged below.
 
@@ -103,6 +103,7 @@ These tips are general knowledge (culture, language, food, practical habits). Th
 | Stari Grad Plain | Hidden Croatia | On Hvar, the Stari Grad Plain — an agricultural landscape laid out by ancient Greek colonists — is a UNESCO World Heritage Site. |
 | Lokrum and its peacocks | Hidden Croatia | Lokrum, the wooded island facing Dubrovnik’s old town, is reached by boat from the old harbour — and is famous for its free-roaming peacocks. |
 | The Pelješac Bridge | Hidden Croatia | Since 2022, the Pelješac Bridge connects the Dubrovnik area with the rest of the Croatian mainland, so road traffic no longer has to cross the border at Neum. |
+| The pirates of Omiš | Hidden Croatia | In the Middle Ages, Omiš was famous as a base for pirates who raided ships along the Adriatic, using the Cetina’s mouth and the cliffs above it for shelter. |
 | Ljekarna = pharmacy | Survival Mode | Look for “ljekarna” and the green cross. Pharmacists are a good first stop for sunburn, insect bites, blisters and sea-urchin mishaps. |
 | The pekara breakfast | Food & Drinks | Bakeries (“pekara”) sell burek, bread and pastries all day. Burek with a cup of drinking yoghurt is a classic quick breakfast. |
 | Ask for “domaće” | Local Secrets | “Domaće” means home-made. Asking for domaće wine, olive oil or rakija in family-run places often gets you the house’s own — and a proud story with it. |
@@ -138,8 +139,12 @@ These tips are general knowledge (culture, language, food, practical habits). Th
 | Visovac | Hidden Croatia | Visovac is a tiny island in the Krka river with a Franciscan monastery. Within the national park it is reached by excursion boat. |
 | Pustinja Blaca | Hidden Croatia | Blaca on Brač is a former hermitage built into a cliff, now a museum. There is no road to the door: the last part is on foot, so wear proper shoes and take water. |
 | Bars outside the walls | Local Secrets | Dubrovnik has bars perched on the rocks outside the southern city walls, reached through small openings in the wall (“buža” means hole). |
+| Next time: Zagreb | Hidden Croatia | Croatia’s capital is worth a trip of its own: the historic Upper Town (Gornji grad), the Dolac market just above the main square, and a café culture that rivals Split’s. |
+| Next time: Istria | Hidden Croatia | Istria, the peninsula in the north-west, is known for hilltop towns such as Motovun, coastal towns such as Rovinj, truffles and award-winning olive oil. |
+| Next time: Plitvice Lakes | Hidden Croatia | Plitvice Lakes National Park, inland between Zagreb and Zadar, is a UNESCO World Heritage Site of terraced lakes and waterfalls linked by wooden walkways. Swimming is not allowed. |
+| Next time: Zadar | Hidden Croatia | On Zadar’s waterfront, the Sea Organ plays music with the waves through pipes built into stone steps, and the Greeting to the Sun lights up beside it after dark. |
 
-### Flagged for review before launch (9)
+### Flagged for review before launch (10)
 
 These editorial tips state a rule, a custom or a local claim. Confirm each with an official source or a local reviewer (see also `docs/LOCAL_REVIEW.md`).
 
@@ -154,3 +159,4 @@ These editorial tips state a rule, a custom or a local claim. Confirm each with 
 | No swimming at Krka’s waterfalls | Park rule — confirm with the official Krka National Park site before launch. |
 | Skradinski rižot | Dish description — confirm wording with a local reviewer. |
 | The stone-head challenge | Tradition — confirm location wording with a local reviewer. |
+| Next time: Plitvice Lakes | Park rule (no swimming) — confirm wording with the official park site. |

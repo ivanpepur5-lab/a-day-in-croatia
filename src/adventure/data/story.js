@@ -21,6 +21,7 @@ import { EVERYDAY_EVENTS } from './events/everyday.js';
 import { PLACE_EVENTS } from './events/places.js';
 import { EVENING_EVENTS } from './events/evening.js';
 import { HIDDEN_EVENTS } from './events/hidden.js';
+import { FINALE_EVENTS } from './events/finale.js';
 
 export { START, DESTINATIONS, ISLANDS, MAINLAND_DAY_TRIPS };
 
@@ -101,6 +102,7 @@ export function nightLine(s, night) {
 export const BASES = [
   {
     id: 'hostel',
+    rel: { luka: 1 },
     label: 'Party hostel',
     hint: 'Cheap. Comes with Luka and his guitar.',
     nightly: 25,
@@ -112,6 +114,7 @@ export const BASES = [
   },
   {
     id: 'apartment',
+    rel: { marija: 1 },
     label: 'Apartment with a nonna next door',
     hint: 'Mid-price. Comes with Marija.',
     nightly: 45,
@@ -124,9 +127,10 @@ export const BASES = [
   },
   {
     id: 'boutique',
+    rel: { igor: 1 },
     label: 'Boutique hotel with a sea view',
     hint: 'Expensive. Comes with Igor the concierge.',
-    nightly: 80,
+    nightly: 65,
     recover: 40,
     effects: { happiness: 9 },
     flags: { boutique: true },
@@ -154,6 +158,7 @@ export const TRAVEL = {
       },
       {
         id: 'bus',
+        rel: { duje: 1 },
         label: 'Take the bus',
         hint: 'Cheap, slower, character-building',
         to: 'split',
@@ -242,7 +247,7 @@ export const TRAVEL = {
         effects: { money: -18, energy: -8, happiness: 6, adventure: 2, local: 1 },
         flags: { island: 1 },
         result: 'On deck, locals drink coffee with the serenity of people who have done this a thousand times, while a seagull eyes your sandwich like a professional.',
-        duje: 'The ferry: where Dalmatians go to drink coffee in motion.',
+        duje: 'Look at the locals: coffee, newspaper, zero panic. Copy them.',
         tip: 'island-cash',
       },
       {
@@ -344,7 +349,7 @@ export const DAY5 = {
     to: 'dubrovnik',
     effects: { money: -30, energy: -18, happiness: 7, adventure: 3 },
     result: 'Hours of coastline so blue it looks edited. Then the walls appear, and the whole bus goes quiet.',
-    duje: 'Dubrovnik for the finale. Very cinematic. Very many stairs.',
+    duje: 'Dubrovnik for the finale. Beautiful. Also about a million stairs. Pace yourself.',
     tip: 'peljesac-bridge',
   },
   islandToDubrovnik: {
@@ -586,7 +591,7 @@ export const ACTIVITIES = {
       effects: { money: -5, energy: -8, happiness: 7, local: 2 },
       flags: { hidden: 1 },
       result: 'Students carve white stone with techniques older than your country’s postal service. You try for thirty seconds and produce “gravel”.',
-      duje: 'Your gravel is very nice. Very modern. Very gravel.',
+      duje: 'You made gravel. Those students make churches. Give it a few years.',
       tip: 'pucisca-stone',
     },
     {
@@ -648,7 +653,7 @@ const CORE_EVENTS = [
     weight: 3,
     broke: {
       result: 'You order bread and tap water and watch other people’s fish with the intensity of a cat at a window. The waiter, moved, brings you a few grilled sardines “because it’s sad”.',
-      duje: 'Sympathy sardines. The lowest and most Dalmatian point of any holiday.',
+      duje: 'Sympathy sardines. We’ve all been there. Well, I haven’t. But I’ve heard.',
       moment: { id: 'sardines', text: 'Was given sympathy sardines by a waiter', rank: 7, headline: 'Sympathy Sardines' },
     },
     title: 'The Fish Price Mystery',
@@ -656,6 +661,7 @@ const CORE_EVENTS = [
     choices: [
       {
         id: 'point-big',
+        rel: { duje: -1 },
         label: 'Point at the biggest, shiniest one',
         effects: { money: -95, happiness: 3 },
         flags: { bigFish: true, bigFishPlace: '@here', bigFishDay: '@day' },
@@ -666,6 +672,7 @@ const CORE_EVENTS = [
       },
       {
         id: 'ask-weight',
+        rel: { duje: 1 },
         label: 'Ask the weight and the total first',
         effects: { money: -40, happiness: 7, local: 1 },
         result: 'The waiter weighs it, names the total, and nods with new respect. You pick a smaller fish and the legendary blitva on the side.',
@@ -751,6 +758,7 @@ const CORE_EVENTS = [
     choices: [
       {
         id: 'push-on',
+        rel: { duje: -1 },
         label: 'Squeeze through, it’ll be fine',
         effects: { money: -15, energy: -10, happiness: -8 },
         flags: { mirror: true, mirrorDay: '@day' },
@@ -760,6 +768,7 @@ const CORE_EVENTS = [
       },
       {
         id: 'park-outside',
+        rel: { duje: 1 },
         label: 'Reverse out, park outside the centre and walk',
         effects: { money: -12, energy: -6, happiness: 3, local: 1 },
         flags: { parkedWell: true },
@@ -799,7 +808,7 @@ const CORE_EVENTS = [
             result: 'You hum confidently in a key that does not exist. The tenor raises one eyebrow, then kindly invites you to clap instead.',
           },
         },
-        duje: 'Brave. Very brave. The tenor will tell this story at dinner.',
+        duje: 'Brave. The tenor will tell this story at dinner, and he will exaggerate.',
         tip: 'klapa',
         moment: { id: 'klapa', text: 'Sang along with a klapa (the tenor is still talking about it)', rank: 5, headline: 'The Klapa Solo' },
       },
@@ -815,6 +824,7 @@ const CORE_EVENTS = [
     choices: [
       {
         id: 'phrases',
+        rel: { duje: 1 },
         label: 'Deploy your Croatian: “Dobar dan! … Molim … Hvala!”',
         effects: { money: -3, happiness: 8, local: 2 },
         flags: { phrases: 1 },
@@ -863,7 +873,7 @@ const CORE_EVENTS = [
         effects: { money: -12, happiness: 5 },
         flags: { waterShoes: true },
         result: 'You look like a scuba-diving duck. You also look like someone whose feet are fine.',
-        duje: 'Ugly shoes, happy feet. The Dalmatian way.',
+        duje: 'Ugly shoes, happy feet. Nobody here will judge you. I will, a little.',
         tip: 'ljekarna',
       },
       {
@@ -872,7 +882,7 @@ const CORE_EVENTS = [
         effects: { energy: -6, happiness: 7, adventure: 2 },
         flags: { hidden: 1 },
         result: 'The next cove is smaller, urchin-free and completely empty. Sometimes cowardice is just good scouting.',
-        duje: 'Strategic retreat. Very French. The French were here too, you know — for a few years, two centuries ago.',
+        duje: 'Strategic retreat. Smart. The urchins win more battles than anyone on this coast.',
       },
     ],
   },
@@ -896,6 +906,7 @@ const CORE_EVENTS = [
       },
       {
         id: 'push',
+        rel: { duje: -1 },
         label: 'Push on — sightseeing waits for no one',
         effects: { energy: -16, happiness: -4, adventure: 3 },
         flags: { sunburn: true, sunburnDay: '@day' },
@@ -909,7 +920,7 @@ const CORE_EVENTS = [
         label: 'Refill at a fountain and find a gelato',
         effects: { energy: 9, happiness: 5, money: -3 },
         result: 'Cold water, a shady bench, a gelato the size of your head. Civilisation restored.',
-        duje: 'Water and ice cream. The two pillars of Dalmatian summer medicine.',
+        duje: 'Water and ice cream. Doctor-approved. Not by a doctor. By me.',
         tip: 'tap-water',
       },
     ],
@@ -958,7 +969,7 @@ const CORE_EVENTS = [
         effects: { money: -12, energy: 8, happiness: 8, local: 2 },
         flags: { market: 1 },
         result: 'Bread, cheese, figs and tomatoes on a bench by the sea. The best meal of the trip costs less than one cocktail on the Riva.',
-        duje: 'This is how Dalmatians eat when no one is watching. Delicious and suspiciously cheap.',
+        duje: 'This is how people here eat when nobody is watching. Cheap, simple, perfect.',
         tip: 'pazar',
         moment: { id: 'picnic', text: 'Ate the best meal of the trip on a bench, for less than a cocktail', rank: 3 },
       },
@@ -982,10 +993,11 @@ const CORE_EVENTS = [
     choices: [
       {
         id: 'dance',
+        promise: 'aunt-lunch',
         label: 'Dance along for one song',
         effects: { energy: -12, happiness: 12, adventure: 3, local: 1 },
         flags: { wedding: true, weddingDay: '@day' },
-        result: 'One song becomes four. An aunt teaches you a step, an uncle hands you a drink, and you appear in the official wedding video, centre frame.',
+        result: 'One song becomes four. An aunt teaches you a step, an uncle hands you a drink, and you appear in the official wedding video, centre frame. As you leave, the aunt makes you promise to come to Sunday lunch. Everyone promises. She writes your name down.',
         duje: 'You are in the wedding video. You are now in the family WhatsApp group. There is no leaving the family WhatsApp group.',
         moment: { id: 'wedding', text: 'Accidentally became a guest at a Dalmatian wedding', rank: 8, headline: 'The Accidental Wedding Guest' },
       },
@@ -1009,10 +1021,10 @@ const CORE_EVENTS = [
         id: 'listen',
         label: 'Listen to his stories',
         effects: { energy: 4, happiness: 8, local: 2 },
-        flags: { grandpa: true },
+        flags: { grandpa: true, napkin: true },
         result: 'Two hours of sieges, sea battles and an alarmingly detailed octopus recipe. He draws you a map on a napkin and writes “NEPHEW — FERRY” on the back.',
         duje: 'Keep the napkin. In Dalmatia, a napkin with a nephew’s name on it is worth more than a credit card.',
-        tip: 'omis-pirates',
+        tip: 'omis-pirate-history',
         moment: { id: 'napkin-map', text: 'Was given a napkin map by the grandson of pirates', rank: 4 },
       },
       {
@@ -1023,7 +1035,8 @@ const CORE_EVENTS = [
           success: {
             effects: { happiness: 12, local: 3, adventure: 2 },
             flags: { grandpa: true },
-            result: 'Beginner’s luck! You win. He demands a rematch “tomorrow, same bench”, gives you his nephew’s number, and calls you a pirate.',
+            promise: 'briskula-rematch',
+            result: 'Beginner’s luck! You win. He demands a rematch “tomorrow, same bench”, gives you his nephew’s number, and calls you a pirate. You promise. Of course you promise.',
           },
           fail: {
             effects: { happiness: 5, local: 1, money: -5 },
@@ -1076,7 +1089,7 @@ const CORE_EVENTS = [
         label: 'Wait it out with an ice cream',
         effects: { money: -4, energy: 6, happiness: 4 },
         result: 'By the time your ice cream is gone, so is half the crowd. Patience: rewarded. Ice cream: also rewarded.',
-        duje: 'Waiting with ice cream is the most Dalmatian strategy in existence.',
+        duje: 'Waiting it out with an ice cream. You’re learning.',
         tip: 'go-early',
       },
       {
@@ -1112,7 +1125,7 @@ const CORE_EVENTS = [
         label: 'Stay out of it and board the boat',
         effects: { happiness: 3, energy: 4 },
         result: 'Wise. Very wise. They are still arguing as your boat pulls away. A heron watches them with visible judgement.',
-        duje: 'Never get between a couple and a ticket office. Ancient Dalmatian wisdom.',
+        duje: 'Never get between a couple and a ticket office. My uncle tried once. He still talks about it.',
         tip: 'krka-transfers',
       },
     ],
@@ -1207,7 +1220,7 @@ const CORE_EVENTS = [
         label: 'Watch from the beach with an ice cream',
         effects: { money: -4, energy: 4, happiness: 6 },
         result: 'Watching other people fall into the sea is an extremely relaxing spectator sport. You give them scores.',
-        duje: 'Professional spectator. A respected Dalmatian career.',
+        duje: 'Professional spectator. Half the people on this coast have that job.',
         tip: 'zlatni-rat',
       },
     ],
@@ -1277,7 +1290,7 @@ const CORE_EVENTS = [
         label: 'Join the tour',
         effects: { money: -25, energy: -10, happiness: 9, adventure: 2 },
         result: 'You climb the famous staircase, re-enact a famous scene, and appear in a group photo with forty strangers in matching T-shirts.',
-        duje: 'Very touristy. Very fun. I won’t tell anyone. I will tell everyone.',
+        duje: 'Touristy? Yes. Fun? Also yes. I won’t tell anyone. I will tell everyone.',
         tip: 'got-dubrovnik',
       },
       {
@@ -1360,13 +1373,14 @@ const CORE_EVENTS = [
     id: 'peka-order',
     slot: 'evening',
     where: ['split', 'brac', 'hvar', 'omis'],
-    when: (s) => !s.flags.pekaOrdered,
+    when: (s) => !s.flags.pekaOrdered && s.day <= 4,
     weight: 2,
     title: 'Peka, Please',
     story: 'You walk into a konoba starving and ask for the famous peka. The waiter looks at the clock, then at you, with the deep sympathy of a man delivering bad news.',
     choices: [
       {
         id: 'order-tomorrow',
+        promise: 'peka',
         label: 'Order peka for tomorrow, eat grilled fish today',
         effects: { money: -30, happiness: 9, local: 2 },
         flags: { konoba: 1, pekaOrdered: true, pekaDay: '@day', pekaPlace: '@here' },
@@ -1413,12 +1427,12 @@ const CORE_EVENTS = [
   },
   {
     id: 'sunset-spot',
-    slot: 'evening',
+    slot: 'day',
     where: ['any'],
     when: (s) => s.day === 5,
     weight: 3,
     title: 'The Last Sunset',
-    story: 'Your final evening. The sun is sliding towards the sea. You get one chance to choose where to watch it.',
+    story: 'Your last afternoon. In a few hours the sun will slide into the sea for the last time this holiday, and you get one chance to choose where to watch it.',
     choices: [
       {
         id: 'crowded-bar',
@@ -1430,6 +1444,7 @@ const CORE_EVENTS = [
       },
       {
         id: 'rocks',
+        rel: { duje: 1 },
         label: 'A quiet rock by the sea, with a cold drink from the shop',
         effects: { money: -3, happiness: 11, local: 1 },
         result: 'Just you, the warm stone, the waves and a sky that tries every colour it owns. Pomalo.',
@@ -1477,7 +1492,7 @@ const CORE_EVENTS = [
     priority: true,
     broke: {
       result: 'You explain that you will pay “when you get home”. There is a long silence. They agree, in the tone of people who have heard this from hundreds of tourists, and email you an invoice with three exclamation marks.',
-      duje: 'You now owe money to a car rental company in another country. Very international. Very adult.',
+      duje: 'You now owe money to a rental company in another country. Congratulations: you are an international debtor.',
       moment: { id: 'mirror-debt', text: 'Flew home owing a rental company for a mirror (invoice had three exclamation marks)', rank: 9, headline: 'The Mirror IOU' },
     },
     where: ['any'],
@@ -1535,6 +1550,7 @@ const CORE_EVENTS = [
     choices: [
       {
         id: 'feast',
+        keep: 'peka',
         label: (s) => (s.location === s.flags.pekaPlace ? 'Feast' : 'Find a peka here instead, tonight'),
         effects: { money: -25, happiness: 13, energy: 12, local: 2 },
         flags: { pekaDone: true, konoba: 1 },
@@ -1547,6 +1563,7 @@ const CORE_EVENTS = [
       },
       {
         id: 'gift-peka',
+        keep: 'peka',
         label: (s) => `Tell them to give it to ${s.flags.marija ? 'Marija' : 'the neighbours'}`,
         effects: { money: -20, happiness: 6, local: 3 },
         flags: { pekaDone: true },
@@ -1568,6 +1585,7 @@ const CORE_EVENTS = [
     choices: [
       {
         id: 'sunday-lunch',
+        keep: 'aunt-lunch',
         label: 'Accept the invitation to “a small family lunch”',
         effects: { happiness: 12, energy: 10, local: 3, adventure: -2 },
         flags: { adopted: 1, konoba: 1 },
@@ -1577,6 +1595,7 @@ const CORE_EVENTS = [
       },
       {
         id: 'escape',
+        breaks: 'aunt-lunch',
         label: 'Pretend you have a ferry to catch',
         effects: { happiness: -2, energy: -4, adventure: 2 },
         result: 'You escape. She waves happily, because she knows the ferry schedule better than you do. She will see you again. They always see you again.',
@@ -1652,10 +1671,16 @@ const CORE_EVENTS = [
     when: (s) => s.flags.grandpa,
     weight: 9,
     title: 'The Nephew on the Napkin',
-    story: 'A man in a ferry-company shirt sees the napkin map sticking out of your pocket. “Is that my grandfather’s handwriting? Did he tell you the octopus recipe?” He looks genuinely moved.',
+    story: (s) =>
+      s.flags.napkin
+        ? 'A man in a ferry-company shirt sees the napkin map sticking out of your pocket. “Is that my grandfather’s handwriting? Did he tell you the octopus recipe?” He looks genuinely moved.'
+        : `A man in a ferry-company shirt squints at you. “You’re the one who beat my grandfather at briškula! He talks about nothing else.${
+            s.promises?.['briskula-rematch']?.status === 'open' ? ' Also, he is waiting for his rematch. On the bench. Every day.' : ''
+          }” He draws you a map on a napkin, “to the cove Grandpa would have shown you”.`,
     choices: [
       {
         id: 'nephew-cove',
+        keep: 'briskula-rematch',
         label: 'Ask him for the cove on the napkin',
         effects: { energy: -6, happiness: 13, adventure: 5, local: 2 },
         flags: { hidden: 1, secretCove: true },
@@ -1665,9 +1690,13 @@ const CORE_EVENTS = [
       },
       {
         id: 'nephew-coffee',
+        keep: 'briskula-rematch',
         label: 'Have a coffee and swap stories',
         effects: { happiness: 8, energy: 6, local: 2 },
-        result: 'He buys the coffee, tells you three ferry stories involving goats, and promises to “say hello to Grandpa”. You feel strangely honoured.',
+        result: (s) =>
+          s.promises?.['briskula-rematch']?.status === 'open'
+            ? 'You play one hand of briškula with him on a coffee table, “for Grandpa”. He films it and sends it to Omiš. A reply arrives within a minute: a thumbs-up and the word “REMATCH”.'
+            : 'He buys the coffee, tells you three ferry stories involving goats, and promises to “say hello to Grandpa”. You feel strangely honoured.',
         duje: 'Goat stories. Every ferry worker has at least three.',
       },
     ],
@@ -1676,13 +1705,14 @@ const CORE_EVENTS = [
     id: 'cousin-network',
     kind: 'callback',
     where: ['trogir', 'omis', 'krka', 'hvar', 'brac', 'dubrovnik'],
-    when: (s) => s.flags.marija && s.day >= 2,
+    when: (s) => s.flags.marija && s.day >= 2 && (s.rel?.marija ?? 1) >= 1,
     weight: 4,
     title: 'Marija Called Ahead',
     story: 'You sit down in a konoba. The owner sees your face and says, “Ah! Marija’s guest!” Marija has, apparently, called ahead. Marija has called everyone.',
     choices: [
       {
         id: 'cousin-feast',
+        rel: { marija: 1 },
         label: 'Let the cousin choose for you',
         effects: { money: -12, happiness: 11, local: 3, energy: 6 },
         flags: { konoba: 1, adopted: 1 },
@@ -1692,6 +1722,7 @@ const CORE_EVENTS = [
       },
       {
         id: 'cousin-decline',
+        rel: { marija: -1 },
         label: 'Insist on paying full price',
         effects: { money: -30, happiness: 4, local: 1 },
         result: 'The cousin looks offended, then amused, then charges you full price and adds a free dessert out of principle.',
@@ -1710,11 +1741,18 @@ const CORE_EVENTS = [
     title: 'Luka Has Found You',
     story: (s) =>
       `From across the square, a familiar strum. It is Luka, from the hostel${s.location === 'split' ? '' : ', who has followed you here with the guitar'}. ${
-        s.flags.lukaManager ? '“My manager!” he shouts. “I booked us a gig. It is now.”' : s.flags.lukaGuitar ? '“You kept my guitar warm,” he says. “Now you sing.”' : 'He knows four chords and he wants you to sing.'
+        s.flags.lukaManager
+          ? '“My manager!” he shouts. “I booked us a gig. It is now.”'
+          : s.flags.lukaGuitar
+            ? '“You kept my guitar warm,” he says. “Now you sing.”'
+            : (s.rel?.luka ?? 0) < 1
+              ? 'He spots you, hesitates, then decides to forgive you for leaving the hostel at dawn without saying goodbye. He knows four chords and he wants you to sing.'
+              : 'He knows four chords and he wants you to sing.'
       }`,
     choices: [
       {
         id: 'duet',
+        rel: { luka: 2 },
         label: 'Sing a duet in the square',
         effects: { happiness: 11, adventure: 3, money: 12 },
         result: 'You sing. Badly. Gloriously. A small crowd gathers, laughs, and throws coins into Luka’s guitar case. He splits the money with you like an honest pirate.',
@@ -1723,10 +1761,11 @@ const CORE_EVENTS = [
       },
       {
         id: 'hide',
+        rel: { luka: -1 },
         label: 'Hide behind a lavender stall',
         effects: { happiness: 3, energy: 2 },
         result: 'Luka plays all four chords to an audience of one confused German couple. You hear it from behind the lavender. It is somehow beautiful.',
-        duje: 'Hiding from Luka is a Dalmatian tradition older than the hostel.',
+        duje: 'Hiding from Luka. Everyone in that hostel has done it at least once.',
       },
     ],
   },
@@ -1742,6 +1781,7 @@ const CORE_EVENTS = [
     choices: [
       {
         id: 'igor-yes',
+        rel: { igor: 1 },
         label: 'Accept Igor’s exclusive experience',
         effects: { money: -70, happiness: 9, energy: 4 },
         result: 'Champagne, a boat, a sunset, and a photographer who calls you “darling” fourteen times. It is lovely. Igor sends a smiley face and an invoice.',
@@ -1749,6 +1789,7 @@ const CORE_EVENTS = [
       },
       {
         id: 'igor-no',
+        rel: { igor: 2 },
         label: 'Ask Igor where HE goes for sunset',
         effects: { money: -4, happiness: 10, local: 2 },
         flags: { hidden: 1 },
@@ -1833,6 +1874,7 @@ const CORE_EVENTS = [
     choices: [
       {
         id: 'watch-match',
+        rel: { duje: 2 },
         label: 'Watch the match in a packed bar with Duje',
         effects: { money: -8, energy: -8, happiness: 12, local: 2 },
         result: 'You understand nothing about the tactics and everything about the emotion. When the goal goes in, a man you have never met kisses you on both cheeks.',
@@ -1863,6 +1905,7 @@ const CORE_EVENTS = [
     choices: [
       {
         id: 'cathedral',
+        rel: { duje: 2 },
         label: 'Let Duje give you the tour',
         effects: { money: -10, happiness: 9, local: 2 },
         result: 'Duje tells you everything about the saint, the festival in May, and his own birthday, which he believes is equally important.',
@@ -1872,6 +1915,7 @@ const CORE_EVENTS = [
       },
       {
         id: 'skip-tour',
+        rel: { duje: -1 },
         label: 'Tell Duje you’ve seen enough churches',
         effects: { happiness: 2, energy: 6 },
         result: 'Duje looks wounded, buys you an ice cream anyway, and tells you about the saint while you eat it. You get the tour regardless.',
@@ -1912,7 +1956,7 @@ const CORE_EVENTS = [
   },
 ];
 
-export const EVENTS = [...CORE_EVENTS, ...STORYLINE_EVENTS, ...EVERYDAY_EVENTS, ...PLACE_EVENTS, ...EVENING_EVENTS, ...HIDDEN_EVENTS];
+export const EVENTS = [...CORE_EVENTS, ...STORYLINE_EVENTS, ...EVERYDAY_EVENTS, ...PLACE_EVENTS, ...EVENING_EVENTS, ...HIDDEN_EVENTS, ...FINALE_EVENTS];
 
 /* ───────────────────────────────────────────────── ACHIEVEMENTS ── */
 export const ACHIEVEMENTS = [

@@ -1107,3 +1107,67 @@
   font-size: 0.86rem;
   animation: toastSlide 0.5s var(--ease) both 0.3s;
 }
+
+/* relationships and promises in the outcome sheet */
+.adv-rel {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 10px;
+}
+.adv-rel li {
+  padding: 4px 10px;
+  border-radius: 999px;
+  font-size: 0.78rem;
+  font-weight: 700;
+  background: rgba(255, 255, 255, 0.08);
+}
+.adv-rel li.bad {
+  color: #f3c1b3;
+}
+.adv-promise {
+  margin-top: 10px;
+  padding: 8px 12px;
+  border-radius: var(--r-sm);
+  font-size: 0.84rem;
+  font-weight: 600;
+  background: rgba(243, 217, 184, 0.1);
+  color: #f3d9b8;
+}
+.adv-promise--broken {
+  background: rgba(232, 116, 80, 0.15);
+  color: #f3c1b3;
+}
+.adv-promise--kept {
+  background: rgba(120, 190, 150, 0.15);
+  color: #cfeedd;
+}
+.adv-people,
+.adv-promises {
+  display: grid;
+  gap: 6px;
+  margin-top: 8px;
+}
+.adv-people li,
+.adv-promises li {
+  padding: 8px 12px;
+  border-radius: var(--r-sm);
+  background: rgba(255, 255, 255, 0.05);
+  font-size: 0.86rem;
+  line-height: 1.4;
+}
+.adv-people b {
+  color: #f3d9b8;
+}
+.adv-people small {
+  color: var(--adv-muted);
+  font-size: 0.74rem;
+}
+.adv-people__status {
+  display: block;
+}
+.adv-label--finale {
+  color: var(--ink);
+  background: #f3d9b8;
+  border: 0;
+}

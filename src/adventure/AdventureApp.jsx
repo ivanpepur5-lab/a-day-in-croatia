@@ -9,6 +9,7 @@ import Media from '../ui/components/Media.jsx';
 import { PHOTOS } from '../data/photos.js';
 import { DESTINATIONS, START, ACHIEVEMENTS, EVENTS } from './data/story.js';
 import { TIPS } from './data/tips.js';
+import { CAST } from './data/memory.js';
 import { newGame, getStep, choose, computeScore } from './engine/game.js';
 import { loadProgress, collect, saveCurrent, clearCurrent, recordRun } from './services/progress.js';
 import { dateKey as puzzleDateKey, puzzleNumberForKey, formatPuzzleDate } from '../engine/daily.js';
@@ -24,6 +25,7 @@ const DELTA_GOOD = (k, v) => v > 0;
 
 const ACH_BY_ID = Object.fromEntries(ACHIEVEMENTS.map((a) => [a.id, a]));
 const SECRET_TOTAL = EVENTS.filter((e) => e.kind === 'hidden').length;
+const REL_NAME = Object.fromEntries(CAST.map((c) => [c.id, c.name]));
 
 function randomSeed() {
   return Math.random().toString(36).slice(2, 8).toUpperCase();
@@ -111,7 +113,7 @@ function Outcome({ outcome, newTip, newAch, secretCount, newSecret, onContinue, 
   return (
     <div className="adv-outcome" role="dialog" aria-modal="true" aria-labelledby="adv-outcome-title">
       <div className="adv-outcome__panel" ref={ref} tabIndex={-1}>
-        <p className="adv-label">{outcome.kind === 'hidden' ? '🔎 Hidden discovery' : outcome.kind === 'callback' ? '↩ Consequences' : 'Story'}</p>
+        <p className="adv-label">{outcome.kind === 'hidden' ? '🔎 Hidden discovery' : outcome.kind === 'callback' ? '↩ Consequences' : outcome.kind === 'finale' ? '🌅 The last evening' : 'Story'}</p>
         <h2 id="adv-outcome-title" className="adv-outcome__title">
           {outcome.lucky === true ? 'Lucky!' : outcome.lucky === false ? 'Not this time…' : outcome.choice.label}
         </h2>
@@ -132,12 +134,26 @@ function Outcome({ outcome, newTip, newAch, secretCount, newSecret, onContinue, 
             ))}
           </ul>
         )}
+        {outcome.rel?.length > 0 && (
+          <ul className="adv-rel" data-testid="adv-rel">
+            {outcome.rel.map((r) => (
+              <li key={r.who} className={r.delta > 0 ? 'good' : 'bad'}>
+                {r.delta > 0 ? '🤝' : '😬'} {REL_NAME[r.who] ?? r.who} {r.delta > 0 ? 'liked that' : 'noticed that'}
+              </li>
+            ))}
+          </ul>
+        )}
+        {outcome.promise && (
+          <p className={`adv-promise adv-promise--${outcome.promise.status}`} data-testid="adv-promise">
+            {outcome.promise.status === 'made' ? '🤞' : outcome.promise.status === 'kept' ? '✅' : '💔'} {outcome.promise.text}
+          </p>
+        )}
         {outcome.night && (
           <p className="adv-night" data-testid="adv-night">
             🌙{' '}
             {outcome.night.rough
-              ? 'You couldn’t afford your bed and slept on a bench by the sea. ⚡ +5, 🙂 −10.'
-              : `Night: −€${outcome.night.paid} for your bed, ⚡ +${outcome.night.recovered} after sleep.`}
+              ? `You couldn’t afford your bed and slept on a bench by the sea. ⚡ +${outcome.night.recovered}, 🙂 −10.`
+              : `Night: −€${outcome.night.paid} for your bed, ${outcome.night.recovered > 0 ? `⚡ +${outcome.night.recovered} after sleep` : 'already fully rested'}.`}
             {outcome.night.tired && ' You went to bed exhausted (🙂 −8).'}
           </p>
         )}
@@ -185,7 +201,7 @@ function Play({ state, onChoose }) {
       <section className="adv-scene">
         <Media photo={photo} className="adv-scene__photo" />
         <div className="adv-scene__text">
-          <p className="adv-eyebrow">{dest ? dest.name : 'Somewhere over the Adriatic'}</p>
+          <p className="adv-eyebrow">{dest ? dest.name : state.day === 1 ? 'Split Airport · Kaštela' : 'Before you go'}</p>
           <h1 className="adv-scene__title" data-testid="adv-step-title">
             {step.title}
           </h1>
@@ -195,14 +211,21 @@ function Play({ state, onChoose }) {
         {step.phase === 'event' || step.phase === 'evening' ? (
           <>
             <p className={`adv-label ${step.kind ? `adv-label--${step.kind}` : ''}`} data-testid="adv-event-kind">
-              {step.kind === 'callback' ? '↩ Consequences of your choices' : step.kind === 'hidden' ? '🔎 Hidden discovery' : 'Story'}
+              {step.kind === 'callback' ? '↩ Consequences of your choices' : step.kind === 'hidden' ? '🔎 Hidden discovery' : step.kind === 'finale' ? '🌅 The last evening: Duje remembers' : 'Story'}
             </p>
             <p className="adv-story__text" data-testid="adv-prompt">
               {step.prompt}
             </p>
           </>
         ) : (
-          <Duje testId="adv-prompt">{step.prompt}</Duje>
+          <>
+            {step.memory && (
+              <Duje compact testId="adv-memory">
+                {step.memory}
+              </Duje>
+            )}
+            <Duje testId="adv-prompt">{step.prompt}</Duje>
+          </>
         )}
       </section>
       <ul className="adv-choices" data-testid="adv-choices">

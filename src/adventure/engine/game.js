@@ -16,6 +16,7 @@ import {
   nightLine,
 } from '../data/story.js';
 import { TIPS_BY_ID } from '../data/tips.js';
+import { PROMISES, memoryFor } from '../data/memory.js';
 
 /* ────────────────────────────────────────────────────────── RNG ──
  * Deterministic: every random draw is derived from (seed, day, purpose),
@@ -69,6 +70,9 @@ export function newGame({ seed, mode = 'free' } = {}) {
     doneActivities: [],
     seenEvents: [],
     secrets: [], // hidden discoveries found this run
+    rel: {}, // relationships: { marija: 2, ante: 1, … }
+    promises: {}, // { id: { day, status: 'open' | 'kept' | 'broken' } }
+    mentioned: [], // memories Duje has already brought up
     currentEvent: null,
     flags: {},
     tipsFound: [],
@@ -160,6 +164,9 @@ function eligibleEvents(s) {
  */
 export function pickEvent(s) {
   const eligible = eligibleEvents(s);
+  // the holiday's closing scene always comes last, whatever else is pending
+  const finale = eligible.find((e) => e.finale);
+  if (finale) return finale;
   const urgent = eligible.filter((e) => txt(e.priority, s));
   const pool = urgent.length ? urgent : eligible;
   if (pool.length === 0) return null;
@@ -199,6 +206,7 @@ export function getStep(s) {
   let prompt;
   let raw;
   let event = null;
+  let memory = null;
   if (s.phase === 'base') {
     title = 'Before you go';
     prompt = `${NARRATOR.intro} First things first: where are you sleeping? (You can’t change it later.)`;
@@ -206,6 +214,7 @@ export function getStep(s) {
   } else if (s.phase === 'travel') {
     title = TRAVEL[s.day].title;
     prompt = txt(TRAVEL[s.day].prompt, s);
+    memory = memoryFor(s)?.line ?? null;
     raw = travelChoices(s);
   } else if (s.phase === 'activity') {
     const d = DESTINATIONS[s.location];
@@ -228,7 +237,7 @@ export function getStep(s) {
     const fallback = s.phase === 'travel' ? BROKE_TRAVEL : { ...BROKE, ...(event?.broke ?? {}) };
     choices.push({ ...fallback, cost: 0, disabled: false, reason: '' });
   }
-  return { phase: s.phase, day: s.day, title, prompt, choices, event, location: s.location, kind: event?.kind ?? null };
+  return { phase: s.phase, day: s.day, title, prompt, memory, choices, event, location: s.location, kind: event?.kind ?? null };
 }
 
 /* ─────────────────────────────────────────────────── SCORING ── */
@@ -285,7 +294,40 @@ function applyEffects(s, effects = {}, flags = {}) {
   );
 }
 
+/** Relationship changes: { ante: 1, duje: -1 }. Returns [{ who, delta }]. */
+function applyRel(s, rel = {}) {
+  return Object.entries(rel ?? {})
+    .filter(([, d]) => typeof d === 'number')
+    .map(([who, d]) => {
+      s.rel[who] = (s.rel[who] ?? 0) + d;
+      return { who, delta: d };
+    });
+}
+
+/** Make, keep or break promises named on the choice or its dice branch. */
+function applyPromises(s, choice, branch) {
+  let change = null;
+  const make = branch.promise ?? choice.promise;
+  const keep = branch.keep ?? choice.keep;
+  const brk = branch.breaks ?? choice.breaks;
+  if (make && PROMISES[make] && !s.promises[make]) {
+    s.promises[make] = { day: s.day, status: 'open' };
+    change = { id: make, status: 'made', text: `You promised ${PROMISES[make].to} ${PROMISES[make].text}.` };
+  }
+  for (const [id, status] of [[keep, 'kept'], [brk, 'broken']]) {
+    if (id && s.promises[id]?.status === 'open') {
+      s.promises[id] = { ...s.promises[id], status, resolvedDay: s.day };
+      change = { id, status, text: status === 'kept' ? `Promise kept: ${PROMISES[id].text}.` : `Promise broken: ${PROMISES[id].text}.` };
+    }
+  }
+  return change;
+}
+
 function finish(s) {
+  // promises still open when you fly home count as broken (open-ended ones stay open)
+  for (const [id, p] of Object.entries(s.promises ?? {})) {
+    if (p.status === 'open' && !PROMISES[id]?.openEnded) s.promises[id] = { ...p, status: 'broken', resolvedDay: s.day };
+  }
   s.ended = true;
   s.phase = 'ended';
   s.ending = evaluateEnding(s).id;
@@ -297,6 +339,11 @@ function finish(s) {
  */
 export function choose(state, choiceId) {
   const s = structuredClone(state);
+  // older saves predate these fields
+  s.rel ??= {};
+  s.promises ??= {};
+  s.mentioned ??= [];
+  s.secrets ??= [];
   const step = getStep(s);
   const choice = step.choices.find((c) => c.id === choiceId);
   if (!choice) throw new Error(`Unknown choice "${choiceId}" in phase ${s.phase}`);
@@ -309,10 +356,11 @@ export function choose(state, choiceId) {
   let text = txt(choice.result, state);
   let lucky = null;
   let moment = choice.moment ?? null;
+  let branch = choice;
   if (choice.chance) {
     const roll = rng(s.seed, 'chance', s.day, s.currentEvent ?? s.phase, choice.id);
     lucky = roll < txt(choice.chance.p, state);
-    const branch = lucky ? choice.chance.success : choice.chance.fail;
+    branch = lucky ? choice.chance.success : choice.chance.fail;
     effects = branch.effects;
     flags = { ...flags, ...(branch.flags ?? {}) };
     text = txt(branch.result, state);
@@ -325,6 +373,8 @@ export function choose(state, choiceId) {
   if (s.phase === 'base') {
     s.base = choice.id;
   } else if (s.phase === 'travel') {
+    const memory = memoryFor(state);
+    if (memory) s.mentioned.push(memory.id);
     const to = resolveTarget(s, choice.to);
     s.location = to;
     s.route.push(to);
@@ -346,10 +396,14 @@ export function choose(state, choiceId) {
     secret = s.currentEvent;
   }
 
+  const relChanges = applyRel(s, { ...txt(choice.rel, state), ...txt(branch === choice ? undefined : branch.rel, state) });
+  const promise = applyPromises(s, choice, branch);
+
   let tip = null;
   let newTip = false;
-  if (choice.tip && TIPS_BY_ID[choice.tip]) {
-    tip = TIPS_BY_ID[choice.tip];
+  const tipId = txt(choice.tip, state);
+  if (tipId && TIPS_BY_ID[tipId]) {
+    tip = TIPS_BY_ID[tipId];
     newTip = !s.tipsFound.includes(tip.id);
     if (newTip) s.tipsFound.push(tip.id);
   }
@@ -363,6 +417,8 @@ export function choose(state, choiceId) {
     lucky,
     kind: eventKind,
     secret,
+    rel: relChanges,
+    promise,
     moment,
     achievements: [],
     night: null,
@@ -428,16 +484,18 @@ function night(s) {
   const base = BASES.find((b) => b.id === s.base) ?? BASES[0];
   const tired = s.energy < BALANCE.tiredAtNight;
   if (tired) s.happiness = clamp(s.happiness - BALANCE.tiredPenalty, 0, 100);
+  const before = s.energy;
   if (s.money >= base.nightly) {
     s.money -= base.nightly;
     s.energy = clamp(s.energy + base.recover, 0, 100);
-    const n = { paid: base.nightly, recovered: base.recover, rough: false, tired };
+    const n = { paid: base.nightly, recovered: s.energy - before, rough: false, tired };
     return { ...n, line: nightLine(s, n) };
   }
   s.energy = clamp(s.energy + 5, 0, 100);
+  const recovered = s.energy - before;
   s.happiness = clamp(s.happiness - 10, 0, 100);
   if (!s.moments.some((m) => m.id === 'bench')) s.moments.push({ id: 'bench', text: 'Slept on a bench by the sea (budget-related)', rank: 8, day: s.day, place: s.location, headline: 'The Bench Nights' });
-  const n = { paid: 0, recovered: 5, rough: true, tired };
+  const n = { paid: 0, recovered, rough: true, tired };
   return { ...n, line: nightLine(s, n) };
 }
 

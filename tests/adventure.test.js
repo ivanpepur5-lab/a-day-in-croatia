@@ -15,6 +15,7 @@ import { TIPS, TIPS_BY_ID, TIP_CATEGORIES } from '../src/adventure/data/tips.js'
 import { newGame, getStep, choose, computeScore, rng, pickEvent, BALANCE, txt } from '../src/adventure/engine/game.js';
 import { loadProgress, collect, recordRun, saveCurrent } from '../src/adventure/services/progress.js';
 import { buildAdventureShareText } from '../src/adventure/services/shareCard.js';
+import { reportCard } from '../src/adventure/engine/report.js';
 import TRAVEL_DATA from '../src/data/travel-data.json' with { type: 'json' };
 import ENDING_PATHS from './fixtures/ending-paths.json' with { type: 'json' };
 
@@ -87,7 +88,8 @@ describe('content', () => {
   });
 
   it('every tip referenced by the story exists, and every tip can be collected', () => {
-    const referenced = new Set(allChoices().map((c) => c.tip).filter(Boolean));
+    const referenced = new Set(allChoices().flatMap((c) => c.tipOptions ?? (typeof c.tip === 'string' ? [c.tip] : [])));
+    for (const c of allChoices()) if (typeof c.tip === 'function') expect(c.tipOptions, `${c.id}: a computed tip must list tipOptions`).toBeTruthy();
     for (const id of referenced) expect(TIPS_BY_ID[id], id).toBeTruthy();
     for (const t of TIPS) expect(referenced.has(t.id), `tip ${t.id} is never awarded`).toBe(true);
   });
@@ -478,4 +480,113 @@ describe('every ending is reachable through actual gameplay', () => {
       expect(s.ending).toBe(ending.id);
     });
   }
+});
+
+describe('story memory: promises, relationships and Duje remembering', () => {
+  const randomRun = (seed, pick = (ok, n) => ok[Math.floor(rng('mem', seed, n) * ok.length)]) => {
+    let s = newGame({ seed });
+    const steps = [];
+    while (!s.ended) {
+      const step = getStep(s);
+      const ok = step.choices.filter((c) => !c.disabled);
+      const before = s;
+      const r = choose(s, pick(ok, s.choices.length).id);
+      steps.push({ step, before, outcome: r.outcome, after: r.state });
+      s = r.state;
+    }
+    return { s, steps };
+  };
+
+  it('money is exact: €500 + every change − every night paid = what is left', () => {
+    for (let i = 0; i < 300; i++) {
+      const { s, steps } = randomRun(`money-${i}`);
+      const spent = steps.reduce((a, x) => a + (x.outcome.deltas.money ?? 0) - (x.outcome.night?.paid ?? 0), 0);
+      expect(Math.round((500 + spent) * 100) / 100).toBe(s.money);
+    }
+  });
+
+  it('the night shows the energy actually recovered (never more than the cap allows)', () => {
+    for (let i = 0; i < 200; i++) {
+      for (const x of randomRun(`night-${i}`).steps.filter((y) => y.outcome.night)) {
+        const afterChoice = x.before.energy + (x.outcome.deltas.energy ?? 0);
+        expect(x.after.energy - afterChoice).toBe(x.outcome.night.recovered);
+      }
+    }
+  });
+
+  it('a promise is made, then kept or broken later; unkept promises count as broken at the end', () => {
+    let kept = 0;
+    let broken = 0;
+    for (let i = 0; i < 400; i++) {
+      const { s, steps } = randomRun(`promise-${i}`);
+      for (const [id, p] of Object.entries(s.promises)) {
+        const made = steps.find((x) => x.outcome.promise?.id === id && x.outcome.promise.status === 'made');
+        expect(made, `${id} was never made`).toBeTruthy();
+        expect(['kept', 'broken', 'open']).toContain(p.status);
+        if (p.status === 'open') expect(['come-back', 'jar'], `${id} left open`).toContain(id);
+        if (p.status === 'kept') kept++;
+        if (p.status === 'broken') broken++;
+      }
+    }
+    expect(kept).toBeGreaterThan(0);
+    expect(broken).toBeGreaterThan(0);
+  });
+
+  it('relationships change with choices and are reported, and losing Marija’s trust closes her network', () => {
+    const { s, steps } = randomRun('rel-1', (ok) => ok.find((c) => c.id === 'apartment') ?? ok[0]);
+    expect(s.rel.marija).toBeDefined();
+    const changed = steps.filter((x) => x.outcome.rel?.length);
+    expect(changed.length).toBeGreaterThan(0);
+    const cousin = EVENTS.find((e) => e.id === 'cousin-network');
+    const base = { ...newGame({ seed: 'm' }), day: 3, location: 'hvar', flags: { marija: true } };
+    expect(cousin.when({ ...base, rel: { marija: 1 } })).toBe(true);
+    expect(cousin.when({ ...base, rel: { marija: -1 } })).toBe(false);
+  });
+
+  it('Duje brings up memories only on a later morning, once each, and only about what you actually did', () => {
+    let memories = 0;
+    for (let i = 0; i < 300; i++) {
+      const { s, steps } = randomRun(`memory-${i}`);
+      const shown = steps.filter((x) => x.step.memory);
+      memories += shown.length;
+      expect(new Set(s.mentioned).size).toBe(s.mentioned.length);
+      for (const x of shown) expect(x.step.phase).toBe('travel');
+      // the match memory requires actually watching the match
+      if (s.mentioned.includes('mem-hajduk')) expect(s.choices.some((c) => c.id === 'watch-match')).toBe(true);
+      if (s.mentioned.includes('mem-konoba')) expect(s.choices.some((c) => c.id === 'sit-down')).toBe(true);
+    }
+    expect(memories / 300).toBeGreaterThan(1.5);
+  });
+
+  it('every holiday that reaches the last evening ends with Duje’s personal farewell', () => {
+    for (let i = 0; i < 300; i++) {
+      const { s, steps } = randomRun(`finale-${i}`);
+      const last = steps.at(-1);
+      if (s.energy > 0 && s.happiness > 0 && last.before.day === 5) {
+        expect(last.before.currentEvent, `run ${i}`).toBe('duje-farewell');
+        expect(txt(last.step.prompt, last.before).length).toBeGreaterThan(80);
+      }
+    }
+  });
+
+  it('the report lists the people you met and your promises', () => {
+    const { s } = randomRun('report-1', (ok) => ok.find((c) => ['apartment', 'share-peppers', 'eat-peppers', 'posuda-lost'].includes(c.id)) ?? ok[0]);
+    const r = reportCard(s);
+    expect(r.people.some((p) => p.id === 'duje')).toBe(true);
+    for (const p of r.promises) expect(p.text.length).toBeGreaterThan(10);
+  });
+
+  it('an older save without the new memory fields still plays to the end', () => {
+    let s = newGame({ seed: 'old-save' });
+    s = choose(s, 'hostel').state;
+    s = choose(s, 'bus').state;
+    const old = { ...s };
+    delete old.rel;
+    delete old.promises;
+    delete old.mentioned;
+    delete old.secrets;
+    let t = old;
+    while (!t.ended) t = choose(t, getStep(t).choices.find((c) => !c.disabled).id).state;
+    expect(t.ending).toBeTruthy();
+  });
 });

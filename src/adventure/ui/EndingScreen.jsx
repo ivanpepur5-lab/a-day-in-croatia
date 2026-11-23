@@ -118,6 +118,30 @@ export default function EndingScreen({ state, daily, progress, onAgain, onCollec
             <li key={h}>{h}</li>
           ))}
         </ol>
+        <h3 className="adv-h3">People you met</h3>
+        <ul className="adv-people" data-testid="adv-people">
+          {report.people.map((p) => (
+            <li key={p.id}>
+              <b>{p.name}</b> <small>· {p.role}</small>
+              <span className="adv-people__status">
+                {p.status.charAt(0).toUpperCase()}
+                {p.status.slice(1)}.
+              </span>
+            </li>
+          ))}
+        </ul>
+        {report.promises.length > 0 && (
+          <>
+            <h3 className="adv-h3">Promises</h3>
+            <ul className="adv-promises" data-testid="adv-promises">
+              {report.promises.map((p) => (
+                <li key={p.id}>
+                  {p.status === 'kept' ? '✅' : p.status === 'broken' ? '💔' : '🤞'} {p.text}
+                </li>
+              ))}
+            </ul>
+          </>
+        )}
         {report.stats.length > 0 && (
           <ul className="adv-funstats">
             {report.stats.map((x) => (

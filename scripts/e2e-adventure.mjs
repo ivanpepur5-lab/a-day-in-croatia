@@ -77,11 +77,13 @@ try {
     let nights = 0;
     let shotN = 0;
     const seenTitles = new Set();
+    let memories = 0;
     for (let guard = 0; guard < 30; guard++) {
       if (await page.getByTestId('adv-ending').count()) break;
       await page.getByTestId('adv-choices').waitFor();
       const title = await page.getByTestId('adv-step-title').innerText();
       seenTitles.add(title);
+      if (await page.getByTestId('adv-memory').count()) memories++;
       const buttons = page.locator('[data-testid^="adv-choice-"]:not([disabled])');
       const n = await buttons.count();
       check(n >= 1 && n <= 4, `“${title}”: ${n} choice(s) available`);
@@ -103,6 +105,8 @@ try {
     }
     check(decisions >= 18 && decisions <= 21, `full five-day loop played (${decisions} decisions: base + 5 × travel, activity, afternoon, evening)`);
     check(nights === 4, `four nights slept (${nights})`);
+    check([...seenTitles].some((t) => /The Last Evening/i.test(t)), 'the holiday closes with Duje’s farewell');
+    check(memories >= 1, `Duje brings up earlier days in the mornings (${memories}×)`);
     check(tipsSeen >= 5, `local tips revealed during play (${tipsSeen})`);
     check(dujeReactions >= decisions - 1, `Duje reacts to (almost) every decision (${dujeReactions}/${decisions})`);
 
@@ -117,6 +121,7 @@ try {
     const diary = await page.getByTestId('adv-diary').locator('li').count();
     check(diary === 5, `five-day diary shown (${diary} days)`);
     check(await page.getByTestId('adv-playtest-log').isVisible(), 'playtest log button available');
+    check((await page.getByTestId('adv-people').locator('li').count()) >= 1, 'report lists the people you met');
     const score = Number(await page.getByTestId('adv-score').getAttribute('data-score'));
     check(score > 0, `final score ${score}`);
     await page.getByTestId('adv-share-preview').waitFor({ timeout: 10000 });

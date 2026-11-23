@@ -23,7 +23,7 @@
       "island-dubrovnik",
       "walls-midday",
       "fkk-stay",
-      "glow-swim"
+      "farewell-promise"
     ],
     "route": [
       "split",
@@ -33,9 +33,9 @@
       "dubrovnik"
     ],
     "money": 0,
-    "happiness": 81,
-    "energy": 28,
-    "local": 16
+    "happiness": 80,
+    "energy": 33,
+    "local": 17
   },
   "adopted": {
     "seed": "free-path-1",
@@ -61,7 +61,7 @@
       "coach-dubrovnik",
       "walls-midday",
       "jugo-surrender",
-      "rocks"
+      "farewell-promise"
     ],
     "route": [
       "split",
@@ -70,12 +70,12 @@
       "omis",
       "dubrovnik"
     ],
-    "money": 214,
-    "happiness": 83,
+    "money": 217,
+    "happiness": 82,
     "energy": 60,
     "local": 22
   },
-  "fjaka": {
+  "island": {
     "seed": "free-path-2",
     "strategy": "fun",
     "choices": [
@@ -92,26 +92,26 @@
       "pakleni-taxi",
       "sea-legs-swim",
       "feast",
-      "stay-island",
-      "fortica",
-      "mama-lunch",
-      "igor-no",
-      "farewell-split",
-      "salona-ruins",
-      "give-away",
-      "broke"
+      "island-hop",
+      "vidova-gora",
+      "lesson",
+      "early-ferry",
+      "broke",
+      "zlatni-rat",
+      "phrases",
+      "farewell-quiet"
     ],
     "route": [
       "split",
       "omis",
       "hvar",
-      "hvar",
-      "split"
+      "brac",
+      "brac"
     ],
-    "money": 7,
-    "happiness": 75,
-    "energy": 79,
-    "local": 19
+    "money": 0,
+    "happiness": 67,
+    "energy": 27,
+    "local": 10
   },
   "insider": {
     "seed": "free-path-3",
@@ -136,8 +136,8 @@
       "gift-peka",
       "farewell-split",
       "pazar-morning",
-      "protect-burek",
-      "dance"
+      "ask-neighbour",
+      "farewell-promise"
     ],
     "route": [
       "split",
@@ -147,9 +147,9 @@
       "split"
     ],
     "money": 26,
-    "happiness": 84,
-    "energy": 79,
-    "local": 24
+    "happiness": 83,
+    "energy": 98,
+    "local": 26
   },
   "budget": {
     "seed": "free-path-4",
@@ -175,7 +175,7 @@
       "farewell-split",
       "pazar-morning",
       "watch",
-      "do-dir"
+      "farewell-promise"
     ],
     "route": [
       "split",
@@ -186,8 +186,8 @@
     ],
     "money": 200,
     "happiness": 83,
-    "energy": 98,
-    "local": 16
+    "energy": 96,
+    "local": 15
   },
   "disaster": {
     "seed": "free-path-5",
@@ -208,7 +208,7 @@
       "hide",
       "island-hop",
       "pucisca",
-      "ante-refund",
+      "bakery-port",
       "glow-swim",
       "island-dubrovnik",
       "walls-midday"
@@ -220,10 +220,10 @@
       "brac",
       "dubrovnik"
     ],
-    "money": 38,
-    "happiness": 72,
+    "money": 32,
+    "happiness": 80,
     "energy": 0,
-    "local": 5
+    "local": 6
   },
   "happy": {
     "seed": "free-path-6",
@@ -248,8 +248,8 @@
       "glow-swim",
       "coach-dubrovnik",
       "walls-early",
-      "suitcase-tetris",
-      "listen"
+      "crowded-bar",
+      "farewell-promise"
     ],
     "route": [
       "split",
@@ -258,48 +258,10 @@
       "trogir",
       "dubrovnik"
     ],
-    "money": 114,
+    "money": 99,
     "happiness": 88,
-    "energy": 41,
+    "energy": 50,
     "local": 8
-  },
-  "island": {
-    "seed": "free-path-8",
-    "strategy": "fun",
-    "choices": [
-      "boutique",
-      "taxi",
-      "picigin",
-      "bocce-play",
-      "watch-match",
-      "to-omis",
-      "kayak",
-      "bocce-match",
-      "tombola",
-      "cat-hvar",
-      "pakleni-taxi",
-      "ham-share",
-      "order-tomorrow",
-      "island-hop",
-      "vidova-gora",
-      "jugo-surrender",
-      "broke",
-      "farewell-split",
-      "marjan",
-      "refill",
-      "broke"
-    ],
-    "route": [
-      "split",
-      "omis",
-      "hvar",
-      "brac",
-      "split"
-    ],
-    "money": 1,
-    "happiness": 64,
-    "energy": 49,
-    "local": 17
   },
   "hostage": {
     "seed": "free-path-26",
@@ -322,22 +284,22 @@
       "pakleni-taxi",
       "ham-share",
       "try-prosek",
-      "farewell-split",
-      "marjan",
-      "other-spot",
-      "igor-no"
+      "island-dubrovnik",
+      "broke",
+      "try-maskeron",
+      "farewell-quiet"
     ],
     "route": [
       "split",
       "omis",
       "hvar",
       "hvar",
-      "split"
+      "dubrovnik"
     ],
-    "money": 4,
-    "happiness": 82,
-    "energy": 65,
-    "local": 21
+    "money": 8,
+    "happiness": 74,
+    "energy": 58,
+    "local": 17
   },
   "fish": {
     "seed": "free-path-27",
@@ -355,15 +317,15 @@
       "ferry-brac",
       "pucisca",
       "ante-agree",
-      "ante-family",
+      "order-tomorrow",
       "stay-island",
       "brac-konoba",
       "watch-surfers",
-      "round-up",
+      "gift-peka",
       "farewell-split",
       "picigin",
-      "hang-sock",
-      "crowded-bar"
+      "share-mate",
+      "farewell-quiet"
     ],
     "route": [
       "split",
@@ -372,9 +334,47 @@
       "brac",
       "split"
     ],
-    "money": 75,
+    "money": 56,
+    "happiness": 84,
+    "energy": 87,
+    "local": 23
+  },
+  "fjaka": {
+    "seed": "free-path-46",
+    "strategy": "careful",
+    "choices": [
+      "apartment",
+      "car",
+      "pazar-morning",
+      "share-mate",
+      "quiet-walk",
+      "to-omis",
+      "soparnik",
+      "zip-watch",
+      "eat-peppers",
+      "cat-hvar",
+      "lavender",
+      "posuda-full",
+      "backstreet-squid",
+      "stay-island",
+      "stari-grad",
+      "goat-evidence",
+      "order-spritz",
+      "farewell-split",
+      "salona-ruins",
+      "cathedral",
+      "farewell-promise"
+    ],
+    "route": [
+      "split",
+      "omis",
+      "hvar",
+      "hvar",
+      "split"
+    ],
+    "money": 97,
     "happiness": 84,
     "energy": 85,
-    "local": 22
+    "local": 19
   }
 }

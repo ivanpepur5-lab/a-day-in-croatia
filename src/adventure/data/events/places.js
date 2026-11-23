@@ -43,6 +43,7 @@ export const PLACE_EVENTS = [
     choices: [
       {
         id: 'rub-toe',
+        rel: { duje: 1 },
         label: 'Rub the toe and make a wish',
         effects: { happiness: 6, local: 1 },
         flags: { luckyToe: true },
@@ -174,7 +175,7 @@ export const PLACE_EVENTS = [
         label: 'Watch from a terrace with a cold drink',
         effects: { money: -4, energy: 5, happiness: 5 },
         result: 'From below, the zipliners look like brave, shrieking birds. You award points for screaming style. The winner yodels.',
-        duje: 'Watching other people be brave. Very efficient.',
+        duje: 'Watching other people be brave is a perfectly respectable hobby.',
       },
     ],
   },
@@ -195,12 +196,13 @@ export const PLACE_EVENTS = [
         effects: { happiness: 8, local: 2 },
         result: 'Of course you cheer for the pirates. Everybody in Omiš cheers for the pirates. The pirates win, as they apparently always do, and one of them gives you his wooden sword.',
         duje: 'Never cheer for Venice in Omiš. People have moved towns for less.',
-        tip: 'omis-pirates',
+        tip: 'omis-pirate-history',
       },
       {
         id: 'cheer-venice',
         label: 'Cheer for the Venetians, for balance',
         effects: { happiness: 6, adventure: 2 },
+        flags: { teamVenice: '@day' },
         result: 'You are the only one. The whole crowd turns around. The actor playing the Venetian salutes you with tears in his eyes — nobody has ever cheered for him before. He buys you a drink afterwards.',
         duje: 'You made a grown man in tights cry with happiness. That’s a good evening.',
         moment: { id: 'venice', text: 'Was the only person in Omiš to cheer for the Venetians', rank: 5, headline: 'Team Venice' },

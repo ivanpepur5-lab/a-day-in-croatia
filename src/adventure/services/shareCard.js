@@ -24,7 +24,9 @@ import {
  * Only the configured production domain is printed (never localhost).
  */
 export function buildAdventureShareText({ state, score, number, url }) {
-  const { ending, title, verdict, highlights } = reportCard(state);
+  const { ending, title, verdict, highlights, promises } = reportCard(state);
+  const kept = promises.filter((p) => p.status === 'kept').length;
+  const broken = promises.filter((p) => p.status === 'broken').length;
   const lines = [
     `Croatia Adventure${state.mode === 'daily' ? ` #${number}` : ''} — ${ending.emoji} ${ending.title}`,
     `📖 My holiday: “${title}”`,
@@ -32,6 +34,7 @@ export function buildAdventureShareText({ state, score, number, url }) {
     '',
     ...highlights.map((h) => `• ${h}`),
     '',
+    ...(kept + broken ? [`🤞 Promises: ${kept} kept, ${broken} broken`] : []),
     `💶 €${Math.round(state.money)} left · 🙂 ${state.happiness} · 📇 ${state.tipsFound.length} local tips · ${score} pts`,
     'Can you survive five days in Croatia?',
   ];

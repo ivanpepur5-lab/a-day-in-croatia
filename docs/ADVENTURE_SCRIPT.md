@@ -69,7 +69,7 @@ Please mark anything that is **wrong, unnatural, offensive or not funny to a loc
   - 💬 Luka is on the same boat. With the guitar. I’m so sorry.
 - **Car ferry to Brač** — _Slower, cheaper, more seagulls_
   - On deck, locals drink coffee with the serenity of people who have done this a thousand times, while a seagull eyes your sandwich like a professional.
-  - 💬 The ferry: where Dalmatians go to drink coffee in motion.
+  - 💬 Look at the locals: coffee, newspaper, zero panic. Copy them.
 - **Skip the islands, explore the mainland** — _Buses don’t get seasick_
   - Islands can wait. The mainland has secrets too, and buses that don’t care about waves.
   - 💬 Skipping the islands. Bold. My mother would call this a crime, but she calls everything a crime.
@@ -112,7 +112,7 @@ Please mark anything that is **wrong, unnatural, offensive or not funny to a loc
   - 💬 You paid Ante. Everybody pays Ante eventually.
 - **Coach down the coast to Dubrovnik** — _Long ride, legendary finale_
   - Hours of coastline so blue it looks edited. Then the walls appear, and the whole bus goes quiet.
-  - 💬 Dubrovnik for the finale. Very cinematic. Very many stairs.
+  - 💬 Dubrovnik for the finale. Beautiful. Also about a million stairs. Pace yourself.
 - **Boat back, then coach to Dubrovnik** — _Exhausting. Glorious._
   - Boat, bus, nap, bus. You arrive in Dubrovnik slightly crumpled, but heroic.
   - 💬 Island to Dubrovnik in one day. You are either a legend or very confused. Possibly both.
@@ -244,7 +244,7 @@ Please mark anything that is **wrong, unnatural, offensive or not funny to a loc
   - 💬 You climbed the highest peak on the Adriatic islands. I drove up once. We are not the same.
 - **Visit the stonemasons of Pučišća** — _White stone, quiet harbour_
   - Students carve white stone with techniques older than your country’s postal service. You try for thirty seconds and produce “gravel”.
-  - 💬 Your gravel is very nice. Very modern. Very gravel.
+  - 💬 You made gravel. Those students make churches. Give it a few years.
 - **Lunch at a hillside konoba** — _Lamb, olive oil, long table_
   - Three hours, four courses, one rakija you didn’t order. The owner calls you “prijatelju” — my friend — and means it.
   - 💬 If grandma is in the kitchen, you chose correctly. Grandma was in the kitchen.
@@ -268,7 +268,7 @@ Please mark anything that is **wrong, unnatural, offensive or not funny to a loc
   - 💬 The peacocks run Lokrum. You are a guest. Behave.
 
 
-## Events (101)
+## Events (104)
 
 ### The Fish Price Mystery `fish-mystery`
 
@@ -286,7 +286,7 @@ _evening · where: split, trogir, hvar_
   - Handwritten menu, four tables, a grandmother in the kitchen. The pašticada rearranges your understanding of beef.
   - 💬 Two streets back. The magic distance. Tourists never walk two streets back.
 - _When broke:_ You order bread and tap water and watch other people’s fish with the intensity of a cat at a window. The waiter, moved, brings you a few grilled sardines “because it’s sad”.
-  - 💬 Sympathy sardines. The lowest and most Dalmatian point of any holiday.
+  - 💬 Sympathy sardines. We’ve all been there. Well, I haven’t. But I’ve heard.
 
 ### The Three-Hour Coffee `three-hour-coffee`
 
@@ -341,7 +341,7 @@ _evening · where: split, dubrovnik, trogir_
 - **Join in with confidence**
   - 🎲 lucky: Against all odds you find the bass line. The tenor nods. A tourist films you. You are, for one verse, a Dalmatian man of the sea.
   - 🎲 unlucky: You hum confidently in a key that does not exist. The tenor raises one eyebrow, then kindly invites you to clap instead.
-  - 💬 Brave. Very brave. The tenor will tell this story at dinner.
+  - 💬 Brave. The tenor will tell this story at dinner, and he will exaggerate.
 
 ### Lost in Translation `lost-in-translation`
 
@@ -368,10 +368,10 @@ _day · where: split, brac, hvar, omis, trogir_
   - 💬 Water shoes. I said water shoes. Nobody listens to Duje.
 - **Buy water shoes at the kiosk**
   - You look like a scuba-diving duck. You also look like someone whose feet are fine.
-  - 💬 Ugly shoes, happy feet. The Dalmatian way.
+  - 💬 Ugly shoes, happy feet. Nobody here will judge you. I will, a little.
 - **Walk to the next cove**
   - The next cove is smaller, urchin-free and completely empty. Sometimes cowardice is just good scouting.
-  - 💬 Strategic retreat. Very French. The French were here too, you know — for a few years, two centuries ago.
+  - 💬 Strategic retreat. Smart. The urchins win more battles than anyone on this coast.
 
 ### The Midday Sun Strikes Back `heatwave`
 
@@ -387,7 +387,7 @@ _day · where: any_
   - 💬 The sightseeing waits for everyone, actually. That’s what makes it sightseeing.
 - **Refill at a fountain and find a gelato**
   - Cold water, a shady bench, a gelato the size of your head. Civilisation restored.
-  - 💬 Water and ice cream. The two pillars of Dalmatian summer medicine.
+  - 💬 Water and ice cream. Doctor-approved. Not by a doctor. By me.
 
 ### A Small Glass of Something `rakija-welcome`
 
@@ -412,7 +412,7 @@ _day · where: split, trogir, omis_
 
 - **Build a market picnic**
   - Bread, cheese, figs and tomatoes on a bench by the sea. The best meal of the trip costs less than one cocktail on the Riva.
-  - 💬 This is how Dalmatians eat when no one is watching. Delicious and suspiciously cheap.
+  - 💬 This is how people here eat when nobody is watching. Cheap, simple, perfect.
 - **Buy “authentic” souvenirs at the stand nearby**
   - Your fridge magnet says “CROATIA” in a font normally reserved for heavy-metal albums. It was made very far from Croatia.
   - 💬 Check where the souvenir was made. Then buy olive oil instead. Olive oil doesn’t lie.
@@ -424,7 +424,7 @@ _where: trogir, split, omis_
 > Car horns, flags, singing: a Dalmatian wedding procession sweeps along the waterfront and absorbs you like a friendly wave. An aunt makes eye contact. It’s too late.
 
 - **Dance along for one song**
-  - One song becomes four. An aunt teaches you a step, an uncle hands you a drink, and you appear in the official wedding video, centre frame.
+  - One song becomes four. An aunt teaches you a step, an uncle hands you a drink, and you appear in the official wedding video, centre frame. As you leave, the aunt makes you promise to come to Sunday lunch. Everyone promises. She writes your name down.
   - 💬 You are in the wedding video. You are now in the family WhatsApp group. There is no leaving the family WhatsApp group.
 - **Film it from a safe distance**
   - Your video gets 14 likes and one comment from your mother: “who are these people”. A fair question.
@@ -440,7 +440,7 @@ _where: omis_
   - Two hours of sieges, sea battles and an alarmingly detailed octopus recipe. He draws you a map on a napkin and writes “NEPHEW — FERRY” on the back.
   - 💬 Keep the napkin. In Dalmatia, a napkin with a nephew’s name on it is worth more than a credit card.
 - **Challenge him to a game of briškula**
-  - 🎲 lucky: Beginner’s luck! You win. He demands a rematch “tomorrow, same bench”, gives you his nephew’s number, and calls you a pirate.
+  - 🎲 lucky: Beginner’s luck! You win. He demands a rematch “tomorrow, same bench”, gives you his nephew’s number, and calls you a pirate. You promise. Of course you promise.
   - 🎲 unlucky: You lose spectacularly and pay for the coffees. He is gracious about it, the way pirates usually are after winning.
   - 💬 Never play cards with a Dalmatian grandfather. They learned on the boats. In storms.
 
@@ -465,7 +465,7 @@ _day · where: krka_
 
 - **Wait it out with an ice cream**
   - By the time your ice cream is gone, so is half the crowd. Patience: rewarded. Ice cream: also rewarded.
-  - 💬 Waiting with ice cream is the most Dalmatian strategy in existence.
+  - 💬 Waiting it out with an ice cream. You’re learning.
 - **Take a quieter side trail**
   - Birdsong, small cascades and a bench with nobody on it. You have found the part of Krka the brochures forgot.
   - 💬 The side trail. The brochures don’t know. Now you know. Don’t tell the tripod man.
@@ -481,7 +481,7 @@ _day · where: krka_
   - 💬 Look at you, quoting the official price list. I’ve created a monster.
 - **Stay out of it and board the boat**
   - Wise. Very wise. They are still arguing as your boat pulls away. A heron watches them with visible judgement.
-  - 💬 Never get between a couple and a ticket office. Ancient Dalmatian wisdom.
+  - 💬 Never get between a couple and a ticket office. My uncle tried once. He still talks about it.
 
 ### The Bura Has Opinions `bura-cancel`
 
@@ -525,7 +525,7 @@ _day · where: brac_
   - 💬 Windsurfing. Even if you fall, you fall into the best sea in Europe. I am not biased.
 - **Watch from the beach with an ice cream**
   - Watching other people fall into the sea is an extremely relaxing spectator sport. You give them scores.
-  - 💬 Professional spectator. A respected Dalmatian career.
+  - 💬 Professional spectator. Half the people on this coast have that job.
 
 ### Olive Oil Diplomacy `olive-grove`
 
@@ -561,7 +561,7 @@ _day · where: dubrovnik_
 
 - **Join the tour**
   - You climb the famous staircase, re-enact a famous scene, and appear in a group photo with forty strangers in matching T-shirts.
-  - 💬 Very touristy. Very fun. I won’t tell anyone. I will tell everyone.
+  - 💬 Touristy? Yes. Fun? Also yes. I won’t tell anyone. I will tell everyone.
 - **Skip it and read about the real Republic of Ragusa**
   - Turns out the real history — a tiny republic of diplomats and merchants — is better than the show. Nobody shouts at pigeons.
   - 💬 The real Dubrovnik out-negotiated empires. With paperwork. Respect the paperwork.
@@ -624,9 +624,9 @@ _where: any_
 
 ### The Last Sunset `sunset-spot`
 
-_evening · where: any_
+_day · where: any_
 
-> Your final evening. The sun is sliding towards the sea. You get one chance to choose where to watch it.
+> Your last afternoon. In a few hours the sun will slide into the sea for the last time this holiday, and you get one chance to choose where to watch it.
 
 - **The famous sunset bar**
   - A lovely sunset, framed by two hundred phones held up in perfect synchronisation. Yours is one of them. The bill includes a “kuver” you never noticed on the menu.
@@ -669,7 +669,7 @@ _↩ consequence · where: any_
   - “A goat,” the clerk repeats slowly. “Of course.” He invoices you in full and adds your story to the office goat list. You are number 38.
   - 💬 Number 38. You are not even the most creative goat story this month.
 - _When broke:_ You explain that you will pay “when you get home”. There is a long silence. They agree, in the tone of people who have heard this from hundreds of tourists, and email you an invoice with three exclamation marks.
-  - 💬 You now owe money to a car rental company in another country. Very international. Very adult.
+  - 💬 You now owe money to a rental company in another country. Congratulations: you are an international debtor.
 
 ### Your Peka Is Ready `peka-ready`
 
@@ -734,7 +734,7 @@ _↩ consequence · day · where: any_
 
 _↩ consequence · day · where: hvar, brac, dubrovnik_
 
-> A man in a ferry-company shirt sees the napkin map sticking out of your pocket. “Is that my grandfather’s handwriting? Did he tell you the octopus recipe?” He looks genuinely moved.
+> A man in a ferry-company shirt squints at you. “You’re the one who beat my grandfather at briškula! He talks about nothing else.” He draws you a map on a napkin, “to the cove Grandpa would have shown you”.
 
 - **Ask him for the cove on the napkin**
   - After his shift he takes you to a cove marked only “X — BEST” on the napkin. Turquoise water, no one else, and a fig tree. The pirates knew things.
@@ -764,14 +764,14 @@ _↩ consequence · evening · where: any_
 >
 > From across the square, a familiar strum. It is Luka, from the hostel, who has followed you here with the guitar. “You kept my guitar warm,” he says. “Now you sing.”
 >
-> From across the square, a familiar strum. It is Luka, from the hostel, who has followed you here with the guitar. He knows four chords and he wants you to sing.
+> From across the square, a familiar strum. It is Luka, from the hostel, who has followed you here with the guitar. He spots you, hesitates, then decides to forgive you for leaving the hostel at dawn without saying goodbye. He knows four chords and he wants you to sing.
 
 - **Sing a duet in the square**
   - You sing. Badly. Gloriously. A small crowd gathers, laughs, and throws coins into Luka’s guitar case. He splits the money with you like an honest pirate.
   - 💬 You earned money singing in Dalmatia. Do not quit your job. But I’m impressed.
 - **Hide behind a lavender stall**
   - Luka plays all four chords to an audience of one confused German couple. You hear it from behind the lavender. It is somehow beautiful.
-  - 💬 Hiding from Luka is a Dalmatian tradition older than the hostel.
+  - 💬 Hiding from Luka. Everyone in that hostel has done it at least once.
 
 ### Igor Has Arranged Something `igor-upsell`
 
@@ -951,20 +951,23 @@ _↩ consequence · evening · where: split, trogir, omis, hvar, brac, dubrovnik
 
 ### The Student Becomes the Teacher `shirt-finale`
 
-_↩ consequence · day · where: any_
+_↩ consequence · where: any_
 
-> Last day in Split. Across the square, a familiar voice is explaining Croatian etiquette to a group of new arrivals. It’s Brian, in a NEW Hawaiian shirt. This one has little fish on it.
+> In Split, a familiar voice is explaining Croatian etiquette to a group of new arrivals. It’s Brian, in a NEW Hawaiian shirt. This one has little fish on it.
 >
-> Last day in Hvar. Across the square, a familiar voice is explaining Croatian etiquette to a group of new arrivals. It’s Brian, in a NEW Hawaiian shirt. This one has little fish on it.
+> In Hvar, a familiar voice is explaining Croatian etiquette to a group of new arrivals. It’s Brian, in a NEW Hawaiian shirt. This one has little fish on it.
 >
-> Last day in Brač. Across the square, a familiar voice is explaining Croatian etiquette to a group of new arrivals. It’s Brian, in a NEW Hawaiian shirt. This one has little fish on it.
+> In Brač, a familiar voice is explaining Croatian etiquette to a group of new arrivals. It’s Brian, in a NEW Hawaiian shirt. This one has little fish on it.
 
 - **Go and say goodbye**
   - Brian tells the group about “the person who filmed me getting lost”. They laugh, he laughs: the video made him famous at home. He thanks you, sincerely, and gives you his shirt anyway.
   - “THAT’S MY MENTOR!” Brian shouts, and tells the group how you saved him from the fish and the wrong town. They applaud. He gives you the fish shirt off his back. Literally. He’s wearing another one underneath.
   - 💬 You came to Croatia and left with a Hawaiian shirt and a pen pal. Normal holiday.
 - **Hide behind a pillar and listen**
-  - From behind a column you hear him: “Ask the weight of the fish, buy bus tickets before boarding, and never trust a sunbed man called Ante.” He learned everything. Some of it from you.
+  - From behind a column you hear him: “Ask the weight of the fish before it goes on the grill, and never trust a sunbed man called Ante.” He learned everything. None of it from you, but quite a lot of it about you.
+  - From behind a column you hear him: “Ask the weight of the fish before it goes on the grill, and never, ever walk into a town square without greeting the grandmothers on the bench.” He learned everything. Some of it from you.
+  - From behind a column you hear him: “Ask the weight of the fish before it goes on the grill, and never, ever walk into a town square without greeting the grandmothers on the bench.” He learned everything. None of it from you, but quite a lot of it about you.
+  - 💬 You filmed him and he still turned into a tour guide. Brian is unstoppable.
   - 💬 He’s quoting you. And me. Mostly me.
 
 ### Duje Has a Problem `ivana-bakery`
@@ -1001,13 +1004,13 @@ _↩ consequence · evening · where: any_
 
 ### Did It Work? `duje-date`
 
-_↩ consequence · evening · where: any_
+_↩ consequence · day · where: any_
 
-> Your last evening. Duje walks up to your table glowing like a lighthouse. Next to him: Ivana from the bakery, holding two coffees.
+> Your last afternoon. Duje walks up to your café table glowing like a lighthouse. Next to him: Ivana from the bakery, holding two coffees.
 >
-> Your last evening, in Hvar. Your phone buzzes: a video call from Duje, who is standing soaking wet, a scrape on one knee and a grin on his face. Next to him, laughing: Ivana from the bakery.
+> Your last afternoon, in Hvar. Your phone buzzes: a video call from Duje, who is standing soaking wet, a scrape on one knee and a grin on his face. Next to him, laughing: Ivana from the bakery.
 >
-> Your last evening, in Brač. Your phone buzzes: a video call from Duje, who is standing with a borrowed guitar and a very complicated expression. Behind him, slightly embarrassed and clearly delighted: Ivana from the bakery.
+> Your last afternoon, in Brač. Your phone buzzes: a video call from Duje, who is standing with a borrowed guitar and a very complicated expression. Behind him, slightly embarrassed and clearly delighted: Ivana from the bakery.
 
 - **Raise a glass to Duje**
   - It worked. One coffee became three hours, which in Split means it is serious. Ivana tells you he practised the question on her cat. Duje denies everything. Duje is lying.
@@ -1063,7 +1066,7 @@ _day · where: split, trogir, omis, hvar, brac_
   - 💬 Boće is not a sport. It’s a parliament with balls. The arguing is the main event.
 - **Offer to be the referee**
   - Every throw needs a measurement, and every measurement needs a debate. A man produces a tape measure from his sock. You rule in favour of the oldest player and are praised for your wisdom.
-  - 💬 Ruling for the oldest. Very wise. You’d make a great judge in Split. Or a great diplomat. Same job.
+  - 💬 Ruling for the oldest. Wise. You’d make a good judge in Split. Or a diplomat. Same job here.
 
 ### The Boćari Network `bocce-rematch`
 
@@ -1077,7 +1080,7 @@ _↩ consequence · day · where: any_
 
 - **Accept the “international match”**
   - The match lasts the afternoon. The result is disputed. The dispute lasts the evening. You are toasted, photographed and added to a WhatsApp group called “BOĆE 🔥”.
-  - 💬 You are in a boće WhatsApp group. That’s more Dalmatian than I am.
+  - 💬 You’re in a boće WhatsApp group. I’ve been trying to get into that group for years.
 - **Watch with a coffee and heckle gently**
   - You shout “Ajme!” at all the right moments. The men approve. Heckling is half the game; the other half is pretending not to hear the heckling.
   - 💬 “Ajme” at the right moment is worth ten points in any Dalmatian conversation.
@@ -1121,7 +1124,7 @@ _day · where: split, trogir, omis, hvar, brac, dubrovnik_
 - **Dive in yourself, fully clothed**
   - 🎲 lucky: You dive, grab them and surface like a triumphant seal. A small crowd applauds. Your shorts dry in only four hours.
   - 🎲 unlucky: You dive, miss, dive again, and come up with a sea cucumber, a bottle cap and no sunglasses. The crowd applauds anyway.
-  - 💬 Diving in your clothes. Very Dalmatian. We do it at weddings.
+  - 💬 Diving in your clothes. People do that at weddings here, so you’re in good company.
 - **Let the sea keep them**
   - Goodbye, sunglasses. You squint at the sun. The sun squints back. This will be a long holiday.
   - 💬 Squinting for the rest of the week. In every photo you’ll look like you’re doing maths.
@@ -1398,7 +1401,7 @@ _evening · where: any_
   - 💬 Prošek is not prosecco. Mix them up here and you’ll get a lecture longer than the wine list.
 - **Order a spritz like everyone else**
   - It’s orange, it’s cold, it’s fine. The old man looks at it the way you’d look at someone wearing socks with sandals. Lovingly. Pityingly.
-  - 💬 Spritz. Very nice. Very Italian. We’re neighbours, it’s fine.
+  - 💬 Spritz. Fine. Italian. We’re neighbours, we share.
 
 ### Split or Zagreb? `zagreb-couple`
 
@@ -1521,7 +1524,7 @@ _day · where: omis_
   - 💬 I’ve never done it. I’m Dalmatian. We don’t rush. Not even on wires.
 - **Watch from a terrace with a cold drink**
   - From below, the zipliners look like brave, shrieking birds. You award points for screaming style. The winner yodels.
-  - 💬 Watching other people be brave. Very efficient.
+  - 💬 Watching other people be brave is a perfectly respectable hobby.
 
 ### The Pirates Are Back `pirate-battle`
 
@@ -1651,11 +1654,11 @@ _Hint: On Brač, earn the locals’ trust — or wander off the beaten track at 
 
 ### The Door in the Wall `buza-door`
 
-_🔎 hidden · evening · where: dubrovnik_
+_🔎 hidden · day · where: dubrovnik_
 
 _Hint: In Dubrovnik, speak enough Croatian (or know enough locals) and someone will tell you about a door in the wall._
 
-> A waiter, delighted that you ordered in Croatian, tells you to look for a small opening in the city wall, near a sign that says “cold drinks”. “Go through,” he says. “Trust me.”
+> A waiter, delighted that you ordered in Croatian, tells you to look for a small opening in the city wall, near a sign that says “cold drinks”. “Go through before sunset,” he says. “Trust me.”
 
 - **Go through the wall**
   - On the other side of the wall: a bar clinging to the cliffs above the open sea. Tables on rocks, people diving into the darkening water, and a sunset that seems to have been arranged personally for you.
@@ -1742,6 +1745,58 @@ _Hint: Become a true local insider by the end of the holiday, and someone very i
 - **Panic and claim you have food poisoning**
   - Duje’s mother hears “food poisoning” and is at your door within the hour with soup, tea and a cousin who is a doctor. You have now met her anyway. In pyjamas. She leaves fig jam.
   - 💬 You can’t hide from a Dalmatian mother. She has satellites.
+
+### The Last Evening `duje-farewell`
+
+_evening · where: any_
+
+> Your last evening. Duje is quiet for a moment, which for Duje is a medical event. Then: “Five days, no disasters, no legends. Honestly? Suspiciously well-behaved. I respect it.”
+>
+> Your last evening, in Hvar. Duje is quiet for a moment, which for Duje is a medical event. Then: “Five days, no disasters, no legends. Honestly? Suspiciously well-behaved. I respect it.”
+>
+> Your last evening, in Brač. Duje is quiet for a moment, which for Duje is a medical event. Then: “Five days, no disasters, no legends. Honestly? Suspiciously well-behaved. I respect it.”
+
+- **Promise him you’ll come back**
+  - Duje nods, pretends something is in his eye, and immediately phones his mother to tell her. You hear her cheering from his phone.
+  - 💬 Everyone says they’ll come back. Most people do, actually. This coast is hard to leave.
+- **Ask where you should go next time**
+  - You eat like someone who should see Istria. Hill towns, olive oil, truffles. I’ll deny saying this, but their olive oil might be as good as ours. Might.
+  - Next time, start in Zadar and watch the sunset by the sea organ. The sea plays music. I’m not making it up. For once.
+  - You liked the waterfalls? Then next time: Plitvice. Lakes stacked on lakes, every colour of green. No swimming, before you ask.
+  - 💬 There is more to Croatia than Dalmatia. Not better. But more.
+- **Say nothing. Watch the sea together.**
+  - You sit on the warm stone as the sky goes from orange to navy. A ferry sounds its horn. Neither of you says anything for a long time. It’s the best conversation of the holiday.
+  - 💬 …Pomalo. That’s all. Pomalo.
+
+### Your Only Fan `venetian-actor`
+
+_↩ consequence · evening · where: split, trogir, omis, hvar, brac, dubrovnik_
+
+> Your waiter tonight looks strangely familiar. Out of costume, it takes you a second: he is the man who played the Venetian officer in Omiš. He recognises you at once. “You,” he whispers. “You are the only one who ever cheered.”
+
+- **Accept dinner “on the Republic of Venice”**
+  - Starters you didn’t order, a dessert with a tiny paper lion of St Mark stuck in it, and a toast “to the only person in Dalmatia with taste”. The bill is a drawing of a gondola.
+  - 💬 You got a free dinner for cheering for the wrong side. That’s not luck. That’s strategy.
+- **Ask for his autograph instead**
+  - He signs your napkin “Capitano, forever yours”, poses for a photo in his apron, and tells the whole terrace you are “a true connoisseur of theatre”.
+  - 💬 An autograph from a waiter who plays a villain in a pirate show. Frame it.
+
+### The Couple From Zagreb `zagreb-return`
+
+_↩ consequence · day · where: split, trogir, omis, hvar, brac, dubrovnik_
+
+> In Split, someone shouts your name. It’s the couple from Zagreb, the ones you sided with at dinner. “Our champion!” They’ve told all their friends about the tourist who said Zagreb is better than Split. They insist on buying you a coffee.
+>
+> In Hvar, someone shouts your name. It’s the couple from Zagreb, the ones you sided with at dinner. “Our champion!” They’ve told all their friends about the tourist who said Zagreb is better than Split. They insist on buying you a coffee.
+>
+> In Brač, someone shouts your name. It’s the couple from Zagreb, the ones you sided with at dinner. “Our champion!” They’ve told all their friends about the tourist who said Zagreb is better than Split. They insist on buying you a coffee.
+
+- **Have the coffee and let them tell you about Zagreb**
+  - For an hour they sell you Zagreb: the Upper Town, the market, the cafés, the trams. They give you their number “for when you come”. You realise you now have friends at both ends of the country.
+  - 💬 They’re right about the coffee in Zagreb. Don’t you dare tell them I said so.
+- **Confess you only said it to annoy the waiter**
+  - They gasp, then laugh so hard the next table joins in. “Classic Split,” they say. “You are one of them now.” They buy you the coffee anyway.
+  - 💬 You lied to Zagreb people for a dessert. I have never been prouder.
 
 
 ## Endings

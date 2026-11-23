@@ -74,13 +74,13 @@ export const HIDDEN_EVENTS = [
   {
     id: 'buza-door',
     kind: 'hidden',
-    slot: 'evening',
+    slot: 'day',
     where: ['dubrovnik'],
     when: (s) => s.local >= 5 || f(s, 'phrases') >= 2,
     weight: 4,
     hint: 'In Dubrovnik, speak enough Croatian (or know enough locals) and someone will tell you about a door in the wall.',
     title: 'The Door in the Wall',
-    story: 'A waiter, delighted that you ordered in Croatian, tells you to look for a small opening in the city wall, near a sign that says “cold drinks”. “Go through,” he says. “Trust me.”',
+    story: 'A waiter, delighted that you ordered in Croatian, tells you to look for a small opening in the city wall, near a sign that says “cold drinks”. “Go through before sunset,” he says. “Trust me.”',
     choices: [
       {
         id: 'through-door',
@@ -183,7 +183,7 @@ export const HIDDEN_EVENTS = [
         flags: { hidden: 1 },
         result: 'A steep, sweaty, rocky path, and then: the whole coast at your feet, the river winding into the canyon, the islands floating on the horizon. You can see every ship coming. The pirates were not stupid.',
         duje: 'From up there they saw everything. Like my mother from her balcony.',
-        tip: 'omis-pirates',
+        tip: 'omis-pirate-history',
         moment: { id: 'fortica', text: 'Climbed to the pirates’ highest lookout above Omiš', rank: 8, headline: 'The Pirates’ Lookout' },
       },
       {
@@ -209,6 +209,7 @@ export const HIDDEN_EVENTS = [
     choices: [
       {
         id: 'sit-sustipan',
+        rel: { duje: 2 },
         label: 'Sit with him and watch the ferries',
         effects: { energy: 8, happiness: 12, local: 1 },
         flags: { hidden: 1, dujeSecret: true },
@@ -218,6 +219,7 @@ export const HIDDEN_EVENTS = [
       },
       {
         id: 'photo-go',
+        rel: { duje: -1 },
         label: 'Take a photo and head back for dinner',
         effects: { happiness: 4, energy: 2 },
         result: 'You take a lovely photo. Duje looks at the sea a little longer, then follows you. “Another time,” he says. He means it.',
@@ -241,6 +243,8 @@ export const HIDDEN_EVENTS = [
     choices: [
       {
         id: 'mama-lunch',
+        rel: { duje: 1 },
+        promise: 'jar',
         label: 'Go to lunch',
         effects: { energy: 12, happiness: 14, local: 3 },
         flags: { hidden: 1, adopted: 1, mamaLunch: true, mamaJam: true },
@@ -251,6 +255,7 @@ export const HIDDEN_EVENTS = [
       },
       {
         id: 'mama-hide',
+        rel: { duje: -1 },
         label: 'Panic and claim you have food poisoning',
         effects: { energy: 6, happiness: -2, local: 1 },
         flags: { hidden: 1, mamaJam: true },

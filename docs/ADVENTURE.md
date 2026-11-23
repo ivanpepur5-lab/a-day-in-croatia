@@ -27,12 +27,33 @@ A run is **21 decisions** (base + 5 × 4), about 8–12 minutes on a phone.
 
 | | Count |
 |---|---|
-| Events | **101**: 66 everyday and place events, 23 consequence callbacks, 12 hidden discoveries |
+| Events | **104**: 66 everyday and place events, 25 consequence callbacks, 12 hidden discoveries, 1 finale |
 | Multi-day storylines | 17 (see below) |
 | Activities | 25 across 7 destinations |
 | Endings | 10 |
-| Local Insider tips | 81: 10 verified with official sources, 71 editorial, of which 9 are flagged for review |
+| Local Insider tips | 86: 10 verified with official sources, 76 editorial, of which 10 are flagged for review; 4 introduce regions beyond Dalmatia |
+| Story memory | 6 characters with relationships, 8 kinds of promise, 26 morning memories + “yesterday” callbacks, a personal farewell |
 | Achievements | 6 |
+
+## Story memory (gameplay & quality pass)
+
+The holiday is now one continuous story. Four connected systems (`src/adventure/data/memory.js` and `events/finale.js`):
+
+1. **Relationships.** Choices can carry `rel: { marija: 2 }`. Six characters track how they feel about you: Duje, Marija, Luka, Igor, Ante and Brian.
+   - The outcome sheet shows it at once: “🤝 Marija liked that”, “😬 Ante noticed that”.
+   - Relationships unlock or close later content. Ante only reveals his empire to good customers, and Marija's cousin network goes quiet if you lost her container. Luka greets you differently depending on how you left things.
+2. **Promises.** Some choices make a promise: Sunday lunch with the wedding aunt, Marija's container, the peka, a briškula rematch, the boće rematch, fishing with Pegica, coming back next year. Later choices keep or break them. Anything still open when you fly home counts as broken, except open-ended promises like “come back next year”. Shown as 🤞 / ✅ / 💔 in the outcome sheet and in the report. The share text counts kept and broken promises.
+3. **Duje remembers.** Most mornings Duje brings up something from an earlier day: a hidden place you *actually* went to, a promise you are neglecting (“somewhere in Omiš an old man is sitting on a bench with a deck of cards”), a character you met, or yesterday's most memorable moment.
+   - Each memory is used once, only on a later morning, and only for choices you really made (tested).
+   - Runs get about 2–3 memories each, and 94–100% of runs get at least one.
+4. **The last evening.** Every holiday that reaches day 5 ends with Duje's farewell (`finale: true` always wins the last slot). He looks back at *your* two biggest moments and the promise or person that matters most. Then you choose:
+   - promise to come back;
+   - ask where to go next time — he picks **Zagreb, Istria, Plitvice or Zadar** from how you played, and you get a real tip card for that region;
+   - say nothing and watch the sea together.
+
+**Unusual decisions pay off later:** cheering for Venice in Omiš gets you a free dinner from the actor, and siding with Zagreb brings the couple back (and introduces the capital).
+
+**The report** now also shows **People you met** (with a status from the relationship score, e.g. “Ante gives you the ‘family price’”) and **Promises**.
 
 ## Duje: character guide
 
@@ -45,6 +66,7 @@ Duje is the narrator, a Split local in his thirties, named after Sveti Duje, the
   - **Hajduk**;
   - **Ivana from the bakery**, whom he can't talk to;
   - **coffee and pomalo**, and his hatred of rushing.
+- **Naturally sarcastic, not constantly:** some lines are plain, warm or quiet (the farewell can end with a single “…Pomalo.”). This pass rewrote 20 lines that used generated-sounding formulas (“Very X. Very Y.”, “the most Dalmatian … in existence”).
 - **Catchphrases:** “I don't make the rules. My grandfather made the rules.” “I'm not saying I told you. I'm saying it again.”
 - **The one sincere moment:** the hidden *Sustipan* scene, where he stops joking.
 
@@ -118,98 +140,110 @@ The share text and share card both lead with the ending, the story title and the
 
 ## Balance report
 
-From `node scripts/adventure-sim.mjs 24000` (six strategies × 4,000 runs):
+From `node scripts/adventure-sim.mjs 18000` (six strategies × 3,000 runs), after this pass:
 
 | Ending | All runs | Random play |
 |---|---|---|
-| Island Explorer | 19.9% | 18.9% |
-| Budget Master | 16.5% | 16.8% |
-| Tourist Disaster | 16.4% | 2.5% |
-| Local Insider | 14.2% | 3.3% |
-| Happy Holidaymaker | 9.8% | 27.2% |
-| Fjaka Champion | 8.9% | 17.5% |
-| Professional Ferry Hostage | 5.6% | 4.0% |
-| Adopted by Dalmatia | 5.5% | 2.4% |
-| Croatia Legend | 1.7% | 4.0% |
-| Three-Kilo Fish Legend | 1.6% | 3.4% |
+| Island Explorer | 21.6% | 20.3% |
+| Budget Master | 18.4% | 19.4% |
+| Tourist Disaster | 15.4% | 1.2% |
+| Local Insider | 13.3% | 2.5% |
+| Fjaka Champion | 10.1% | 20.8% |
+| Happy Holidaymaker | 8.2% | 24.7% |
+| Professional Ferry Hostage | 5.8% | 3.4% |
+| Adopted by Dalmatia | 4.7% | 1.9% |
+| Croatia Legend | 1.3% | 3.0% |
+| Three-Kilo Fish Legend | 1.2% | 2.7% |
 
-**Play style drives the ending:**
+**By strategy:**
 
 | Strategy | Most common endings |
 |---|---|
-| Thrifty | Budget Master 61% |
-| Island-chasing (“fun”) | Island Explorer 74%, Ferry Hostage 11% |
-| Local | Local Insider 47%, Adopted 20% |
-| Careful | Insider 27%, Fjaka 25%, Budget 19% |
-| Deliberately bad | **Disaster 90.9%** |
+| Thrifty | Budget Master 66% |
+| Island-chasing | Island Explorer 83%, Ferry Hostage 12% |
+| Local | Local Insider 48%, Adopted 18% |
+| Careful | Fjaka 31%, Insider 24%, Budget 22% |
+| Deliberately bad | **Disaster 89.6%** |
 
-### “10 endings” vs “7 endings”
+**Accommodation:** the boutique hotel cost €80 a night and was a trap. 60% of random players and 100% of fun-seekers ended up sleeping on a bench (see the play-test log). At **€65** it is still the risky luxury option (24% of random boutique guests run out of money) but no longer an obviously bad choice. Hostel €25 / recover 20, apartment €45 / recover 30, boutique €65 / recover 40.
 
-The previous version of this document said random play “spreads across all **seven** endings”. That sentence was written before the last pass added three endings (Adopted by Dalmatia, Three-Kilo Fish Legend, Professional Ferry Hostage) and was never updated. It was a **stale sentence, not a missing ending**: the simulator already counted all ten.
+**“10 endings” vs “7 endings”** (from the previous pass): the old summary sentence was written before three endings were added. It was stale text, not a missing ending.
 
-The old balance was also weaker than that summary suggested:
-- Croatia Legend was reached by **8%** of all runs (12% of random runs) — not “the rarest”.
-- Fish Legend was actually the rarest, at 1.2%.
-- Deliberately bad play still became a Croatia Legend 1.7% of the time.
+**Bad play:** about 90% of deliberately bad runs end in disaster (89.6% now), but random play ends in disaster only about 1%, so the overall disaster rate comes almost entirely from bad play.
 
-The current tuning (stricter Legend, adoption needing two families, lower happiness gains per event because there are now twice as many events) gives every ending a real share. Legend is genuinely rare (1.7% overall, 4% for random play, 0.1% for bad play).
+**Every ending is reachable through actual gameplay:** `node scripts/adventure-endings.mjs` records a real legal run for each ending (`tests/fixtures/ending-paths.json`), and a test replays all ten.
 
-### Verifying “about 90% Tourist Disaster for deliberately bad play”
+**Repetition between runs:** the event overlap between two runs of the same strategy is 0.09–0.15 (Jaccard). All 104 events and all 86 tips are reachable.
 
-- **Before this pass:** 3,562 of 4,000 bad runs ended in disaster = **89.1%** ✓. But those 3,562 runs were **96%** of *all* disasters in the simulation (3,712 of 20,000 runs = 18.6% overall). Random play ended in disaster only 2.3% of the time. So the 90% figure was correct, but the overall 18.6% disaster rate came almost entirely from the deliberately bad strategy.
-- **Now:** **90.9%** of bad runs end in disaster, and disasters are **16.4% of all runs**, of which 92% come from bad play. Random play ends in disaster 2.5% of the time, and careful play 0.8%. Bad runs mostly end by **exhaustion on day 4–5** (17.8 decisions on average instead of 21), which is the intended “you overdid it” story.
+**Storyline payoffs** (share of triggering runs in which the payoff appears): Marija's container 100%, boće 99%, Luka 99%, ham 97%, Pegica 93%, sunglasses 93%, Duje & Ivana 93%, wedding aunt 89%, Brian 87%, mirror 86%, fish 80%, sea urchin 81%, grandpa 79%, sunburn 78%, peka 73%, party boat 65%.
+- **Ante's reveal is now relationship-gated** (you need to have been a good customer twice): 25% of runs that meet him.
+- **Peka:** when it can't be collected before you fly home, it becomes a broken promise (“somewhere, a peka waits”).
 
-### Every ending is reachable through actual gameplay
+## Play-test log
 
-`node scripts/adventure-endings.mjs` plays real runs (legal choices only, real dice) until each ending has been reached. It saves the seed and the exact choice sequence to `tests/fixtures/ending-paths.json`, and a test **replays all ten** through the engine. Every ending was found within the first 28 runs.
+### Gameplay & quality pass (story memory)
 
-### Repetition between runs
+**Inspection first.** Automated checks over 3,000 runs:
+- **Money accounting is exact.** €500 + every change − every night paid = money left. This is now a permanent test.
+- I compared each Verified tip with its source text before changing anything.
 
-- **Event overlap:** the average share of events two runs of the same strategy have in common (Jaccard) is **0.08–0.10**. Two holidays share fewer than one event in ten.
-- **Most common events:** generic evening events (the bill, bevanda, rakija, the fešta) appear in about 26% of runs; no event appears in more than 27%.
-- **Rarest events:** Dubrovnik afternoon events (1–2%, because Dubrovnik is only reachable on day 5) and *Mistaken for a Local* (0.6%, a reward for speaking Croatian).
+**Real bugs found and fixed:**
 
-## Play-test log (this pass)
+| Bug | How it was found | Fix |
+|---|---|---|
+| The night summary claimed the full recovery (“⚡ +30”) even when energy was capped at 100: **wrong in 65% of nights** | Invariant check over 12,000 nights | Shows the real gain, or “already fully rested” (tested) |
+| **The boutique hotel was a trap**: bench nights for 60% of random and 100% of fun runs | Money simulation per base | €80 → €65 a night |
+| Winning at briškula led to the nephew saying he saw “the napkin map in your pocket”, but only *listening* gives you a napkin | Reading the chaotic transcript | Two versions of the scene; the briškula “rematch tomorrow” is now a real promise |
+| Duje said “my voice is still gone from the match” to a player who took a quiet walk instead | Chaotic transcript | Memories check the choice you made, not the event you saw (tested) |
+| The same applied to every hidden place (Duje “remembered” places you declined to visit) | Code review after the above | Fixed |
+| Brian quoted advice about Ante to players who never met Ante, and credited the player for advice they never gave | Chaotic transcript | Lines built from what actually happened |
+| Duje said “Ante says you’re a good customer” to players who never bought anything | Normal transcript | Separate line for difficult customers |
+| Day 1 header said “Somewhere over the Adriatic” above a photo of Split, while Duje says “Welcome to Split Airport” | Mobile review | “Split Airport · Kaštela” |
+| The Dubrovnik hidden discovery could no longer happen (an evening event in a city you only reach on the last evening) | Reachability test | Moved to the afternoon |
+| 17 memory flags were recorded and never used again | Flag audit | Now feed Duje's memories, Brian's lines and the report |
+| Five **Verified** tips said more than their sources (airport “between Split and Trogir”, Krka “all land sites”, Kamerlengo description, Omiš pirate history, Salona “Roman capital”, “where the river meets the sea”) | Comparing each tip with its stored source text | Verified text trimmed to exactly what the source says; pirate history moved to a new Editorial card |
 
-I read eight full transcripts end to end (`node scripts/adventure-transcript.mjs <seed> <first|last|cheap|fun|local|bad|car|island>`). What I found and fixed:
+**Five personas played in full** (`node scripts/adventure-transcript.mjs <seed> normal|cheap|fun|chaos|local`):
+
+| Persona | Ending | What I noticed |
+|---|---|---|
+| Normal tourist (car + apartment + big fish + party boat) | Happy Holidaymaker, €1 left | A funny, believable spiral. Duje recalled the fish and Ante. It exposed the “good customer” bug. |
+| Budget tourist | Budget Master, €368 | Calm and pleasant; fewer big moments, so the report leans on the diary. |
+| Adventurous (fun) | Island Explorer | Very eventful. Island-chasing is predictable (83% Island Explorer). |
+| Chaotic | Fjaka Champion | Exposed three memory bugs (above). After the fixes, Brian's finale and the farewell reflect the chaos. |
+| Local discoveries | Adopted by Dalmatia | The strongest run: the container promise was kept, the konoba with no name was remembered on day 5, and the farewell mentioned Marija crying. |
+
+### Earlier passes
 
 | Found while playing | Fix |
 |---|---|
-| With one event a day, a run saw 5 of the events, and callbacks crowded out new situations | An evening slot (two events per day, separate pools); a run now sees 10 events |
-| The urchin “success” still added “Stepped on a sea urchin” to the report | Dice branches can carry their own report moment |
-| The fish callback always said “in Split”, even if you ate the fish in Trogir | It remembers where you ate it |
-| The sunburn and urchin callbacks could fire on the same evening (“tomorrow, when you put your backpack on…”) | Payoffs require an earlier day (tested) |
-| Morning-type callbacks (“at first light…”) appeared in the afternoon | Rewritten to fit the time of day |
-| Ante's boat appeared *after* the reveal of his whole empire | The order is enforced |
-| Report diary said “wandered the palace” on a Salona day | The diary uses what you actually did, in the past tense |
-| Ante, Brian, Duje's date and Luka paid off in only 5–49% of triggering runs | Follow-ups made into callbacks; now 47–99% |
-| Happiness saturated near 90 for every strategy with 10 events | Gains per event lowered (0.85 → 0.6) |
+| A run saw too few events for stories to develop | Evening slot (two events per day) |
+| The urchin “success” still added “stepped on a sea urchin” | Dice branches carry their own report moment |
+| Callbacks fired the same day as their seed | Payoffs require an earlier day (tested) |
+| Ante, Brian, Duje's date and Luka rarely paid off | Follow-ups made into callbacks |
+| Happiness saturated near 90 | Lower gains per event |
 
-**Still repetitive or weak (honest list):**
-- Generic evening events are the most frequent. They are well written but recur across runs for regular players.
-- **Thrifty play is a little predictable** (Budget Master 61%) and **island-chasing even more so** (Island Explorer 74%). This is intended, but worth testing with real players.
-- Dubrovnik content is under-seen because it's day-5 only.
-- Within a single run, several storylines can stack on days 3–5. Usually that's a feature (busy, connected days); occasionally it means one more callback than ideal.
-- The humour needs a **local review**: see [`LOCAL_REVIEW.md`](LOCAL_REVIEW.md) and the full script in [`ADVENTURE_SCRIPT.md`](ADVENTURE_SCRIPT.md).
+**Still weak (honest list):**
+- Generic evening events (the bill, bevanda, the fešta) recur most for regular players.
+- Thrifty and island-chasing play are predictable.
+- Dubrovnik is only reachable on day 5.
+- Several storylines can stack on days 3–5.
+- The humour still needs a local reviewer ([`LOCAL_REVIEW.md`](LOCAL_REVIEW.md)).
 
-## Local Insider tips: review of all 81
+## Local Insider tips: review of all 86
 
-Every card has the tip, **why it matters**, and an accuracy label:
+Labels shown to the player: **Story** (fiction) vs **Real-world tip**. Each tip card is then marked:
 
 | Label | Meaning | Rules |
 |---|---|---|
-| ✓ **Verified** | Backed by an official source in `src/data/travel-data.json` (Promet Split fares, Krka 2026 price list, the Trogir and Omiš tourist boards, the Archaeological Museum in Split) | Source id and date; the audit warns when stale |
-| ✎ **Editorial** | General knowledge: language, food, culture, practical habits | **No prices, times, durations or distances** (enforced by a test); listed in `docs/UNVERIFIED.md` |
-| ✎ + review flag | Editorial tips that state a **rule, custom or local claim** (Sunday trading, the Hvar swimwear rule, no swimming at Krka, returning a dish full, tipping, jugo, the Peškarija “no flies” lore, skradinski rižot, the Dubrovnik stone head) | Listed under “Flagged for review before launch” in `docs/UNVERIFIED.md` and in `LOCAL_REVIEW.md` |
+| ✓ **Verified** | An official source in `src/data/travel-data.json` **directly** supports every claim in the tip text | Source id and date; the audit warns when stale. Background that the source does not state goes into a separate Editorial card |
+| ✎ **Editorial** | General knowledge: language, food, culture, practical habits | **No prices, times, durations or distances** (test-enforced); listed in `docs/UNVERIFIED.md` |
+| ✎ + review flag | Editorial tips stating a rule, custom or local claim (Sunday trading, Hvar swimwear rule, no swimming at Krka or Plitvice, returning dishes full, tipping, jugo, the Peškarija lore, skradinski rižot, the stone head) | Listed under “Flagged for review before launch” and in `LOCAL_REVIEW.md` |
 
-**Review of the original 56:**
-- *Radman's Mills*: removed “medieval” from the fortress description, because the source doesn't say it.
-- *Hvar from above* and *King's Landing*: rewritten to be useful, not just trivia (when to go; which places fans look for).
-- No other factual problems found.
-
-**Overlaps checked:** *Go early*, *June and September* and *the cruise-ship rhythm* cover time of day, season and Dubrovnik specifically, so they're kept as three cards. The most-awarded cards (*pekara*, *go early*) are each given by five choices; repeats show as “Local Insider tip” rather than “New”.
-
-**25 new tips** were added, each tied to a real situation in the new events: taxi-boat prices, tipping, Sunday shops, church dress, swimwear, packing liquids, FKK, jugo, boćanje, returning dishes, the Dalmatian dog, fešta, bevanda, prošek, Peškarija, Grgur's toe, Radovan's portal, the đir, no swimming at Krka, skradinski rižot, Hvar's theatre, the stone head, Visovac, Blaca and the buža bars.
+**This pass:**
+- The 10 Verified tips were checked word by word against their stored sources, and five were trimmed (see the bug table).
+- New Editorial card: *The pirates of Omiš*.
+- New **regional cards** — Zagreb, Istria, Plitvice and Zadar — gradually introduce the rest of Croatia through Duje's “next time” advice and the Zagreb couple. They are general, durable facts, with no prices or times.
 
 ## Daily challenge
 
@@ -225,6 +259,8 @@ src/adventure/
   data/events/everyday.js   situations that can happen anywhere (jugo, FKK, Sunday, tipping, …)
   data/events/places.js     place-specific events (Peškarija, Radovan's portal, zipline, maškeron, …)
   data/events/hidden.js     hidden discoveries with hints
+  data/events/finale.js     Duje's farewell, the Venice and Zagreb payoffs
+  data/memory.js            promises, cast (relationships), Duje's morning memories
   data/tips.js              Local Insider tips (verified / editorial / flagged)
   engine/game.js            deterministic engine (two event slots per day)
   engine/report.js          holiday report card: title, verdict, diary, moments, stats

@@ -1,4 +1,5 @@
 import { ENDINGS, DESTINATIONS, ACTIVITIES } from '../data/story.js';
+import { CAST, PROMISES, relLabel } from '../data/memory.js';
 
 /** Past-tense diary lines for quiet days (falls back to the activity label). */
 const DID = {
@@ -93,5 +94,24 @@ export function reportCard(state) {
   // A run with no memorable moments still deserves a story.
   if (highlights.length === 0) highlights.push('Survived five days without a single disaster (suspicious)');
 
-  return { ending, title, verdict: ending.verdict, highlights, diary, stats, secrets: state.secrets ?? [] };
+  // the people you met, and how they feel about you now (Duje always; others once you've met them)
+  const rel = state.rel ?? {};
+  const people = CAST.filter((c) => c.id === 'duje' || rel[c.id] !== undefined).map((c) => ({
+    id: c.id,
+    name: c.name,
+    role: c.role,
+    score: rel[c.id] ?? 0,
+    status: relLabel(c, rel[c.id] ?? 0),
+  }));
+
+  // promises: kept, broken, or still to keep
+  const promises = Object.entries(state.promises ?? {})
+    .filter(([id]) => PROMISES[id])
+    .map(([id, p]) => {
+      const def = PROMISES[id];
+      const status = p.status === 'open' && def.openEnded ? 'pending' : p.status;
+      return { id, status, text: status === 'kept' ? def.kept : status === 'broken' ? def.broken : def.openEnded ?? `Promised ${def.to} ${def.text}` };
+    });
+
+  return { ending, title, verdict: ending.verdict, highlights, diary, stats, people, promises, secrets: state.secrets ?? [] };
 }
