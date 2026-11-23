@@ -1,8 +1,8 @@
 /* A Day in Croatia — service worker.
  * Navigation: network-first (fresh daily puzzle), falling back to the cached shell.
  * Same-origin assets: stale-while-revalidate (hashed Vite assets are immutable). */
-const CACHE = 'adic-v6';
-const SHELL = ['/', '/index.html', '/manifest.webmanifest', '/icons/icon.svg'];
+const CACHE = 'adic-v7';
+const SHELL = ['./', 'index.html', 'manifest.webmanifest', 'icons/icon.svg'];
 
 self.addEventListener('install', (event) => {
   event.waitUntil(caches.open(CACHE).then((c) => c.addAll(SHELL)).then(() => self.skipWaiting()));
@@ -28,10 +28,10 @@ self.addEventListener('fetch', (event) => {
       fetch(request)
         .then((res) => {
           const copy = res.clone();
-          caches.open(CACHE).then((c) => c.put('/index.html', copy));
+          caches.open(CACHE).then((c) => c.put('index.html', copy));
           return res;
         })
-        .catch(() => caches.match('/index.html')),
+        .catch(() => caches.match('index.html')),
     );
     return;
   }

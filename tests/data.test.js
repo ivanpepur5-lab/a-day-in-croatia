@@ -8,7 +8,7 @@ import { buildShareText } from '../src/engine/share.js';
 import { scorePlan } from '../src/engine/scoring.js';
 import { CHALLENGES_BY_ID } from '../src/data/challenges.js';
 
-const publicDir = resolve(process.cwd(), 'public');
+const publicDir = `${resolve(process.cwd(), 'public')}/`;
 const DATE = /^\d{4}-\d{2}-\d{2}$/;
 
 describe('location data audit', () => {

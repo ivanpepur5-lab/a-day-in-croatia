@@ -37,6 +37,8 @@ export default defineConfig(({ mode }) => {
       __NETLIFY_SITE_URL__: JSON.stringify(netlifyUrl),
       __BUILD_ID__: JSON.stringify(buildId()),
     },
+    // relative asset URLs: works at a site root (Netlify) and under a sub-path (previews)
+    base: './',
     build: { target: 'es2020', sourcemap: false },
     test: {
       environment: 'jsdom',

@@ -9,9 +9,9 @@
  */
 export const PHOTOS = {
   'split-hero': {
-    src: '/images/photos/split-hero-1200.jpg',
-    thumb: '/images/photos/split-hero-480.jpg',
-    large: '/images/photos/split-hero-1920.jpg',
+    src: 'images/photos/split-hero-1200.jpg',
+    thumb: 'images/photos/split-hero-480.jpg',
+    large: 'images/photos/split-hero-1920.jpg',
     alt: "Split waterfront (Riva) with Diocletian’s Palace and the bell tower of St Domnius",
     title: "View_of_Diocletian's_Palace,_Split_01.jpg",
     author: "Bernard Gagnon",
@@ -22,8 +22,8 @@ export const PHOTOS = {
     qualityImage: true,
   },
   'diocletians-palace': {
-    src: '/images/photos/diocletians-palace-1200.jpg',
-    thumb: '/images/photos/diocletians-palace-480.jpg',
+    src: 'images/photos/diocletians-palace-1200.jpg',
+    thumb: 'images/photos/diocletians-palace-480.jpg',
     alt: "The Peristyle of Diocletian’s Palace with the Protiron, Split",
     title: "Split_BW_2024-10-02_11-16-50.jpg",
     author: "Berthold Werner",
@@ -34,8 +34,8 @@ export const PHOTOS = {
     qualityImage: true,
   },
   'marjan': {
-    src: '/images/photos/marjan-1200.jpg',
-    thumb: '/images/photos/marjan-480.jpg',
+    src: 'images/photos/marjan-1200.jpg',
+    thumb: 'images/photos/marjan-480.jpg',
     alt: "View over Split and its harbour from the pine-covered Marjan hill",
     title: "Split-Marjan-01.jpg",
     author: "SchiDD",
@@ -46,8 +46,8 @@ export const PHOTOS = {
     qualityImage: false,
   },
   'bacvice': {
-    src: '/images/photos/bacvice-1200.jpg',
-    thumb: '/images/photos/bacvice-480.jpg',
+    src: 'images/photos/bacvice-1200.jpg',
+    thumb: 'images/photos/bacvice-480.jpg',
     alt: "Aerial view of Bačvice beach, Split",
     title: "Bacvice_Beach_in_Split,_Croatia_(48608741537).jpg",
     author: "dronepicr",
@@ -58,8 +58,8 @@ export const PHOTOS = {
     qualityImage: false,
   },
   'salona': {
-    src: '/images/photos/salona-1200.jpg',
-    thumb: '/images/photos/salona-480.jpg',
+    src: 'images/photos/salona-1200.jpg',
+    thumb: 'images/photos/salona-480.jpg',
     alt: "Amphitheatre of Salona, Solin",
     title: "Amphitheatre_of_Salona_02.jpg",
     author: "Bernard Gagnon",
@@ -70,8 +70,8 @@ export const PHOTOS = {
     qualityImage: true,
   },
   'klis': {
-    src: '/images/photos/klis-1200.jpg',
-    thumb: '/images/photos/klis-480.jpg',
+    src: 'images/photos/klis-1200.jpg',
+    thumb: 'images/photos/klis-480.jpg',
     alt: "Klis Fortress",
     title: "Fortress_of_Klis_05.jpg",
     author: "Bernard Gagnon",
@@ -82,8 +82,8 @@ export const PHOTOS = {
     qualityImage: true,
   },
   'trogir': {
-    src: '/images/photos/trogir-1200.jpg',
-    thumb: '/images/photos/trogir-480.jpg',
+    src: 'images/photos/trogir-1200.jpg',
+    thumb: 'images/photos/trogir-480.jpg',
     alt: "Trogir old town and waterfront",
     title: "Trogir_Panorama_01.jpg",
     author: "Helmlechner",
@@ -94,8 +94,8 @@ export const PHOTOS = {
     qualityImage: false,
   },
   'omis': {
-    src: '/images/photos/omis-1200.jpg',
-    thumb: '/images/photos/omis-480.jpg',
+    src: 'images/photos/omis-1200.jpg',
+    thumb: 'images/photos/omis-480.jpg',
     alt: "Cetina river canyon at Omiš",
     title: "Cetina-Canyon_in_Omis,_Croatia.JPG",
     author: "Modzzak",
@@ -106,8 +106,8 @@ export const PHOTOS = {
     qualityImage: false,
   },
   'krka': {
-    src: '/images/photos/krka-1200.jpg',
-    thumb: '/images/photos/krka-480.jpg',
+    src: 'images/photos/krka-1200.jpg',
+    thumb: 'images/photos/krka-480.jpg',
     alt: "Skradinski buk waterfall, Krka National Park",
     title: "Skradinski_buk_waterfall_–_NP_Krka_–_2016.jpg",
     author: "Skot",
@@ -118,8 +118,8 @@ export const PHOTOS = {
     qualityImage: true,
   },
   hvar: {
-    src: '/images/photos/hvar-1200.jpg',
-    thumb: '/images/photos/hvar-480.jpg',
+    src: 'images/photos/hvar-1200.jpg',
+    thumb: 'images/photos/hvar-480.jpg',
     alt: "Hvar Town and its harbour seen from above",
     title: "View_of_Hvar_02.jpg",
     author: "Bernard Gagnon",
@@ -130,8 +130,8 @@ export const PHOTOS = {
     qualityImage: true,
   },
   dubrovnik: {
-    src: '/images/photos/dubrovnik-1200.jpg',
-    thumb: '/images/photos/dubrovnik-480.jpg',
+    src: 'images/photos/dubrovnik-1200.jpg',
+    thumb: 'images/photos/dubrovnik-480.jpg',
     alt: "Dubrovnik old town rooftops with Lokrum island",
     title: "Dubrovnik_from_city_walls.jpg",
     author: "Tlusťa",
@@ -142,8 +142,8 @@ export const PHOTOS = {
     qualityImage: true,
   },
   brac: {
-    src: '/images/photos/brac-1200.jpg',
-    thumb: '/images/photos/brac-480.jpg',
+    src: 'images/photos/brac-1200.jpg',
+    thumb: 'images/photos/brac-480.jpg',
     alt: "Aerial view of Zlatni rat beach near Bol, Brač",
     title: "Aerial_view_of_Zlatni_rat_(Golden_Horn)_Beach_in_Bol,_Croatia_(48608813081).jpg",
     author: "dronepicr",
