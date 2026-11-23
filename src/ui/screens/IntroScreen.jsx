@@ -2,15 +2,22 @@ import Media from '../components/Media.jsx';
 import { formatDuration, formatEuro, formatClock, parseClock } from '../../engine/itinerary.js';
 import { describeRequirement } from '../../engine/requirements.js';
 import { CATEGORIES } from '../../data/locations.js';
+import { PHOTOS, creditLine } from '../../data/photos.js';
+import { formatPuzzleDate } from '../../engine/daily.js';
 
 export default function IntroScreen({ daily, hasPlayed, onStart, onViewResult, onHelp }) {
   const { challenge, number } = daily;
   const start = parseClock(challenge.startTime);
-  const dateLabel = new Date().toLocaleDateString('en-GB', { weekday: 'long', day: 'numeric', month: 'long' });
+  const dateLabel = formatPuzzleDate(daily.dateKey);
   return (
     <main className="screen intro">
       <section className="intro__hero">
-        <Media artId="split-hero" className="intro__art" label="Illustration of Split’s waterfront" />
+        <Media photo={PHOTOS['split-hero']} variant="hero" className="intro__art" priority />
+        <p className="intro__credit">
+          <a href={PHOTOS['split-hero'].sourceUrl} target="_blank" rel="noopener noreferrer">
+            {creditLine(PHOTOS['split-hero'])}
+          </a>
+        </p>
         <div className="intro__heroText">
           <p className="eyebrow eyebrow--light">
             Daily challenge #{number} · {dateLabel}
@@ -86,7 +93,7 @@ export default function IntroScreen({ daily, hasPlayed, onStart, onViewResult, o
           </button>
         </div>
         <p className="fineprint">
-          Start and finish at {challenge.hub.name}. All times and prices are illustrative estimates.
+          Start and finish at {challenge.hub.name}. Visit and travel times are estimates; tap a card’s “i” for verified facts and sources.
         </p>
       </section>
     </main>

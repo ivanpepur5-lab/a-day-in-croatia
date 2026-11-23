@@ -1,16 +1,55 @@
+import { useState } from 'react';
 import LocationArt from '../art/LocationArt.jsx';
+import { creditLine } from '../../data/photos.js';
 
 /**
- * Destination imagery. Uses a licensed photo when `location.photo` is set
- * (see README → "Adding photography"), otherwise the illustrated poster.
+ * Destination imagery: a licensed photograph (see data/photos.js), falling
+ * back to the illustrated poster only if the photo is missing or fails to load.
+ *
+ * variant: 'thumb' (small tiles) | 'card' (default) | 'hero'
+ * credit:  true → overlay the photographer + licence line
  */
-export default function Media({ location, artId, className = '', label }) {
-  const photo = location?.photo;
-  if (photo?.src) {
+export default function Media({
+  location,
+  photo: photoProp,
+  artId,
+  className = '',
+  label,
+  variant = 'card',
+  credit = false,
+  priority = false,
+}) {
+  const photo = photoProp ?? location?.photo;
+  const [failed, setFailed] = useState(false);
+
+  if (photo?.src && !failed) {
+    const src = variant === 'thumb' ? photo.thumb : photo.src;
+    const srcSet =
+      variant === 'thumb'
+        ? undefined
+        : [`${photo.thumb} 480w`, `${photo.src} 1200w`, photo.large && `${photo.large} 1920w`]
+            .filter(Boolean)
+            .join(', ');
+    const sizes = variant === 'hero' ? '100vw' : variant === 'card' ? '(min-width: 960px) 25vw, 50vw' : undefined;
     return (
-      <figure className={`media ${className}`}>
-        <img src={photo.src} alt={label ?? location.name} loading="lazy" decoding="async" />
-        {photo.credit && <figcaption className="media__credit">{photo.credit}</figcaption>}
+      <figure className={`media media--photo ${className}`}>
+        <img
+          src={src}
+          srcSet={srcSet}
+          sizes={srcSet ? sizes : undefined}
+          alt={label ?? photo.alt ?? location?.name ?? ''}
+          loading={priority ? 'eager' : 'lazy'}
+          fetchpriority={priority ? 'high' : undefined}
+          decoding="async"
+          onError={() => setFailed(true)}
+        />
+        {credit && (
+          <figcaption className="media__credit">
+            <a href={photo.sourceUrl} target="_blank" rel="noopener noreferrer">
+              {creditLine(photo)}
+            </a>
+          </figcaption>
+        )}
       </figure>
     );
   }

@@ -1,8 +1,9 @@
 /**
  * Optional Supabase integration (prepared, not required).
  *
- * Enabled only when both VITE_SUPABASE_URL and VITE_SUPABASE_ANON_KEY are set
- * at build time. Uses the PostgREST HTTP API directly, so no SDK is bundled.
+ * DISABLED BY DEFAULT — pending a review of supabase/schema.sql.
+ * It turns on only when VITE_ENABLE_SUPABASE=true AND both VITE_SUPABASE_URL
+ * and VITE_SUPABASE_ANON_KEY are set at build time. Uses the PostgREST HTTP API directly, so no SDK is bundled.
  * Table definition: supabase/schema.sql
  *
  * Gameplay never depends on this — every call fails soft.
@@ -10,7 +11,8 @@
 const url = import.meta.env?.VITE_SUPABASE_URL;
 const anonKey = import.meta.env?.VITE_SUPABASE_ANON_KEY;
 
-export const isSupabaseConfigured = Boolean(url && anonKey);
+const optIn = import.meta.env?.VITE_ENABLE_SUPABASE === 'true';
+export const isSupabaseConfigured = Boolean(optIn && url && anonKey);
 
 function headers() {
   return {

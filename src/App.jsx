@@ -5,17 +5,38 @@ import ArrangeScreen from './ui/screens/ArrangeScreen.jsx';
 import ResultsScreen from './ui/screens/ResultsScreen.jsx';
 import Sheet from './ui/components/Sheet.jsx';
 import HowToPlay from './ui/components/HowToPlay.jsx';
-import { getDailyChallenge } from './engine/daily.js';
+import { getDailyChallenge, dateKey as puzzleDateKey } from './engine/daily.js';
 import { gameReducer, createInitialState } from './engine/gameReducer.js';
 import { scorePlan } from './engine/scoring.js';
 import { getResultFor, saveResult, loadState, computeStats, getPlayerId, markIntroSeen } from './services/storage.js';
 import { submitResult } from './services/supabase.js';
 import { DATA_STATUS } from './data/locations.js';
+import Credits from './ui/components/Credits.jsx';
 
 export default function App({ now = new Date() }) {
   const daily = useMemo(() => getDailyChallenge(now), [now]);
   const { challenge } = daily;
-  const [saved, setSaved] = useState(() => getResultFor(daily.dateKey));
+  // A saved result only counts if it belongs to exactly this puzzle.
+  const [saved, setSaved] = useState(() => {
+    const entry = getResultFor(daily.dateKey);
+    return entry && entry.challengeId === challenge.id && entry.puzzleNumber === daily.number ? entry : null;
+  });
+  const [newDay, setNewDay] = useState(false);
+  const [creditsOpen, setCreditsOpen] = useState(false);
+
+  // The puzzle day ends at midnight in Croatia. If the tab stays open past it,
+  // tell the player instead of silently mixing two days' challenges.
+  useEffect(() => {
+    const check = () => setNewDay(puzzleDateKey(new Date()) !== daily.dateKey);
+    const id = setInterval(check, 30_000);
+    document.addEventListener('visibilitychange', check);
+    window.addEventListener('focus', check);
+    return () => {
+      clearInterval(id);
+      document.removeEventListener('visibilitychange', check);
+      window.removeEventListener('focus', check);
+    };
+  }, [daily.dateKey]);
   const [helpOpen, setHelpOpen] = useState(() => !loadState().seenIntro);
 
   const reducer = useCallback((s, a) => gameReducer(s, a, challenge), [challenge]);
@@ -33,7 +54,7 @@ export default function App({ now = new Date() }) {
       components: Object.fromEntries(result.components.map((c) => [c.id, c.points])),
     };
     if (saveResult(daily.dateKey, entry)) {
-      setSaved(getResultFor(daily.dateKey));
+      setSaved({ ...entry, ...getResultFor(daily.dateKey) });
       submitResult({ ...entry, playerId: getPlayerId(), dateKey: daily.dateKey });
     }
   }, [state, saved, challenge, daily]);
@@ -81,6 +102,15 @@ export default function App({ now = new Date() }) {
         </button>
       </header>
 
+      {newDay && (
+        <div className="newday" role="status" data-testid="new-day">
+          <span>A new daily challenge is ready.</span>
+          <button type="button" className="btn btn--primary newday__btn" onClick={() => window.location.reload()}>
+            Load it
+          </button>
+        </div>
+      )}
+
       <div className="stage" key={state.screen}>
         {state.screen === 'intro' && (
           <IntroScreen
@@ -125,10 +155,19 @@ export default function App({ now = new Date() }) {
 
       <footer className="footer">
         <p>
-          <strong>{DATA_STATUS.label}</strong> — durations, prices and travel times are estimates for play, not live
-          data. Check official sources before you travel.
+          <strong>{DATA_STATUS.label}.</strong> Visit and travel times are game estimates; prices marked “est.” are not
+          verified. Check official sources before you travel.
+        </p>
+        <p className="footer__links">
+          <button type="button" className="btn btn--link" onClick={() => setCreditsOpen(true)} data-testid="open-credits">
+            Photo credits & data sources
+          </button>
         </p>
       </footer>
+
+      <Sheet open={creditsOpen} onClose={() => setCreditsOpen(false)} title="Credits & sources" labelledBy="credits-title">
+        <Credits />
+      </Sheet>
 
       <Sheet open={helpOpen} onClose={closeHelp} title="How to play" labelledBy="help-title">
         <HowToPlay />

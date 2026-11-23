@@ -51,11 +51,15 @@ export default function HowToPlay() {
           <dd>Shared equally between the day’s requirements.</dd>
         </div>
       </dl>
+      <p className="howto__p">
+        Your rank is exact: every one of the 1,680 possible plans (4 of 8 cards, in every order) is scored the same way,
+        and your rank is 1 + the number of plans that score higher. A new challenge starts at midnight Croatian time.
+      </p>
 
       <h3 className="howto__h">Travel estimates</h3>
       <p className="howto__p">
         No car: legs up to {T.WALK_MAX_KM} km are walked (free). Longer legs are estimated bus trips: {T.WAIT_MIN} min of
-        waiting and connections plus ride time, with an illustrative fare. Distances use straight-line km × {T.DETOUR_FACTOR}.
+        waiting and connections plus ride time, with an estimated fare (not an official tariff). Distances use straight-line km × {T.DETOUR_FACTOR}.
         These are <strong>not timetables</strong>.
       </p>
 

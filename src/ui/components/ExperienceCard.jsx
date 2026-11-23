@@ -35,7 +35,14 @@ export default function ExperienceCard({ location, order, onToggle, onInfo, shak
           </div>
           <div>
             <dt className="sr-only">Cost per person</dt>
-            <dd>{location.costPerPerson === 0 ? 'Free' : `${formatEuro(location.costPerPerson)} pp`}</dd>
+            <dd>
+              {location.costPerPerson === 0 ? 'Free' : `${formatEuro(location.costPerPerson)} pp`}
+              {location.costStatus === 'verified' ? (
+                <span className="tag tag--ok" title="Price verified on an official source">✓</span>
+              ) : (
+                <span className="tag" title="Game estimate — not a verified price">est.</span>
+              )}
+            </dd>
           </div>
         </dl>
       </div>

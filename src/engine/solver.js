@@ -33,10 +33,3 @@ export function bestPlan(challenge, legFn) {
   if (!legFn) cache.set(challenge.id, best);
   return best;
 }
-
-/** Percentile of a score against every possible plan (0–100). */
-export function percentileOf(challenge, total, legFn) {
-  const plans = allPlans(challenge, legFn);
-  const beaten = plans.filter((p) => p.result.total < total).length;
-  return Math.floor((beaten / plans.length) * 100);
-}

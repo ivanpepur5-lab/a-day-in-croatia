@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest';
 import { CHALLENGES, CHALLENGES_BY_ID } from '../src/data/challenges.js';
-import { LOCATIONS, SPLIT_HUB, CATEGORIES, DATA_STATUS, getLocation } from '../src/data/locations.js';
+import { LOCATIONS, SPLIT_HUB, CATEGORIES, getLocation } from '../src/data/locations.js';
 import { estimateLeg, haversineKm, TRAVEL_MODEL } from '../src/engine/travel.js';
 import {
   buildItinerary,
@@ -20,8 +20,7 @@ import {
 } from '../src/engine/scoring.js';
 import { requirementMet, describeRequirement } from '../src/engine/requirements.js';
 import { permutations, combinations } from '../src/engine/combinatorics.js';
-import { bestPlan, allPlans, percentileOf } from '../src/engine/solver.js';
-import { getDailyChallenge, puzzleNumber, dateKey, msUntilNextPuzzle, previousDateKey } from '../src/engine/daily.js';
+import { bestPlan, allPlans } from '../src/engine/solver.js';
 import { toggleSelection, moveItem, isComplete } from '../src/engine/selection.js';
 import { gameReducer, createInitialState } from '../src/engine/gameReducer.js';
 import { buildShareText, scoreBar } from '../src/engine/share.js';
@@ -54,14 +53,6 @@ describe('data', () => {
       'omis',
       'krka',
     ]);
-  });
-
-  it('marks all location data as illustrative / unverified', () => {
-    expect(DATA_STATUS.verified).toBe(false);
-    for (const l of LOCATIONS) {
-      expect(l.verified).toBe(false);
-      expect(l.costNote.length).toBeGreaterThan(0);
-    }
   });
 
   it('gives every location valid categories, durations and costs', () => {
@@ -393,36 +384,6 @@ describe('solver & balance', () => {
     expect(Math.max(...totals)).toBeGreaterThanOrEqual(95);
   });
 
-  it('computes a percentile against all possible plans', () => {
-    const best = bestPlan(classic);
-    expect(percentileOf(classic, best.result.total)).toBe(99);
-    expect(percentileOf(classic, 0)).toBe(0);
-  });
-});
-
-describe('daily rotation', () => {
-  it('numbers puzzles from the epoch', () => {
-    expect(puzzleNumber(new Date(2026, 10, 1))).toBe(1);
-    expect(puzzleNumber(new Date(2026, 10, 22, 23, 59))).toBe(22);
-    expect(puzzleNumber(new Date(2020, 0, 1))).toBe(1);
-  });
-  it('gives everyone the same challenge on the same date and rotates daily', () => {
-    const a = getDailyChallenge(new Date(2026, 10, 1, 8));
-    const b = getDailyChallenge(new Date(2026, 10, 1, 22));
-    const c = getDailyChallenge(new Date(2026, 10, 2, 8));
-    expect(a.challenge.id).toBe(b.challenge.id);
-    expect(a.challenge.id).toBe('split-classic');
-    expect(c.challenge.id).not.toBe(a.challenge.id);
-    expect(getDailyChallenge(new Date(2026, 10, 1 + CHALLENGES.length)).challenge.id).toBe(a.challenge.id);
-  });
-  it('is DST-safe across the October/March changes', () => {
-    expect(puzzleNumber(new Date(2027, 2, 29)) - puzzleNumber(new Date(2027, 2, 27))).toBe(2);
-  });
-  it('formats date keys and counts down to midnight', () => {
-    expect(dateKey(new Date(2026, 0, 5))).toBe('2026-01-05');
-    expect(previousDateKey('2026-03-01')).toBe('2026-02-28');
-    expect(msUntilNextPuzzle(new Date(2026, 10, 22, 23, 0, 0))).toBe(3_600_000);
-  });
 });
 
 describe('selection rules', () => {

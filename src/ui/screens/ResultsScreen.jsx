@@ -1,14 +1,14 @@
 import { useEffect, useMemo, useState } from 'react';
 import ScoreRing from '../components/ScoreRing.jsx';
-import ShareCard from '../components/ShareCard.jsx';
 import RouteMap from '../components/RouteMap.jsx';
 import { scorePlan } from '../../engine/scoring.js';
-import { allPlans, bestPlan } from '../../engine/solver.js';
+import { analyzeChallenge, rankOf } from '../../engine/analysis.js';
 import { formatClock, formatDuration } from '../../engine/itinerary.js';
 import { describeRequirement } from '../../engine/requirements.js';
 import { buildShareText } from '../../engine/share.js';
-import { msUntilNextPuzzle } from '../../engine/daily.js';
-import { renderShareImage, shareImage, copyText } from '../../services/shareImage.js';
+import { msUntilNextPuzzle, formatPuzzleDate } from '../../engine/daily.js';
+import { SITE_URL } from '../../config.js';
+import { renderShareImage, shareImage, copyText, FORMATS } from '../../services/shareImage.js';
 import { useNow, usePrefersReducedMotion } from '../hooks.js';
 import { CATEGORIES } from '../../data/locations.js';
 
@@ -74,24 +74,42 @@ export default function ResultsScreen({ daily, selection, practice, stats, onPra
   const [showBest, setShowBest] = useState(false);
   const [toast, setToast] = useState('');
   const [busy, setBusy] = useState(false);
+  const [format, setFormat] = useState('story');
+  const [preview, setPreview] = useState({ url: '', blob: null, format: '' });
 
-  // The exhaustive solve (~1.7k plans) runs after first paint.
+  // Exhaustive analysis of all 1,680 plans runs after first paint.
   useEffect(() => {
     const id = setTimeout(() => {
-      const plans = allPlans(challenge);
-      const beaten = plans.filter((p) => p.result.total < result.total).length;
-      setAnalysis({
-        best: bestPlan(challenge),
-        percentile: Math.floor((beaten / plans.length) * 100),
-        count: plans.length,
-      });
+      const a = analyzeChallenge(challenge);
+      setAnalysis({ ...a, position: rankOf(a, result.total) });
     }, 50);
     return () => clearTimeout(id);
   }, [challenge, result.total]);
 
-  const dateLabel = new Date().toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' });
-  const url = typeof window !== 'undefined' ? window.location.origin : '';
-  const shareText = buildShareText({ number, challenge, result, url });
+  const dateLabel = formatPuzzleDate(daily.dateKey, { day: 'numeric', month: 'short', year: 'numeric' });
+  const shareText = buildShareText({ number, challenge, result, url: SITE_URL });
+  const rankText = analysis
+    ? `Rank ${analysis.position.rank.toLocaleString('en')} of ${analysis.count.toLocaleString('en')} possible plans`
+    : '';
+
+  // Render the real export as the on-screen preview, so what you see is what you share.
+  useEffect(() => {
+    if (!analysis) return undefined;
+    let cancelled = false;
+    let url = '';
+    renderShareImage({ number, challenge, result, dateLabel, rankText, format })
+      .then((blob) => {
+        if (cancelled) return;
+        url = URL.createObjectURL(blob);
+        setPreview({ url, blob, format });
+      })
+      .catch(() => !cancelled && setPreview({ url: '', blob: null, format }));
+    return () => {
+      cancelled = true;
+      if (url) URL.revokeObjectURL(url);
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [analysis, format, number, challenge, result.total, dateLabel, rankText]);
 
   const flash = (msg) => {
     setToast(msg);
@@ -101,8 +119,11 @@ export default function ResultsScreen({ daily, selection, practice, stats, onPra
   const onShareImage = async () => {
     setBusy(true);
     try {
-      const blob = await renderShareImage({ number, challenge, result, dateLabel, url });
-      const outcome = await shareImage(blob, shareText, `a-day-in-croatia-${number}.png`);
+      const blob =
+        preview.blob && preview.format === format
+          ? preview.blob
+          : await renderShareImage({ number, challenge, result, dateLabel, rankText, format });
+      const outcome = await shareImage(blob, shareText, `a-day-in-croatia-${number}-${format}.png`);
       if (outcome === 'downloaded') flash('Result card saved as an image');
     } catch {
       flash('Could not create the image — try “Copy result”.');
@@ -137,12 +158,22 @@ export default function ResultsScreen({ daily, selection, practice, stats, onPra
         <p className="results__blurb">{result.rating.blurb}</p>
         <p className="results__context" aria-live="polite">
           {analysis ? (
-            <>
-              Better than <strong>{analysis.percentile}%</strong> of all {analysis.count.toLocaleString('en')} possible plans · Best possible today:{' '}
-              <strong>{analysis.best.result.total}</strong>
-            </>
+            <span data-testid="rank" data-rank={analysis.position.rank} data-count={analysis.count} data-max={analysis.maxTotal}>
+              {analysis.position.isBest ? (
+                <>
+                  <strong>You found the best possible plan.</strong>{' '}
+                </>
+              ) : null}
+              Rank <strong>{analysis.position.rank.toLocaleString('en')}</strong> of{' '}
+              {analysis.count.toLocaleString('en')} possible plans
+              {analysis.position.tiedWith > 0 &&
+                ` (tied with ${analysis.position.tiedWith} other${analysis.position.tiedWith === 1 ? '' : 's'})`}
+              <br />
+              Highest score possible today: <strong>{analysis.maxTotal}</strong>
+              {analysis.bestPlans.length > 1 && ` (${analysis.bestPlans.length} plans reach it)`}
+            </span>
           ) : (
-            'Comparing against every possible plan…'
+            'Ranking against every possible plan…'
           )}
         </p>
         {!result.valid && (
@@ -185,16 +216,40 @@ export default function ResultsScreen({ daily, selection, practice, stats, onPra
 
       <section className="panel share">
         <h2 className="panel__title">Share your day</h2>
-        <ShareCard number={number} challenge={challenge} result={result} dateLabel={dateLabel} />
+        <div className="seg" role="radiogroup" aria-label="Image format">
+          {Object.values(FORMATS).map((f) => (
+            <button
+              key={f.id}
+              type="button"
+              role="radio"
+              aria-checked={format === f.id}
+              className={`seg__btn ${format === f.id ? 'is-on' : ''}`}
+              onClick={() => setFormat(f.id)}
+              data-testid={`format-${f.id}`}
+            >
+              {f.label} <span>{f.ratio}</span>
+            </button>
+          ))}
+        </div>
+        <p className="share__hint">
+          {format === 'story' ? 'For Instagram & Facebook Stories and WhatsApp Status.' : 'For feeds, WhatsApp chats and Facebook posts.'}
+        </p>
+        <div className={`share__preview share__preview--${format}`}>
+          {preview.url && preview.format === format ? (
+            <img src={preview.url} alt="Your shareable result card" data-testid="share-preview" />
+          ) : (
+            <div className="share__loading">Preparing your card…</div>
+          )}
+        </div>
         <div className="share__actions">
-          <button type="button" className="btn btn--primary" onClick={onShareImage} disabled={busy} data-testid="share-image">
+          <button type="button" className="btn btn--primary" onClick={onShareImage} disabled={busy || !analysis} data-testid="share-image">
             {busy ? 'Preparing…' : 'Share image'}
           </button>
           <button type="button" className="btn btn--ghost" onClick={onCopy} data-testid="copy-result">
             Copy result
           </button>
         </div>
-        <pre className="share__text" aria-label="Share text preview">
+        <pre className="share__text" aria-label="Share text preview" data-testid="share-text">
           {shareText}
         </pre>
       </section>

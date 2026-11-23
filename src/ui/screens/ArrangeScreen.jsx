@@ -61,7 +61,7 @@ function StopCard({ stop, index, count, onMove }) {
       >
         <span aria-hidden="true">⋮⋮</span>
       </button>
-      <Media location={location} className="stop__media" />
+      <Media location={location} className="stop__media" variant="thumb" />
       <div className="stop__body">
         <p className="stop__time">
           {formatClock(stop.arrive)} – {formatClock(stop.depart)}

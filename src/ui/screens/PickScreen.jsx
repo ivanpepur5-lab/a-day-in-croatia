@@ -57,7 +57,7 @@ export default function PickScreen({ challenge, selection, lastToggle, onToggle,
                   aria-label={id ? `Remove ${getLocation(id).name}` : `Empty slot ${i + 1}`}
                   disabled={!id}
                 >
-                  {id ? <Media location={getLocation(id)} className="slot__media" /> : <span>{i + 1}</span>}
+                  {id ? <Media location={getLocation(id)} className="slot__media" variant="thumb" /> : <span>{i + 1}</span>}
                 </button>
               );
             })}

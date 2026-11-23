@@ -6,16 +6,18 @@ A mobile-first daily travel puzzle. Everyone gets the same challenge each day, f
 
 You pick 4 of 8 experiences, drag them into order, and get a score out of 100 that shows exactly how it was worked out. Then you can share the result.
 
-> ⚠️ **Illustrative sample data.** Visit durations, prices and travel times are game estimates. They are **not** live prices, opening hours or public transport timetables. Every location is marked `verified: false` until someone checks it against official sources.
+> **Partly verified data.** Every fact is labelled *verified* (checked on an official source, with URL and date), *unverified*, or *estimate* (a game value). Visit times and travel times are always estimates. See [docs/DATA_AUDIT.md](docs/DATA_AUDIT.md).
 
 ## Quick start
 
 ```bash
 npm install
 npm run dev        # http://localhost:5173
-npm test           # engine unit tests (Vitest)
+npm test           # unit tests (Vitest); timezone tests also re-run under TZ=America/Los_Angeles and TZ=Pacific/Kiritimati
 npm run build
-npm run test:e2e   # plays a full game on an emulated iPhone against the build (needs Playwright installed on the machine)
+npm run test:e2e   # plays the game at 360/390/430 px widths with real touch drag, against the build (needs Playwright on the machine)
+# to check that the share domain appears on images:
+VITE_SITE_URL=https://play.example.org npm run build && E2E_SITE_URL=https://play.example.org npm run test:e2e
 ```
 
 ## Gameplay
@@ -23,8 +25,16 @@ npm run test:e2e   # plays a full game on an emulated iPhone against the build (
 1. **Mission:** time window, budget, party size, transport and requirements.
 2. **Pick:** choose exactly 4 of 8 cards. Live time and cost estimates appear in the bottom dock.
 3. **Arrange:** drag the handle (or use the ↑/↓ buttons) to set the order. The timeline, travel legs, time and budget meters and requirement checks all update live. The day always starts and ends at Split Riva.
-4. **Results:** an animated score, a breakdown of each part, a comparison with all 1,680 possible plans, an optional reveal of the best plan, stats and streak, and a countdown to the next challenge.
-5. **Share:** a PNG result card (uses the Web Share API, or downloads the image if that isn't available) and spoiler-free share text.
+4. **Results:** an animated score, a breakdown of each part, your **exact rank among all 1,680 possible plans** (ties shown), the highest score possible that day, an optional reveal of the best plan, stats and streak, and a countdown to the next challenge.
+5. **Share:** a PNG result card in two formats, **Story 1080×1920** (Instagram/Facebook Stories, WhatsApp Status) and **Post 1080×1350** (feeds, chats). It shows photo tiles of your route. The on-screen preview is the exported image itself. Plus spoiler-light share text.
+
+### Daily challenge timing
+
+There is one puzzle day for everyone, defined in **Europe/Zagreb** time. The challenge changes at midnight in Croatia, whatever timezone the device is in. If a tab stays open past midnight, the app shows a "new challenge" banner instead of mixing days. A saved result only counts for the exact puzzle number and challenge it was played on.
+
+### Production URL on share cards
+
+Set `VITE_SITE_URL=https://your-domain` in Netlify. Without it, Netlify builds fall back to the site's main URL (`URL`). The URL is never taken from `window.location`, and localhost/non-https values are rejected. If no URL is configured, none is printed.
 
 You get one official attempt per day. Practice rounds don't change your official score.
 
@@ -46,7 +56,10 @@ Each component is rounded to a whole number, and the total is their sum. All con
 ```
 src/
   data/        locations.js (8 Split-region locations, illustrative), challenges.js (daily rotation)
+  config.js    production site URL (for share output)
+  data/photos.js  licensed photo metadata
   engine/      pure game logic, no React
+    analysis.js      exhaustive analysis: exact rank, max score, best plans
     travel.js        leg estimates
     itinerary.js     timed plan, totals, constraints, formatters
     scoring.js       the 4 score components + ratings
@@ -65,15 +78,9 @@ supabase/      schema.sql
 public/        manifest, service worker, icons
 ```
 
-## Adding photography
+## Photography
 
-Cards currently show original SVG illustrations (`src/ui/art/LocationArt.jsx`). To use real, licensed photos, put an image in `public/images/` and set the location's `photo` field:
-
-```js
-photo: { src: '/images/marjan.jpg', credit: 'Photo: Name / CC BY-SA 4.0', license: 'CC BY-SA 4.0' }
-```
-
-The credit is shown on the image. Only use images whose licence you have checked.
+All destination and hero images are real photographs from Wikimedia Commons (`src/data/photos.js`, files in `public/images/photos/`). Each has its author, licence and source recorded, and credits are shown in the app. See [docs/PHOTO_CREDITS.md](docs/PHOTO_CREDITS.md). The SVG posters in `src/ui/art/` are used only if a photo fails to load. `npm run og` regenerates the 1200×630 link-preview image (`public/og-image.jpg`).
 
 ## Adding challenges
 
@@ -83,14 +90,9 @@ Add an entry to `CHALLENGES` in `src/data/challenges.js`. Requirement types are 
 
 `public/manifest.webmanifest` and `public/sw.js` (registered only in production builds) make the app installable. Pages are fetched network-first so the daily puzzle stays fresh, and assets use stale-while-revalidate. Progress is stored in `localStorage`. Only the plan order is saved, and scores are always recomputed by the engine.
 
-## Supabase (optional)
+## Supabase (disabled)
 
-The game works fully without a backend. To collect global results:
-
-1. Run `supabase/schema.sql` in your Supabase project.
-2. Set `VITE_SUPABASE_URL` and `VITE_SUPABASE_ANON_KEY` (see `.env.example`).
-
-Official results are then posted to `daily_results`, and `fetchDistribution()` reads the anonymous `daily_distribution` view. No SDK is bundled; it calls the PostgREST API with `fetch`.
+The game works fully without a backend. The Supabase adapter stays **off** until `supabase/schema.sql` has been reviewed (open points are in [docs/SUPABASE_REVIEW.md](docs/SUPABASE_REVIEW.md)). Turning it on requires `VITE_ENABLE_SUPABASE=true` plus the URL and anon key.
 
 ## Deploying to Netlify
 
