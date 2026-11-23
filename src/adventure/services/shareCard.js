@@ -24,9 +24,10 @@ import {
  * Only the configured production domain is printed (never localhost).
  */
 export function buildAdventureShareText({ state, score, number, url }) {
-  const { ending, verdict, highlights } = reportCard(state);
+  const { ending, title, verdict, highlights } = reportCard(state);
   const lines = [
     `Croatia Adventure${state.mode === 'daily' ? ` #${number}` : ''} — ${ending.emoji} ${ending.title}`,
+    `📖 My holiday: “${title}”`,
     `“${verdict}”`,
     '',
     ...highlights.map((h) => `• ${h}`),
@@ -66,7 +67,7 @@ export async function renderAdventureCard({ state, score, number, format = 'stor
   const story = format === 'story';
   const H = story ? 1920 : 1350;
   await loadFonts();
-  const { ending, verdict, highlights } = reportCard(state);
+  const { ending, title, verdict, highlights } = reportCard(state);
   const heroPhoto = PHOTOS[ending.photo] ?? PHOTOS['split-hero'];
   const days = state.route.map((id) => ({ location: { short: DESTINATIONS[id].name.replace(' National Park', ''), photo: PHOTOS[DESTINATIONS[id].photo] } }));
   const [hero, ...imgs] = await Promise.all([loadImage(heroPhoto.src), ...days.map((d) => loadImage(d.location.photo?.src ?? ''))]);
@@ -86,7 +87,9 @@ export async function renderAdventureCard({ state, score, number, format = 'stor
     brandLine(ctx, pad, top, story ? 30 : 26);
     ctx.fillStyle = '#fff';
     ctx.font = `600 ${story ? 30 : 26}px ${SANS}`;
-    ctx.fillText(state.mode === 'daily' ? `Croatia Adventure · Daily #${number}` : 'Croatia Adventure · 5 days', pad, top + (story ? 46 : 40));
+    const sub = `${state.mode === 'daily' ? `Daily #${number}` : '5 days'} · “${title}”`;
+    fitFont(ctx, sub, `600 {s}px ${SANS}`, story ? 30 : 26, W - pad * 2, 20);
+    ctx.fillText(sub, pad, top + (story ? 46 : 40));
   });
 
   // ending

@@ -16,6 +16,7 @@ import { newGame, getStep, choose, computeScore, rng, pickEvent, BALANCE, txt } 
 import { loadProgress, collect, recordRun, saveCurrent } from '../src/adventure/services/progress.js';
 import { buildAdventureShareText } from '../src/adventure/services/shareCard.js';
 import TRAVEL_DATA from '../src/data/travel-data.json' with { type: 'json' };
+import ENDING_PATHS from './fixtures/ending-paths.json' with { type: 'json' };
 
 const allChoices = () => [
   ...BASES,
@@ -136,7 +137,7 @@ describe('Local Insider tips are accurate by construction', () => {
 });
 
 describe('engine', () => {
-  it('starts with the specified stats and walks base → 5 × (travel, activity, event) → ending', () => {
+  it('starts with the specified stats and walks base → 5 × (travel, activity, event, evening) → ending', () => {
     let s = newGame({ seed: 'x' });
     expect(s).toMatchObject({ money: 500, energy: 100, happiness: 50, adventure: 0, phase: 'base', day: 0 });
     const phases = [];
@@ -147,6 +148,7 @@ describe('engine', () => {
     }
     expect(phases[0]).toBe('0:base');
     expect(phases).toContain('5:event');
+    expect(phases).toContain('5:evening');
     expect(phases.filter((p) => p.endsWith('travel')).length).toBe(5);
     expect(s.ending).toBeTruthy();
     expect(s.route.length).toBe(5);
@@ -183,8 +185,10 @@ describe('engine', () => {
     expect(r.outcome.tip.id).toBe('airport-in-kastela');
     // finish day 1 and check the night
     let st = r.state;
-    st = choose(st, getStep(st).choices.find((c) => !c.disabled).id).state;
-    const ev = choose(st, getStep(st).choices.find((c) => !c.disabled).id);
+    st = choose(st, getStep(st).choices.find((c) => !c.disabled).id).state; // activity
+    st = choose(st, getStep(st).choices.find((c) => !c.disabled).id).state; // afternoon event
+    expect(st.phase).toBe('evening');
+    const ev = choose(st, getStep(st).choices.find((c) => !c.disabled).id); // evening event → night
     expect(ev.outcome.night.paid).toBe(45);
     expect(ev.state.day).toBe(2);
   });
@@ -207,6 +211,8 @@ describe('engine', () => {
     s = choose(s, 'boutique').state;
     s = choose(s, 'bus').state;
     s = choose(s, getStep(s).choices.find((c) => c.cost === 0).id).state;
+    s = choose(s, getStep(s).choices.filter((c) => !c.disabled).sort((a, b) => a.cost - b.cost)[0].id).state;
+    expect(s.phase).toBe('evening');
     s = { ...s, money: 10 };
     const ok = getStep(s).choices.filter((c) => !c.disabled).sort((a, b) => a.cost - b.cost);
     const r = choose(s, ok[0].id);
@@ -253,7 +259,7 @@ describe('gameplay loop over thousands of runs', () => {
           expect(s.happiness).toBeGreaterThanOrEqual(0);
           expect(s.happiness).toBeLessThanOrEqual(100);
           expect(s.money).toBeGreaterThanOrEqual(0);
-          expect(outcomes.length).toBeLessThanOrEqual(16);
+          expect(outcomes.length).toBeLessThanOrEqual(21);
           expect(computeScore(s).total).toBeGreaterThan(0);
         });
       }
@@ -276,7 +282,10 @@ describe('progress & sharing', () => {
   beforeEach(() => localStorage.clear());
   it('collects tips and achievements across runs without duplicates', () => {
     expect(collect({ tips: ['fjaka', 'peka'] }).newTips).toEqual(['fjaka', 'peka']);
-    expect(collect({ tips: ['peka', 'klapa'], achievements: ['konoba-expert'] })).toEqual({ newTips: ['klapa'], newAch: ['konoba-expert'] });
+    expect(collect({ tips: ['peka', 'klapa'], achievements: ['konoba-expert'] })).toEqual({ newTips: ['klapa'], newAch: ['konoba-expert'], newSecrets: [] });
+    expect(collect({ secrets: ['visovac'] }).newSecrets).toEqual(['visovac']);
+    expect(collect({ secrets: ['visovac', 'blaca'] }).newSecrets).toEqual(['blaca']);
+    expect(loadProgress().secrets).toEqual(['visovac', 'blaca']);
     expect(loadProgress().tips).toEqual(['fjaka', 'peka', 'klapa']);
   });
   it('records only the first daily result and autosaves runs', () => {
@@ -305,11 +314,11 @@ describe('story memory and consequences', () => {
   function playWith(seed, prefer) {
     let s = newGame({ seed });
     const seen = [];
-    for (let i = 0; i < 40 && !s.ended; i++) {
+    for (let i = 0; i < 60 && !s.ended; i++) {
       const step = getStep(s);
       const ok = step.choices.filter((c) => !c.disabled);
       const c = ok.find((x) => prefer.includes(x.id)) ?? ok[0];
-      if (step.phase === 'event') seen.push(step.event.id);
+      if (step.event) seen.push(step.event.id);
       s = choose(s, c.id).state;
     }
     return { s, seen };
@@ -376,6 +385,7 @@ describe('story memory and consequences', () => {
     s = choose(s, 'bus').state;
     s = choose(s, getStep(s).choices.filter((c) => !c.disabled)[0].id).state;
     s = choose(s, getStep(s).choices.filter((c) => !c.disabled).sort((a, b) => a.cost - b.cost)[0].id).state;
+    s = choose(s, getStep(s).choices.filter((c) => !c.disabled).sort((a, b) => a.cost - b.cost)[0].id).state;
     s = { ...s, money: 0 };
     const step = getStep(s);
     expect(step.phase).toBe('travel');
@@ -386,4 +396,86 @@ describe('story memory and consequences', () => {
     expect(next.route.every(Boolean)).toBe(true);
     expect(next.phase).toBe('activity');
   });
+});
+
+describe('100-event library: quality rules', () => {
+  const sample = {
+    ...newGame({ seed: 'q' }),
+    day: 3,
+    location: 'hvar',
+    base: 'hostel',
+    route: ['split', 'omis', 'hvar'],
+    visited: ['split', 'omis', 'hvar'],
+    flags: { hostel: true, dujePlan: 'song', ante: 2, shirtMet: 2, bigFishPlace: 'split', posuda: 2, bocce: 2, prsut: 2, noSunglasses: 2, hamCarry: true },
+  };
+
+  it('has at least 100 distinct events with unique ids', () => {
+    expect(EVENTS.length).toBeGreaterThanOrEqual(100);
+    expect(new Set(EVENTS.map((e) => e.id)).size).toBe(EVENTS.length);
+    expect(new Set(EVENTS.map((e) => txt(e.title, sample))).size, 'duplicate titles').toBe(EVENTS.length);
+  });
+
+  it('every event choice gets a Duje reaction, and no two choices in an event are interchangeable', () => {
+    for (const e of EVENTS) {
+      const sigs = new Set();
+      for (const c of e.choices) {
+        expect(txt(c.duje, sample), `${e.id}/${c.id} has no Duje line`).toBeTruthy();
+        const branches = c.chance ? [c.chance.success, c.chance.fail] : [c];
+        sigs.add(JSON.stringify(branches.map((b) => [b.effects, b.flags ?? {}, c.tip ?? null])));
+      }
+      expect(sigs.size, `${e.id}: two choices have identical consequences`).toBe(e.choices.length);
+    }
+  });
+
+  it('no story or result text is repeated word for word', () => {
+    const seen = new Map();
+    for (const e of EVENTS)
+      for (const c of e.choices)
+        for (const b of c.chance ? [c.chance.success, c.chance.fail] : [c]) {
+          const t = txt(b.result, sample);
+          expect(seen.has(t), `"${t.slice(0, 50)}…" repeated in ${e.id} and ${seen.get(t)}`).toBe(false);
+          seen.set(t, e.id);
+        }
+  });
+
+  it('hidden discoveries tell the player how to find them, and events use known time slots', () => {
+    const hidden = EVENTS.filter((e) => e.kind === 'hidden');
+    expect(hidden.length).toBeGreaterThanOrEqual(10);
+    for (const e of hidden) expect(e.hint?.length, e.id).toBeGreaterThan(20);
+    for (const e of EVENTS) expect([undefined, 'day', 'evening']).toContain(e.slot);
+  });
+
+  it('a storyline payoff never fires on the same day as its seed', () => {
+    for (let i = 0; i < 300; i++) {
+      let s = newGame({ seed: `pay-${i}` });
+      const dayOf = {};
+      while (!s.ended) {
+        const step = getStep(s);
+        if (step.event) dayOf[step.event.id] = s.day;
+        const ok = step.choices.filter((c) => !c.disabled);
+        s = choose(s, ok[Math.floor(rng('p', i, s.choices.length) * ok.length)].id).state;
+      }
+      for (const [seed, pay] of [['marija-posuda', 'posuda-return'], ['bocce-challenge', 'bocce-rematch'], ['dalmatian-dog', 'dawn-fishing'], ['village-festa', 'prsut-problem'], ['sunglasses-sea', 'squint-photos']]) {
+        if (dayOf[pay] !== undefined) expect(dayOf[pay], `${pay} on day ${dayOf[pay]}`).toBeGreaterThan(dayOf[seed]);
+      }
+    }
+  });
+});
+
+describe('every ending is reachable through actual gameplay', () => {
+  const paths = ENDING_PATHS;
+  for (const ending of ENDINGS) {
+    it(`${ending.title}: replaying a recorded run with legal choices reaches it`, () => {
+      const p = paths[ending.id];
+      expect(p, `no recorded path for ${ending.id} — run node scripts/adventure-endings.mjs`).toBeTruthy();
+      let s = newGame({ seed: p.seed, mode: 'free' });
+      for (const id of p.choices) {
+        const c = getStep(s).choices.find((x) => x.id === id);
+        expect(c && !c.disabled, `${id} not available`).toBeTruthy();
+        s = choose(s, id).state;
+      }
+      expect(s.ended).toBe(true);
+      expect(s.ending).toBe(ending.id);
+    });
+  }
 });

@@ -12,7 +12,7 @@ You pick 4 of 8 experiences, drag them into order, and get a score out of 100 th
 
 ## New: Croatia Adventure (prototype)
 
-A five-day narrative holiday game with humour, branching choices, ten endings, a narrator who remembers your mistakes, achievements and 56 collectible **real-world Local Insider tips**. Open it at `/#adventure`, or from the card on the puzzle's intro. It's a separate mode, and the puzzle below is unchanged. Design, rules and accuracy policy: [docs/ADVENTURE.md](docs/ADVENTURE.md).
+A five-day narrative holiday game with 101 events, 17 multi-day storylines, 12 hidden discoveries, ten endings, a narrator who remembers your mistakes, a personal holiday story at the end, and 81 collectible **real-world Local Insider tips**. Open it at `/#adventure`, or from the card on the puzzle's intro. It's a separate mode, and the puzzle below is unchanged. Design, rules and accuracy policy: [docs/ADVENTURE.md](docs/ADVENTURE.md). Playtest guide: [docs/PLAYTEST.md](docs/PLAYTEST.md). Local review: [docs/LOCAL_REVIEW.md](docs/LOCAL_REVIEW.md).
 
 ## Quick start
 
@@ -24,6 +24,9 @@ npm run audit:check  # same, exits 1 on errors (use before deploying)
 npm test           # unit tests (Vitest); timezone tests also re-run under TZ=America/Los_Angeles and TZ=Pacific/Kiritimati
 npm run build
 node scripts/e2e-adventure.mjs   # Croatia Adventure phone playthrough (after a build)
+node scripts/adventure-sim.mjs 20000   # balance, variety and storyline report
+node scripts/adventure-endings.mjs     # prove every ending is reachable (re-records test paths)
+node scripts/adventure-script.mjs      # full script for local reviewers → docs/ADVENTURE_SCRIPT.md
 npm run test:e2e   # plays the game at 360/390/430 px widths with real touch drag, against the build (needs Playwright on the machine)
 # to check that the share domain appears on images:
 VITE_SITE_URL=https://play.example.org npm run build && E2E_SITE_URL=https://play.example.org npm run test:e2e

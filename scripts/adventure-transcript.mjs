@@ -37,5 +37,7 @@ out.push(`\n=== ENDING: ${e.title} · score ${computeScore(s).total} · €${s.m
 out.push(e.epilogue);
 const rc = reportCard(s);
 out.push(`REPORT: “${rc.verdict}”`);
+out.push(`TITLE: “${rc.title}”`);
+rc.diary.forEach((d) => out.push(`  Day ${d.day} · ${d.place}: ${d.text}`));
 rc.highlights.forEach((h) => out.push(`  • ${h}`));
 console.log(out.join('\n'));

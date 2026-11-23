@@ -15,7 +15,14 @@
  * moment:   { id, text, rank } — memorable things for the holiday report card.
  */
 
-export const START = { money: 500, energy: 100, happiness: 50, adventure: 0, local: 0, days: 5 };
+import { START, DESTINATIONS, ISLANDS, MAINLAND_DAY_TRIPS, f, was, before, BASE_FRIEND } from './world.js';
+import { STORYLINE_EVENTS } from './events/storylines.js';
+import { EVERYDAY_EVENTS } from './events/everyday.js';
+import { PLACE_EVENTS } from './events/places.js';
+import { EVENING_EVENTS } from './events/evening.js';
+import { HIDDEN_EVENTS } from './events/hidden.js';
+
+export { START, DESTINATIONS, ISLANDS, MAINLAND_DAY_TRIPS };
 
 export const NARRATOR = {
   name: 'Duje',
@@ -24,23 +31,6 @@ export const NARRATOR = {
   intro:
     'Bok! I’m Duje. Your cousin is my friend, which by Dalmatian law makes you family, which means I am now responsible for keeping you alive for five days. No pressure. Mostly on me.',
 };
-
-export const DESTINATIONS = {
-  split: { id: 'split', name: 'Split', photo: 'split-hero', kind: 'city' },
-  trogir: { id: 'trogir', name: 'Trogir', photo: 'trogir', kind: 'town' },
-  omis: { id: 'omis', name: 'Omiš', photo: 'omis', kind: 'town' },
-  krka: { id: 'krka', name: 'Krka National Park', photo: 'krka', kind: 'nature' },
-  hvar: { id: 'hvar', name: 'Hvar', photo: 'hvar', kind: 'island' },
-  brac: { id: 'brac', name: 'Brač', photo: 'brac', kind: 'island' },
-  dubrovnik: { id: 'dubrovnik', name: 'Dubrovnik', photo: 'dubrovnik', kind: 'city' },
-};
-
-export const ISLANDS = ['hvar', 'brac'];
-export const MAINLAND_DAY_TRIPS = ['trogir', 'omis', 'krka'];
-
-const f = (s, k) => s.flags[k] ?? 0;
-const was = (s, place) => s.visited.includes(place);
-const BASE_FRIEND = { hostel: 'Luka from the hostel', apartment: 'Marija next door', boutique: 'Igor the concierge' };
 
 /* ───────────────────────────────────────────── NARRATOR LINES ── */
 /** Duje's opening line for an activity, per destination — first visit and return visit. */
@@ -168,7 +158,7 @@ export const TRAVEL = {
         hint: 'Cheap, slower, character-building',
         to: 'split',
         effects: { money: -6, energy: -10, happiness: 2, local: 1 },
-        flags: { busPro: true },
+        flags: { busPro: true, shirt: 1 },
         result: 'You buy your ticket before boarding like a pro, then watch a man in a Hawaiian shirt pay the driver double. Small victories. Big shirt.',
         duje: 'Ticket before boarding. You’re learning. I may cry.',
         tip: 'buy-ticket-before',
@@ -331,16 +321,17 @@ export const DAY4 = {
     result: 'The harbour café becomes your office. By noon the waiter brings your coffee before you order it. By evening he introduces you to his mother.',
     duje: 'Welcome to island life. Population: you, the café, and the wind.',
     tip: 'pomalo',
-    moment: { id: 'hostage', text: 'Was held hostage by the wind on an island (enjoyed it)', rank: 6 },
+    moment: { id: 'hostage', text: 'Was held hostage by the wind on an island (enjoyed it)', rank: 6, headline: 'Hostage of the Wind' },
   },
   privateBoat: {
     id: 'private-boat',
     label: 'Pay a private boat to get out',
     hint: 'Very expensive. Very dramatic.',
     effects: { money: -120, energy: -12, happiness: -2, adventure: 4 },
+    flags: { ante: 1 },
     result: 'A man called Ante agrees to “maybe” take you across. The ride is bumpy. The price is not. You arrive greener than the olive oil.',
     duje: 'You paid Ante. Everybody pays Ante eventually.',
-    moment: { id: 'ante', text: 'Paid a man called Ante to escape an island', rank: 7 },
+    moment: { id: 'ante', text: 'Paid a man called Ante to escape an island', rank: 7, headline: 'Everybody Pays Ante' },
   },
 };
 
@@ -648,16 +639,17 @@ export const ACTIVITIES = {
  * kind: 'callback' (pays off an earlier decision) · 'hidden' (rare discovery)
  * chance: seeded dice roll; p may be a function of state.
  */
-export const EVENTS = [
+const CORE_EVENTS = [
   // ───────────────────────── everyday Dalmatia
   {
     id: 'fish-mystery',
+    slot: 'evening',
     where: ['split', 'trogir', 'hvar'],
     weight: 3,
     broke: {
       result: 'You order bread and tap water and watch other people’s fish with the intensity of a cat at a window. The waiter, moved, brings you a few grilled sardines “because it’s sad”.',
       duje: 'Sympathy sardines. The lowest and most Dalmatian point of any holiday.',
-      moment: { id: 'sardines', text: 'Was given sympathy sardines by a waiter', rank: 7 },
+      moment: { id: 'sardines', text: 'Was given sympathy sardines by a waiter', rank: 7, headline: 'Sympathy Sardines' },
     },
     title: 'The Fish Price Mystery',
     story: 'A waiter on the waterfront presents a silver tray of glistening fish like a jeweller showing diamonds. The menu says only: “Fish — per kg.” Your stomach says yes. Your wallet asks for a lawyer.',
@@ -666,11 +658,11 @@ export const EVENTS = [
         id: 'point-big',
         label: 'Point at the biggest, shiniest one',
         effects: { money: -95, happiness: 3 },
-        flags: { bigFish: true },
+        flags: { bigFish: true, bigFishPlace: '@here', bigFishDay: '@day' },
         result: 'It was delicious. It was also, apparently, the weight of a toddler. The bill arrives with the solemnity of a court verdict.',
         duje: 'Three kilos. THREE. My cousin heard about it in Zagreb. This will follow you.',
         tip: 'fish-per-kilo',
-        moment: { id: 'big-fish', text: 'Ordered a fish the size of a toddler without asking the price', rank: 10 },
+        moment: { id: 'big-fish', text: 'Ordered a fish the size of a toddler without asking the price', rank: 10, headline: 'The Three-Kilo Fish' },
       },
       {
         id: 'ask-weight',
@@ -694,6 +686,7 @@ export const EVENTS = [
   },
   {
     id: 'three-hour-coffee',
+    slot: 'day',
     where: ['split', 'omis', 'trogir', 'brac'],
     weight: 2,
     title: 'The Three-Hour Coffee',
@@ -723,6 +716,7 @@ export const EVENTS = [
   },
   {
     id: 'sunbed-economics',
+    slot: 'day',
     where: ['split', 'brac', 'hvar', 'trogir'],
     weight: 2,
     title: 'Sunbed Economics',
@@ -748,6 +742,7 @@ export const EVENTS = [
   },
   {
     id: 'parking-odyssey',
+    slot: 'day',
     where: ['split', 'trogir', 'dubrovnik'],
     when: (s) => s.flags.car && !s.flags.mirror && !s.flags.parkedWell,
     weight: 6,
@@ -758,10 +753,10 @@ export const EVENTS = [
         id: 'push-on',
         label: 'Squeeze through, it’ll be fine',
         effects: { money: -15, energy: -10, happiness: -8 },
-        flags: { mirror: true },
+        flags: { mirror: true, mirrorDay: '@day' },
         result: 'It was not fine. The wing mirror is now modern art. The man’s face achieves a new level of expression. The wall is unharmed; it has seen worse since the 4th century.',
         duje: 'The wall wins. The wall always wins. I hope you took the full insurance. You didn’t, did you?',
-        moment: { id: 'mirror', text: 'Lost a wing mirror to a 1,700-year-old wall', rank: 9 },
+        moment: { id: 'mirror', text: 'Lost a wing mirror to a 1,700-year-old wall', rank: 9, headline: 'The Wall Always Wins' },
       },
       {
         id: 'park-outside',
@@ -776,6 +771,7 @@ export const EVENTS = [
   },
   {
     id: 'klapa-vestibule',
+    slot: 'evening',
     where: ['split', 'dubrovnik', 'trogir'],
     weight: 2,
     title: 'Voices in the Stone',
@@ -805,12 +801,13 @@ export const EVENTS = [
         },
         duje: 'Brave. Very brave. The tenor will tell this story at dinner.',
         tip: 'klapa',
-        moment: { id: 'klapa', text: 'Sang along with a klapa (the tenor is still talking about it)', rank: 5 },
+        moment: { id: 'klapa', text: 'Sang along with a klapa (the tenor is still talking about it)', rank: 5, headline: 'The Klapa Solo' },
       },
     ],
   },
   {
     id: 'lost-in-translation',
+    slot: 'day',
     where: ['any'],
     weight: 2,
     title: 'Lost in Translation',
@@ -838,6 +835,7 @@ export const EVENTS = [
   },
   {
     id: 'urchin',
+    slot: 'day',
     where: ['split', 'brac', 'hvar', 'omis', 'trogir'],
     weight: 2,
     title: 'The Spiky Neighbours',
@@ -851,13 +849,13 @@ export const EVENTS = [
           success: { effects: { happiness: 6, adventure: 2 }, result: 'Ballet-level footwork. You reach the sea untouched and insufferably smug.' },
           fail: {
             effects: { energy: -12, happiness: -8 },
-            flags: { urchin: true },
+            flags: { urchin: true, urchinDay: '@day' },
             result: 'Ouch. Ouch. OUCH. A grandmother appears from nowhere with olive oil, a needle and the calm of someone who has done this a hundred times.',
+            moment: { id: 'urchin', text: 'Stepped on a sea urchin (as predicted by Duje)', rank: 6, headline: 'The Urchin Incident' },
           },
         },
         duje: 'Water shoes. I said water shoes. Nobody listens to Duje.',
         tip: 'water-shoes',
-        moment: { id: 'urchin', text: 'Stepped on a sea urchin (as predicted by Duje)', rank: 6 },
       },
       {
         id: 'buy-shoes',
@@ -880,6 +878,7 @@ export const EVENTS = [
   },
   {
     id: 'heatwave',
+    slot: 'day',
     where: ['any'],
     when: (s) => s.energy < 60,
     weight: 3,
@@ -899,11 +898,11 @@ export const EVENTS = [
         id: 'push',
         label: 'Push on — sightseeing waits for no one',
         effects: { energy: -16, happiness: -4, adventure: 3 },
-        flags: { sunburn: true },
+        flags: { sunburn: true, sunburnDay: '@day' },
         result: 'You see everything, through a shimmering haze, while slowly turning the colour of a Dalmatian tomato.',
         duje: 'The sightseeing waits for everyone, actually. That’s what makes it sightseeing.',
         tip: 'go-early',
-        moment: { id: 'tomato', text: 'Turned the colour of a Dalmatian tomato', rank: 5 },
+        moment: { id: 'tomato', text: 'Turned the colour of a Dalmatian tomato', rank: 5, headline: 'The Dalmatian Tomato' },
       },
       {
         id: 'refill',
@@ -917,6 +916,7 @@ export const EVENTS = [
   },
   {
     id: 'rakija-welcome',
+    slot: 'evening',
     where: ['any'],
     weight: 2,
     title: 'A Small Glass of Something',
@@ -946,6 +946,7 @@ export const EVENTS = [
   },
   {
     id: 'market-haul',
+    slot: 'day',
     where: ['split', 'trogir', 'omis'],
     weight: 2,
     title: 'Market Morning',
@@ -983,10 +984,10 @@ export const EVENTS = [
         id: 'dance',
         label: 'Dance along for one song',
         effects: { energy: -12, happiness: 12, adventure: 3, local: 1 },
-        flags: { wedding: true },
+        flags: { wedding: true, weddingDay: '@day' },
         result: 'One song becomes four. An aunt teaches you a step, an uncle hands you a drink, and you appear in the official wedding video, centre frame.',
         duje: 'You are in the wedding video. You are now in the family WhatsApp group. There is no leaving the family WhatsApp group.',
-        moment: { id: 'wedding', text: 'Accidentally became a guest at a Dalmatian wedding', rank: 8 },
+        moment: { id: 'wedding', text: 'Accidentally became a guest at a Dalmatian wedding', rank: 8, headline: 'The Accidental Wedding Guest' },
       },
       {
         id: 'watch',
@@ -1030,12 +1031,13 @@ export const EVENTS = [
           },
         },
         duje: 'Never play cards with a Dalmatian grandfather. They learned on the boats. In storms.',
-        moment: { id: 'briskula', text: 'Played cards with the grandson of (alleged) pirates', rank: 5 },
+        moment: { id: 'briskula', text: 'Played cards with the grandson of (alleged) pirates', rank: 5, headline: 'Cards With a Pirate' },
       },
     ],
   },
   {
     id: 'canyon-sunburn',
+    slot: 'evening',
     where: ['omis', 'krka'],
     when: (s) => !s.flags.sunburn,
     weight: 2,
@@ -1054,15 +1056,16 @@ export const EVENTS = [
         id: 'ignore',
         label: 'Ignore it, you’re tough',
         effects: { energy: -10, happiness: -5 },
-        flags: { sunburn: true },
+        flags: { sunburn: true, sunburnDay: '@day' },
         result: 'You are not tough. You are a lobster with a backpack.',
         duje: 'This will come back. Specifically: tomorrow, when you put your backpack on.',
-        moment: { id: 'lobster', text: 'Ignored a sunburn and became a lobster with a backpack', rank: 6 },
+        moment: { id: 'lobster', text: 'Ignored a sunburn and became a lobster with a backpack', rank: 6, headline: 'The Lobster With a Backpack' },
       },
     ],
   },
   {
     id: 'krka-crowd',
+    slot: 'day',
     where: ['krka'],
     weight: 4,
     title: 'The Midday Stampede',
@@ -1089,6 +1092,7 @@ export const EVENTS = [
   },
   {
     id: 'krka-ticket-surprise',
+    slot: 'day',
     where: ['krka'],
     weight: 3,
     title: 'The Ticket Office Revelation',
@@ -1128,7 +1132,7 @@ export const EVENTS = [
         result: 'You find a tiny guesthouse, eat grilled squid with the other stranded travellers and form a support group. It becomes the best evening of the trip.',
         duje: 'The bura decides. We just drink coffee and wait. Welcome to the islands.',
         tip: 'wind-cancellations',
-        moment: { id: 'bura', text: 'Got stranded on an island by the bura and formed a squid-based support group', rank: 7 },
+        moment: { id: 'bura', text: 'Got stranded on an island by the bura and formed a squid-based support group', rank: 7, headline: 'The Squid Support Group' },
       },
       {
         id: 'panic',
@@ -1154,6 +1158,7 @@ export const EVENTS = [
   },
   {
     id: 'party-boat',
+    slot: 'day',
     where: ['hvar'],
     weight: 3,
     title: 'The Party Boat',
@@ -1166,7 +1171,7 @@ export const EVENTS = [
         flags: { partyBoat: true, partyBoatDay: '@day' },
         result: 'You dance, you swim, you lose a flip-flop to the Adriatic. Tomorrow-you will have strong feelings about today-you.',
         duje: 'Have fun. Drink water. I’ll see you tomorrow, when you won’t want to see anyone.',
-        moment: { id: 'party', text: 'Lost a flip-flop to the Adriatic on a party boat', rank: 7 },
+        moment: { id: 'party', text: 'Lost a flip-flop to the Adriatic on a party boat', rank: 7, headline: 'The Lost Flip-Flop' },
       },
       {
         id: 'sunset-wine',
@@ -1180,6 +1185,7 @@ export const EVENTS = [
   },
   {
     id: 'zlatni-wind',
+    slot: 'day',
     where: ['brac'],
     weight: 3,
     title: 'Windsurf Wednesday',
@@ -1194,7 +1200,7 @@ export const EVENTS = [
           fail: { effects: { money: -40, energy: -18, happiness: 6, adventure: 4 }, result: 'You fall off 47 times. The instructor stops counting at 30. You swallow a decent portion of the Adriatic. Weirdly, you loved it.' },
         },
         duje: 'Windsurfing. Even if you fall, you fall into the best sea in Europe. I am not biased.',
-        moment: { id: 'windsurf', text: 'Fell off a windsurf board 47 times (stood up for 11 seconds, allegedly)', rank: 5 },
+        moment: { id: 'windsurf', text: 'Fell off a windsurf board 47 times (stood up for 11 seconds, allegedly)', rank: 5, headline: 'Forty-Seven Falls' },
       },
       {
         id: 'watch-surfers',
@@ -1208,6 +1214,7 @@ export const EVENTS = [
   },
   {
     id: 'olive-grove',
+    slot: 'day',
     where: ['brac', 'hvar'],
     weight: 2,
     title: 'Olive Oil Diplomacy',
@@ -1233,6 +1240,7 @@ export const EVENTS = [
   },
   {
     id: 'lost-luggage-island',
+    slot: 'day',
     where: ['hvar', 'brac'],
     weight: 1,
     title: 'Where Is My Bag?',
@@ -1252,12 +1260,13 @@ export const EVENTS = [
         flags: { lemons: true },
         result: 'The only swimsuit in your size is covered in giant lemons. You wear it proudly. The bag turns up anyway.',
         duje: 'Lemons. Bold. Iconic. Photographed.',
-        moment: { id: 'lemons', text: 'Wore a swimsuit covered in giant lemons (bag returned anyway)', rank: 6 },
+        moment: { id: 'lemons', text: 'Wore a swimsuit covered in giant lemons (bag returned anyway)', rank: 6, headline: 'The Lemon Swimsuit' },
       },
     ],
   },
   {
     id: 'got-guide',
+    slot: 'day',
     where: ['dubrovnik'],
     weight: 3,
     title: 'Winter Is Coming (in August)',
@@ -1282,6 +1291,7 @@ export const EVENTS = [
   },
   {
     id: 'cruise-wave',
+    slot: 'day',
     where: ['dubrovnik'],
     weight: 4,
     title: 'The Cruise-Ship Wave',
@@ -1317,6 +1327,7 @@ export const EVENTS = [
   },
   {
     id: 'peacock-heist',
+    slot: 'day',
     where: ['dubrovnik'],
     when: (s) => s.flags.lokrum,
     weight: 6,
@@ -1333,7 +1344,7 @@ export const EVENTS = [
         },
         duje: 'Never fight a peacock on its own island. Home advantage.',
         tip: 'lokrum',
-        moment: { id: 'peacock', text: 'Fought a peacock for a sandwich on Lokrum', rank: 8 },
+        moment: { id: 'peacock', text: 'Fought a peacock for a sandwich on Lokrum', rank: 8, headline: 'The Peacock Heist' },
       },
       {
         id: 'share',
@@ -1347,6 +1358,7 @@ export const EVENTS = [
   },
   {
     id: 'peka-order',
+    slot: 'evening',
     where: ['split', 'brac', 'hvar', 'omis'],
     when: (s) => !s.flags.pekaOrdered,
     weight: 2,
@@ -1401,6 +1413,7 @@ export const EVENTS = [
   },
   {
     id: 'sunset-spot',
+    slot: 'evening',
     where: ['any'],
     when: (s) => s.day === 5,
     weight: 3,
@@ -1430,14 +1443,15 @@ export const EVENTS = [
   // ───────────────────────── callbacks: your earlier choices come back
   {
     id: 'fish-reunion',
+    slot: 'evening',
     kind: 'callback',
     priority: true,
     where: ['any'],
-    when: (s) => s.flags.bigFish && s.location !== 'split',
+    when: (s) => s.flags.bigFish && s.location !== s.flags.bigFishPlace,
     weight: 9,
     title: 'Word Travels Fast in Dalmatia',
     story: (s) =>
-      `In ${DESTINATIONS[s.location].name}, a waiter squints at you, then grins. “Wait. Are you the one who ate the three-kilo fish in Split? My cousin told me!” The whole terrace turns around.`,
+      `In ${DESTINATIONS[s.location].name}, a waiter squints at you, then grins. “Wait. Are you the one who ate the three-kilo fish in ${DESTINATIONS[s.flags.bigFishPlace]?.name ?? 'Split'}? My cousin told me!” The whole terrace turns around.`,
     choices: [
       {
         id: 'own-it',
@@ -1446,7 +1460,7 @@ export const EVENTS = [
         flags: { fishLegend: true },
         result: 'Applause. Someone buys you a drink. A child asks for a selfie. You are a minor celebrity in a very specific, fish-related way.',
         duje: 'A legend is just a mistake told with confidence.',
-        moment: { id: 'fish-legend', text: 'Became famous along the coast as “the three-kilo fish tourist”', rank: 11 },
+        moment: { id: 'fish-legend', text: 'Became famous along the coast as “the three-kilo fish tourist”', rank: 11, headline: 'The Fish Legend' },
       },
       {
         id: 'deny',
@@ -1464,10 +1478,10 @@ export const EVENTS = [
     broke: {
       result: 'You explain that you will pay “when you get home”. There is a long silence. They agree, in the tone of people who have heard this from hundreds of tourists, and email you an invoice with three exclamation marks.',
       duje: 'You now owe money to a car rental company in another country. Very international. Very adult.',
-      moment: { id: 'mirror-debt', text: 'Flew home owing a rental company for a mirror (invoice had three exclamation marks)', rank: 9 },
+      moment: { id: 'mirror-debt', text: 'Flew home owing a rental company for a mirror (invoice had three exclamation marks)', rank: 9, headline: 'The Mirror IOU' },
     },
     where: ['any'],
-    when: (s) => s.flags.mirror && s.day >= 3,
+    when: (s) => s.flags.mirror && before(s, 'mirrorDay'),
     weight: 9,
     title: 'The Rental Company Has Questions',
     story: 'Your phone rings. It is the car rental company. They would like to talk about “the condition of the left mirror”. There is a long pause in which you hear a Roman wall laughing.',
@@ -1493,20 +1507,22 @@ export const EVENTS = [
         id: 'goat',
         label: 'Blame a goat',
         effects: { money: -80, happiness: 3, adventure: 2 },
+        flags: { goatExcuse: true },
         result: '“A goat,” the clerk repeats slowly. “Of course.” He invoices you in full and adds your story to the office goat list. You are number 38.',
         duje: 'Number 38. You are not even the most creative goat story this month.',
-        moment: { id: 'goat', text: 'Blamed a broken mirror on a goat (and was customer #38 to do so)', rank: 9 },
+        moment: { id: 'goat', text: 'Blamed a broken mirror on a goat (and was customer #38 to do so)', rank: 9, headline: 'The Goat Defence' },
       },
     ],
   },
   {
     id: 'peka-ready',
+    slot: 'evening',
     kind: 'callback',
     priority: true,
     broke: {
       result: 'You confess you can’t pay for the peka you ordered. The owner looks at you for a long moment, then wraps a portion in foil “for the road” and refuses your coins. Dalmatian hospitality wins again.',
       duje: 'They gave you the peka for free. Do you understand how rare that is? Send them a postcard. Send them ten.',
-      moment: { id: 'free-peka', text: 'Confessed to being broke and got a pre-ordered peka wrapped in foil for free', rank: 8 },
+      moment: { id: 'free-peka', text: 'Confessed to being broke and got a pre-ordered peka wrapped in foil for free', rank: 8, headline: 'The Free Peka' },
     },
     where: ['any'],
     when: (s) => s.flags.pekaOrdered && s.flags.pekaDay < s.day && !s.flags.pekaDone,
@@ -1536,7 +1552,7 @@ export const EVENTS = [
         flags: { pekaDone: true },
         result: 'You pay for it anyway and tell them to give it to someone hungry. The story reaches three villages by evening. You are now “the generous one”.',
         duje: 'Generosity in Dalmatia is never forgotten. Neither is the fish, but that’s another matter.',
-        moment: { id: 'gift-peka', text: 'Paid for a peka and gave it away (now known as “the generous one”)', rank: 5 },
+        moment: { id: 'gift-peka', text: 'Paid for a peka and gave it away (now known as “the generous one”)', rank: 5, headline: 'The Generous One' },
       },
     ],
   },
@@ -1545,7 +1561,7 @@ export const EVENTS = [
     kind: 'callback',
     priority: true,
     where: ['any'],
-    when: (s) => s.flags.wedding && s.day >= 3,
+    when: (s) => s.flags.wedding && before(s, 'weddingDay'),
     weight: 8,
     title: 'The Aunt From the Wedding',
     story: 'A voice calls your name across the square. It is the aunt from the wedding. She has your photo on her phone. She has forty photos on her phone. She is coming towards you with intent.',
@@ -1557,7 +1573,7 @@ export const EVENTS = [
         flags: { adopted: 1, konoba: 1 },
         result: 'The small family lunch has thirty-one people, four courses and two uncles arguing about football. You are fed until you cannot see. You are family now.',
         duje: 'A “small lunch” is a Dalmatian figure of speech. Like “five minutes” and “I’m on my way”.',
-        moment: { id: 'family-lunch', text: 'Was adopted by a Dalmatian family at a “small lunch” for 31 people', rank: 9 },
+        moment: { id: 'family-lunch', text: 'Was adopted by a Dalmatian family at a “small lunch” for 31 people', rank: 9, headline: 'Lunch for Thirty-One' },
       },
       {
         id: 'escape',
@@ -1570,13 +1586,14 @@ export const EVENTS = [
   },
   {
     id: 'morning-after',
+    slot: 'day',
     kind: 'callback',
     priority: true,
     where: ['any'],
     when: (s) => s.flags.partyBoat && s.flags.partyBoatDay === s.day - 1,
     weight: 12,
     title: 'The Morning After',
-    story: 'You wake up with one flip-flop, glitter in places glitter should not be, and a headache with its own weather system. Today-you is meeting yesterday-you’s decisions.',
+    story: 'You woke up this morning with one flip-flop, glitter in places glitter should not be, and a headache with its own weather system. It is now afternoon. Today-you is still meeting yesterday-you’s decisions.',
     choices: [
       {
         id: 'burek-cure',
@@ -1597,10 +1614,11 @@ export const EVENTS = [
   },
   {
     id: 'sunburn-revenge',
+    slot: 'day',
     kind: 'callback',
     priority: true,
     where: ['any'],
-    when: (s) => s.flags.sunburn && !s.flags.sunburnDone,
+    when: (s) => s.flags.sunburn && before(s, 'sunburnDay') && !s.flags.sunburnDone,
     weight: 8,
     title: 'The Backpack Strap of Doom',
     story: 'You put on your backpack. Your sunburnt shoulders scream in a language you didn’t know they spoke.',
@@ -1621,12 +1639,13 @@ export const EVENTS = [
         flags: { sunburnDone: true },
         result: 'You walk through town in a towel cape like a minor superhero whose power is regret. Children point. A dog salutes.',
         duje: 'Captain Sunburn. Defender of the shade.',
-        moment: { id: 'cape', text: 'Walked through town wearing a towel cape (sunburn-related)', rank: 6 },
+        moment: { id: 'cape', text: 'Walked through town wearing a towel cape (sunburn-related)', rank: 6, headline: 'Captain Sunburn' },
       },
     ],
   },
   {
     id: 'pirate-nephew',
+    slot: 'day',
     kind: 'callback',
     priority: true,
     where: ['hvar', 'brac', 'dubrovnik'],
@@ -1642,7 +1661,7 @@ export const EVENTS = [
         flags: { hidden: 1, secretCove: true },
         result: 'After his shift he takes you to a cove marked only “X — BEST” on the napkin. Turquoise water, no one else, and a fig tree. The pirates knew things.',
         duje: 'The napkin was worth more than a credit card. I told you.',
-        moment: { id: 'napkin', text: 'Found a secret cove using a pirate grandpa’s napkin map', rank: 10 },
+        moment: { id: 'napkin', text: 'Found a secret cove using a pirate grandpa’s napkin map', rank: 10, headline: 'The Napkin Map' },
       },
       {
         id: 'nephew-coffee',
@@ -1669,7 +1688,7 @@ export const EVENTS = [
         flags: { konoba: 1, adopted: 1 },
         result: 'Five dishes you didn’t order arrive, along with a bill that is suspiciously small and a message: “Marija says eat more.”',
         duje: 'The Marija network. Faster than 5G. More reliable than ferries.',
-        moment: { id: 'marija', text: 'Got fed by Marija’s cousin network in another town', rank: 6 },
+        moment: { id: 'marija', text: 'Got fed by Marija’s cousin network in another town', rank: 6, headline: 'The Marija Network' },
       },
       {
         id: 'cousin-decline',
@@ -1682,12 +1701,17 @@ export const EVENTS = [
   },
   {
     id: 'luka-returns',
+    slot: 'evening',
     kind: 'callback',
-    where: ['hvar', 'brac', 'omis', 'trogir', 'dubrovnik'],
-    when: (s) => s.flags.hostel && s.day >= 3,
+    priority: (s) => Boolean(s.flags.lukaGuitar),
+    where: ['any'],
+    when: (s) => s.flags.hostel && s.day >= 3 && (s.flags.lukaGuitar || s.location !== 'split'),
     weight: 4,
     title: 'Luka Has Found You',
-    story: 'From across the square, a familiar strum. It is Luka, from the hostel. He has followed you here with the guitar. He knows four chords and he wants you to sing.',
+    story: (s) =>
+      `From across the square, a familiar strum. It is Luka, from the hostel${s.location === 'split' ? '' : ', who has followed you here with the guitar'}. ${
+        s.flags.lukaManager ? '“My manager!” he shouts. “I booked us a gig. It is now.”' : s.flags.lukaGuitar ? '“You kept my guitar warm,” he says. “Now you sing.”' : 'He knows four chords and he wants you to sing.'
+      }`,
     choices: [
       {
         id: 'duet',
@@ -1695,7 +1719,7 @@ export const EVENTS = [
         effects: { happiness: 11, adventure: 3, money: 12 },
         result: 'You sing. Badly. Gloriously. A small crowd gathers, laughs, and throws coins into Luka’s guitar case. He splits the money with you like an honest pirate.',
         duje: 'You earned money singing in Dalmatia. Do not quit your job. But I’m impressed.',
-        moment: { id: 'busking', text: 'Earned money busking with a man who knows four chords', rank: 8 },
+        moment: { id: 'busking', text: 'Earned money busking with a man who knows four chords', rank: 8, headline: 'Four Chords and a Dream' },
       },
       {
         id: 'hide',
@@ -1708,6 +1732,7 @@ export const EVENTS = [
   },
   {
     id: 'igor-upsell',
+    slot: 'evening',
     kind: 'callback',
     where: ['any'],
     when: (s) => s.flags.boutique && s.day >= 2,
@@ -1730,16 +1755,17 @@ export const EVENTS = [
         result: 'Igor pauses, then whispers the name of a rocky point behind the church. No champagne, no boat, no photographer. The best sunset of your life.',
         duje: 'Always ask the concierge where the concierge goes. Golden rule.',
         tip: 'domace',
-        moment: { id: 'igor-secret', text: 'Got the concierge to reveal his secret sunset spot', rank: 5 },
+        moment: { id: 'igor-secret', text: 'Got the concierge to reveal his secret sunset spot', rank: 5, headline: 'The Concierge’s Secret' },
       },
     ],
   },
   {
     id: 'urchin-limp',
+    slot: 'day',
     kind: 'callback',
     priority: true,
     where: ['any'],
-    when: (s) => s.flags.urchin && !s.flags.urchinDone,
+    when: (s) => s.flags.urchin && before(s, 'urchinDay') && !s.flags.urchinDone,
     weight: 7,
     title: 'Step Carefully',
     story: 'Your foot, still haunted by yesterday’s sea urchin, reminds you of its existence with every step. A long staircase appears ahead. Of course it does.',
@@ -1767,7 +1793,9 @@ export const EVENTS = [
   // ───────────────────────── hidden discoveries (rare)
   {
     id: 'beach-no-name',
+    slot: 'day',
     kind: 'hidden',
+    hint: 'Make enough local friends (anywhere but Dubrovnik) and one of them will show you a beach with no sign.',
     where: ['any'],
     when: (s) => s.local >= 5 && s.location !== 'dubrovnik',
     weight: 2,
@@ -1782,7 +1810,7 @@ export const EVENTS = [
         result: 'A goat path, a scramble, and then: turquoise water and nobody at all. You swear an oath of secrecy. You will keep it. Mostly.',
         duje: 'If you post the location, I will know. And the goats will know.',
         tip: 'public-beaches',
-        moment: { id: 'no-name', text: 'Was shown a beach with no name (and swore to keep it secret)', rank: 7 },
+        moment: { id: 'no-name', text: 'Was shown a beach with no name (and swore to keep it secret)', rank: 7, headline: 'The Beach With No Name' },
       },
       {
         id: 'nap',
@@ -1795,7 +1823,9 @@ export const EVENTS = [
   },
   {
     id: 'hajduk-night',
+    slot: 'evening',
     kind: 'hidden',
+    hint: 'In Split, luck decides: be there on a match night.',
     where: ['split'],
     weight: 2,
     title: 'Match Night',
@@ -1808,7 +1838,7 @@ export const EVENTS = [
         result: 'You understand nothing about the tactics and everything about the emotion. When the goal goes in, a man you have never met kisses you on both cheeks.',
         duje: 'Now you understand Split. Football here is not a sport. It is weather.',
         tip: 'hajduk',
-        moment: { id: 'hajduk', text: 'Got kissed on both cheeks by a stranger when Hajduk scored', rank: 7 },
+        moment: { id: 'hajduk', text: 'Got kissed on both cheeks by a stranger when Hajduk scored', rank: 7, headline: 'Match Night' },
       },
       {
         id: 'quiet-walk',
@@ -1822,7 +1852,9 @@ export const EVENTS = [
   },
   {
     id: 'saint-duje',
+    slot: 'day',
     kind: 'hidden',
+    hint: 'In Split, earn a little local trust and Duje will introduce you to his famous namesake.',
     where: ['split'],
     when: (s) => s.local >= 4,
     weight: 2,
@@ -1850,7 +1882,9 @@ export const EVENTS = [
   },
   {
     id: 'radman-mills',
+    slot: 'day',
     kind: 'hidden',
+    hint: 'In Omiš, a boatman sometimes offers to go further up the river than the kayaks.',
     where: ['omis'],
     weight: 2,
     title: 'The Old Mills',
@@ -1878,6 +1912,8 @@ export const EVENTS = [
   },
 ];
 
+export const EVENTS = [...CORE_EVENTS, ...STORYLINE_EVENTS, ...EVERYDAY_EVENTS, ...PLACE_EVENTS, ...EVENING_EVENTS, ...HIDDEN_EVENTS];
+
 /* ───────────────────────────────────────────────── ACHIEVEMENTS ── */
 export const ACHIEVEMENTS = [
   { id: 'konoba-expert', title: 'Konoba Expert', emoji: '🍷', description: 'Eat at two konobas or local family places.', test: (s) => f(s, 'konoba') >= 2 },
@@ -1890,6 +1926,10 @@ export const ACHIEVEMENTS = [
 
 /* ───────────────────────────────────────────────────── ENDINGS ── */
 /** Checked in order; the first match wins. `verdict` is Duje’s one-liner for the share card. */
+/** Ending thresholds (tuned with scripts/adventure-sim.mjs). */
+export const LEGEND = { score: 1100, happiness: 78, tips: 15 };
+export const LOCAL_INSIDER = 22;
+
 export const ENDINGS = [
   {
     id: 'disaster',
@@ -1906,7 +1946,7 @@ export const ENDINGS = [
     title: 'Croatia Legend',
     emoji: '👑',
     photo: 'dubrovnik',
-    test: (s, x) => x.score >= 1000 && s.happiness >= 75 && s.visited.length >= 5 && s.tipsFound.length >= 12,
+    test: (s, x) => x.score >= LEGEND.score && s.happiness >= LEGEND.happiness && s.visited.length >= 5 && s.tipsFound.length >= LEGEND.tips && f(s, 'secrets') >= 1,
     verdict: 'Ate like a local, swam like a fish, said “hvala” with a perfect accent.',
     epilogue:
       'Five days, five chapters, zero regrets. You ate like a local, swam like a fish and navigated ferries like a sailor. Duje has told his mother about you. His mother has told the whole street. You are expected back by June.',
@@ -1916,7 +1956,7 @@ export const ENDINGS = [
     title: 'Adopted by Dalmatia',
     emoji: '🍲',
     photo: 'diocletians-palace',
-    test: (s) => f(s, 'adopted') >= 1 && f(s, 'konoba') >= 2 && s.happiness >= 55,
+    test: (s) => f(s, 'adopted') >= 2 && f(s, 'konoba') >= 2 && s.happiness >= 55,
     verdict: 'Came for a holiday. Left with a Dalmatian family and a 31-person WhatsApp group.',
     epilogue:
       'Somewhere between the third konoba and the second “small family lunch”, it happened: you were adopted. You now receive voice messages from aunts you can’t understand, and Christmas parcels of figs. There is no unsubscribe button.',
@@ -1956,7 +1996,7 @@ export const ENDINGS = [
     title: 'Local Insider',
     emoji: '🗝️',
     photo: 'split-hero',
-    test: (s) => s.local >= 13,
+    test: (s) => s.local >= LOCAL_INSIDER,
     verdict: 'Three-hour coffees, a secret beach, and a market vendor who calls me “dušo”.',
     epilogue:
       'Konobas, markets, three-hour coffees and a secret beach you will take to the grave. You didn’t visit Croatia — you briefly lived in it. Duje says you can come back any time, which from a Dalmatian is basically a marriage proposal.',
@@ -1966,7 +2006,7 @@ export const ENDINGS = [
     title: 'Budget Master',
     emoji: '💶',
     photo: 'trogir',
-    test: (s) => s.money >= 200 && s.happiness >= 55,
+    test: (s) => s.money >= 150 && s.happiness >= 55,
     verdict: 'Bus tickets bought before boarding. Free beaches. Market picnics. Money left. Respect.',
     epilogue:
       'Free beaches, market picnics, tickets bought before boarding — and still enough money for a very respectable farewell dinner. Your bank sends you a thank-you note. Duje sends a voice message that just says “bravo” six times.',
@@ -1976,7 +2016,7 @@ export const ENDINGS = [
     title: 'Fjaka Champion',
     emoji: '😎',
     photo: 'brac',
-    test: (s) => s.energy >= 70 && s.happiness >= 60,
+    test: (s) => s.energy >= 75 && s.happiness >= 60,
     verdict: 'Mastered the ancient Dalmatian art of doing absolutely nothing.',
     epilogue:
       'You mastered the ancient Dalmatian art of doing nothing, gloriously. You return home rested, relaxed and annoyingly calm. When colleagues ask your secret, you just whisper: “pomalo”.',

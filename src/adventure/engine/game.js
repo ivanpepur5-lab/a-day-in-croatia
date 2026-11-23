@@ -46,7 +46,7 @@ const clamp = (v, lo, hi) => Math.min(hi, Math.max(lo, v));
  * happiness gains are damped so the meter doesn't saturate, energy costs bite
  * a little harder, and going to bed exhausted costs happiness.
  */
-export const BALANCE = { happyGain: 0.85, happyCeiling: 120, energyCost: 1.25, tiredAtNight: 35, tiredPenalty: 8 };
+export const BALANCE = { happyGain: 0.6, happyCeiling: 115, energyCost: 1.25, tiredAtNight: 35, tiredPenalty: 8 };
 /** Story text can be a string or a function of the state (that's how the story remembers you). */
 export const txt = (v, s) => (typeof v === 'function' ? v(s) : v);
 
@@ -56,7 +56,7 @@ export function newGame({ seed, mode = 'free' } = {}) {
     seed: String(seed ?? 'free'),
     mode,
     day: 0,
-    phase: 'base', // base → (travel → activity → event) × 5 → ended
+    phase: 'base', // base → (travel → activity → event → evening) × 5 → ended
     money: START.money,
     energy: START.energy,
     happiness: START.happiness,
@@ -68,6 +68,7 @@ export function newGame({ seed, mode = 'free' } = {}) {
     route: [], // destination per day
     doneActivities: [],
     seenEvents: [],
+    secrets: [], // hidden discoveries found this run
     currentEvent: null,
     flags: {},
     tipsFound: [],
@@ -140,10 +141,14 @@ function activityChoices(s) {
     .map((x) => x.a);
 }
 
+/** Events can be limited to a time slot: 'day' (afternoon) or 'evening'. Unset = either. */
+const slotOk = (e, phase) => !e.slot || (phase === 'evening' ? e.slot === 'evening' : e.slot === 'day');
+
 function eligibleEvents(s) {
   return EVENTS.filter(
     (e) =>
       !s.seenEvents.includes(e.id) &&
+      slotOk(e, s.phase) &&
       (e.where.includes('any') || e.where.includes(s.location)) &&
       (!e.when || e.when(s)),
   );
@@ -155,11 +160,11 @@ function eligibleEvents(s) {
  */
 export function pickEvent(s) {
   const eligible = eligibleEvents(s);
-  const urgent = eligible.filter((e) => e.priority);
+  const urgent = eligible.filter((e) => txt(e.priority, s));
   const pool = urgent.length ? urgent : eligible;
   if (pool.length === 0) return null;
   const total = pool.reduce((a, e) => a + (e.weight ?? 1), 0);
-  let r = rng(s.seed, 'event', s.day, s.location) * total;
+  let r = rng(s.seed, s.phase === 'evening' ? 'evening' : 'event', s.day, s.location) * total;
   for (const e of pool) {
     r -= e.weight ?? 1;
     if (r < 0) return e;
@@ -303,6 +308,7 @@ export function choose(state, choiceId) {
   let flags = choice.flags ?? {};
   let text = txt(choice.result, state);
   let lucky = null;
+  let moment = choice.moment ?? null;
   if (choice.chance) {
     const roll = rng(s.seed, 'chance', s.day, s.currentEvent ?? s.phase, choice.id);
     lucky = roll < txt(choice.chance.p, state);
@@ -310,6 +316,7 @@ export function choose(state, choiceId) {
     effects = branch.effects;
     flags = { ...flags, ...(branch.flags ?? {}) };
     text = txt(branch.result, state);
+    if (branch.moment) moment = branch.moment;
   }
   const duje = txt(choice.duje, state) ?? null;
   const eventKind = step.kind;
@@ -324,15 +331,20 @@ export function choose(state, choiceId) {
     if (!s.visited.includes(to)) s.visited.push(to);
   } else if (s.phase === 'activity') {
     if (choice.id !== 'broke') s.doneActivities.push(choice.id);
-  } else if (s.phase === 'event') {
+  } else if (s.phase === 'event' || s.phase === 'evening') {
     s.seenEvents.push(s.currentEvent);
   }
 
   const deltas = applyEffects(s, effects, flags);
-  if (choice.moment && !s.moments.some((m) => m.id === choice.moment.id)) {
-    s.moments.push({ ...choice.moment, day: s.day });
+  if (moment && !s.moments.some((m) => m.id === moment.id)) {
+    s.moments.push({ ...moment, day: s.day, place: s.location });
   }
-  if (eventKind === 'hidden') s.flags.secrets = (s.flags.secrets ?? 0) + 1;
+  let secret = null;
+  if (eventKind === 'hidden') {
+    s.flags.secrets = (s.flags.secrets ?? 0) + 1;
+    s.secrets = [...(s.secrets ?? []), s.currentEvent];
+    secret = s.currentEvent;
+  }
 
   let tip = null;
   let newTip = false;
@@ -350,7 +362,8 @@ export function choose(state, choiceId) {
     newTip,
     lucky,
     kind: eventKind,
-    moment: choice.moment ?? null,
+    secret,
+    moment,
     achievements: [],
     night: null,
     ending: null,
@@ -375,6 +388,8 @@ export function choose(state, choiceId) {
   } else if (s.phase === 'activity') {
     s.phase = 'event';
   } else if (s.phase === 'event') {
+    s.phase = 'evening';
+  } else if (s.phase === 'evening') {
     if (s.day >= START.days) {
       finish(s);
       outcome.ending = s.ending;
@@ -388,19 +403,20 @@ export function choose(state, choiceId) {
     finish(s);
     outcome.ending = s.ending;
   }
-  if (s.phase === 'event' && !s.ended) {
+  // draw the next event (afternoon, then evening); skip a slot with nothing eligible
+  for (let guard = 0; guard < 2 && !s.ended && (s.phase === 'event' || s.phase === 'evening'); guard++) {
     const e = pickEvent(s);
     s.currentEvent = e ? e.id : null;
-    if (!e) {
-      // no eligible event: skip straight to the night
-      if (s.day >= START.days) {
-        finish(s);
-        outcome.ending = s.ending;
-      } else {
-        outcome.night = night(s);
-        s.day += 1;
-        s.phase = 'travel';
-      }
+    if (e) break;
+    if (s.phase === 'event') {
+      s.phase = 'evening';
+    } else if (s.day >= START.days) {
+      finish(s);
+      outcome.ending = s.ending;
+    } else {
+      outcome.night = night(s);
+      s.day += 1;
+      s.phase = 'travel';
     }
   }
   outcome.achievements = checkAchievements(s);
@@ -420,7 +436,7 @@ function night(s) {
   }
   s.energy = clamp(s.energy + 5, 0, 100);
   s.happiness = clamp(s.happiness - 10, 0, 100);
-  if (!s.moments.some((m) => m.id === 'bench')) s.moments.push({ id: 'bench', text: 'Slept on a bench by the sea (budget-related)', rank: 8, day: s.day });
+  if (!s.moments.some((m) => m.id === 'bench')) s.moments.push({ id: 'bench', text: 'Slept on a bench by the sea (budget-related)', rank: 8, day: s.day, place: s.location, headline: 'The Bench Nights' });
   const n = { paid: 0, recovered: 5, rough: true, tired };
   return { ...n, line: nightLine(s, n) };
 }

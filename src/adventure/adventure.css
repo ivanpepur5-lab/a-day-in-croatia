@@ -1024,3 +1024,86 @@
   font-size: 0.66rem;
   color: var(--adv-muted);
 }
+
+/* report card: story title + five-day diary */
+.adv-report__title {
+  font-size: 1.6rem;
+  line-height: 1.15;
+  color: var(--sun);
+  margin: 6px 0 12px;
+  overflow-wrap: anywhere;
+}
+.adv-h3 {
+  font-size: 0.7rem;
+  font-weight: 800;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--adv-muted);
+  margin: 16px 0 8px;
+}
+.adv-diary {
+  display: grid;
+  gap: 0;
+  margin-top: 12px;
+  border-left: 2px solid rgba(243, 217, 184, 0.35);
+}
+.adv-diary li {
+  position: relative;
+  padding: 6px 0 10px 16px;
+  font-size: 0.86rem;
+  line-height: 1.4;
+}
+.adv-diary li::before {
+  content: '';
+  position: absolute;
+  left: -6px;
+  top: 11px;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--coral);
+}
+.adv-diary b {
+  display: block;
+  font-size: 0.68rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #f3d9b8;
+}
+
+/* hidden discoveries album */
+.adv-secrets {
+  display: grid;
+  gap: 8px;
+}
+.adv-secrets li {
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+  padding: 10px 12px;
+  border-radius: var(--r-sm);
+  background: rgba(111, 95, 176, 0.18);
+  font-size: 0.86rem;
+}
+.adv-secrets li.is-locked {
+  background: rgba(255, 255, 255, 0.04);
+  color: var(--adv-muted);
+}
+.adv-secrets b {
+  display: block;
+}
+.adv-secrets small {
+  display: block;
+  font-size: 0.74rem;
+  color: var(--adv-muted);
+}
+.adv-secret-toast {
+  margin-top: 12px;
+  padding: 10px 12px;
+  border-radius: var(--r-sm);
+  background: #6f5fb0;
+  color: #fff;
+  font-weight: 700;
+  font-size: 0.86rem;
+  animation: toastSlide 0.5s var(--ease) both 0.3s;
+}

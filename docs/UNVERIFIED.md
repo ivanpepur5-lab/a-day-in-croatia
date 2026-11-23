@@ -61,9 +61,9 @@ These are game values. The app always shows them with “≈” / “est.”, ne
 - **Travel times** for every leg (distance model in `src/engine/travel.js`, not timetables).
 - **Time on site** for every location.
 
-## Croatia Adventure — editorial tips for periodic review (46)
+## Croatia Adventure — editorial tips for periodic review (71)
 
-These tips are general knowledge (culture, language, food, practical habits). They contain no prices, times or schedules (a test enforces this), but a human should re-read them from time to time. Tips with prices or rules use verified sources instead.
+These tips are general knowledge (culture, language, food, practical habits). They contain no prices, times or schedules (a test enforces this), but a human should re-read them from time to time. Tips with prices use verified sources instead; tips stating rules or customs are flagged below.
 
 | Tip | Category | Text |
 |---|---|---|
@@ -78,8 +78,8 @@ These tips are general knowledge (culture, language, food, practical habits). Th
 | Mind the cruise-ship rhythm | Tourist Traps | Dubrovnik’s old town gets busiest when cruise passengers arrive. Early mornings and evenings are far more relaxed. |
 | The beach is (usually) for everyone | Local Secrets | Most of the Croatian coast is maritime domain (pomorsko dobro), generally open to the public. On many beaches you pay for sunbeds and umbrellas, not for access to the sea. |
 | Pazar: Split’s open-air market | Local Secrets | Pazar, the green market just outside the eastern side of Diocletian’s Palace, is where locals buy fruit, vegetables and figs. Go in the morning for the best choice. |
-| Hvar from above | Local Secrets | The Spanish Fortress (Fortica) on the hill above Hvar Town looks down over the harbour and the Pakleni islands. |
-| Yes, that was King’s Landing | Local Secrets | Dubrovnik’s old town and walls were a filming location for Game of Thrones. |
+| Hvar from above | Local Secrets | The Spanish Fortress (Fortica) on the hill above Hvar Town looks down over the harbour and the Pakleni islands. The path up winds through pine trees — go in the cooler late afternoon and stay for sunset. |
+| Yes, that was King’s Landing | Local Secrets | Dubrovnik’s old town, walls and the Lovrijenac fortress were filming locations for Game of Thrones; the Jesuit Staircase is the one fans look for. |
 | “Idemo na kavu” | Dalmatian Life | “Let’s go for coffee” is a social ritual, not a quick caffeine stop. One coffee can last a very long, very pleasant time — nobody will rush you off the table. |
 | Fjaka is a state of mind | Dalmatian Life | Fjaka is the Dalmatian word for a blissful, sun-drenched state of doing absolutely nothing — especially on hot summer afternoons. |
 | Pomalo | Dalmatian Life | “Pomalo” — roughly “take it easy”, “slowly does it” — is something you will hear constantly in Dalmatia. |
@@ -113,3 +113,44 @@ These tips are general knowledge (culture, language, food, practical habits). Th
 | Hajduk is a religion | Dalmatian Life | HNK Hajduk Split is the city’s beloved football club. On match nights the city turns white and blue — and wearing a rival club’s shirt in Split is a very bold life choice. |
 | Sveti Duje | Dalmatian Life | Saint Domnius — Sveti Duje — is Split’s patron saint. His feast day in May (Sudamja) is the city’s biggest celebration, and Duje is a very common Split name. |
 | The castles of Kaštela | Hidden Croatia | Between Split and Trogir lies Kaštela, a string of seaside villages that grew around old fortified castles built along the shore. |
+| Agree the taxi-boat price first | Tourist Traps | Before you step onto a taxi boat, agree the price, the destination and when (and where) you will be picked up again. |
+| Tipping: appreciated, not obligatory | Survival Mode | Tipping is not compulsory in Croatia. Rounding up or leaving a little extra for good service in restaurants and cafés is appreciated — and it is easiest to leave it in cash. |
+| Many shops close on Sundays | Survival Mode | Since 2023, Croatian law has limited Sunday opening for most shops to a small number of Sundays a year. Shops at ports, bus and train stations, airports and petrol stations are exempt, and bakeries and kiosks are often open. |
+| Cover your shoulders in churches | Survival Mode | Churches and cathedrals expect covered shoulders and no swimwear. Carry a light scarf or shirt in your day bag. |
+| Swimwear is for the beach | Tourist Traps | Some towns — Hvar Town is the best-known example — fine people for walking around the streets in swimwear or shirtless. Cover up when you leave the beach. |
+| Olive oil goes in the checked bag | Survival Mode | Hand-luggage liquid rules apply to olive oil, rakija and jam. Check your airport and airline rules, and pack liquids well wrapped in your checked luggage. |
+| FKK means naturist | Local Secrets | Naturist beaches are common in Croatia and are usually signposted “FKK” or “naturist”. |
+| Blame the jugo | Dalmatian Life | The jugo is a warm, humid south-easterly wind. Dalmatians famously blame it for headaches, bad moods and bad decisions. |
+| Boćanje | Dalmatian Life | Boćanje (balote) — a bowls game played on gravel or packed-earth courts — is a much-loved pastime in Dalmatian towns and villages. Spectators are welcome; arguing about measurements is traditional. |
+| Return the dish — preferably full | Dalmatian Life | If a neighbour or host brings you food in a dish or container, give it back — and it is a lovely gesture not to return it empty. |
+| The Dalmatian is from Dalmatia | Hidden Croatia | The spotted Dalmatian dog breed is named after Dalmatia, and Croatia is the breed’s recognised country of origin. |
+| Fešta for the village saint | Dalmatian Life | In summer, many Dalmatian towns and villages hold a fešta for their patron saint’s day, often with live music, food stalls, fritule and a tombola (raffle). |
+| Bevanda | Food & Drinks | Bevanda is wine — traditionally red — mixed with plain water, a classic Dalmatian way of drinking wine with a meal on hot days. |
+| Prošek is not prosecco | Food & Drinks | Prošek is a sweet Dalmatian dessert wine made from dried grapes. It has nothing to do with Italian prosecco, apart from sounding similar. |
+| Peškarija, Split’s fish market | Local Secrets | Split’s fish market, Peškarija, is on the western edge of the old town and is busiest in the morning. Locals like to tell you it has no flies thanks to nearby sulphur springs. |
+| Rub Grgur’s toe | Dalmatian Life | Rubbing the big toe of the giant bronze statue of Gregory of Nin (Grgur Ninski) by Split’s Golden Gate is said to bring luck — which is why the toe shines. |
+| Radovan’s portal | Hidden Croatia | The Romanesque portal of Trogir’s cathedral, signed by Master Radovan in the 13th century, is famous for its Adam and Eve and its carved scenes of everyday life through the months. |
+| The evening đir | Dalmatian Life | “Đir” is the evening stroll along the waterfront, when whole towns come out to walk, chat and see and be seen. |
+| No swimming at Krka’s waterfalls | Survival Mode | Swimming is no longer allowed at Krka National Park’s waterfalls, including Skradinski buk. Bring your swimsuit for the coast instead. |
+| Skradinski rižot | Food & Drinks | Skradin, the riverside gateway to Krka, is known for skradinski rižot, a slow-cooked veal risotto that takes so long to make that restaurants often ask you to order it in advance. |
+| Hvar’s historic theatre | Hidden Croatia | Above the old Arsenal on Hvar Town’s main square is a public theatre founded in 1612, one of the oldest in Europe. |
+| The stone-head challenge | Hidden Croatia | Near the Franciscan monastery in Dubrovnik, a small stone head sticks out of the wall. The local challenge: balance on it facing the wall and take your shirt off. Almost nobody manages it. |
+| Visovac | Hidden Croatia | Visovac is a tiny island in the Krka river with a Franciscan monastery. Within the national park it is reached by excursion boat. |
+| Pustinja Blaca | Hidden Croatia | Blaca on Brač is a former hermitage built into a cliff, now a museum. There is no road to the door: the last part is on foot, so wear proper shoes and take water. |
+| Bars outside the walls | Local Secrets | Dubrovnik has bars perched on the rocks outside the southern city walls, reached through small openings in the wall (“buža” means hole). |
+
+### Flagged for review before launch (9)
+
+These editorial tips state a rule, a custom or a local claim. Confirm each with an official source or a local reviewer (see also `docs/LOCAL_REVIEW.md`).
+
+| Tip | What to check |
+|---|---|
+| Tipping: appreciated, not obligatory | Custom — ask a local reviewer to confirm the wording. |
+| Many shops close on Sundays | Rule (Trade Act amendments, July 2023) — confirm against an official source before launch. |
+| Swimwear is for the beach | Local rule; reported fine amounts vary — confirm with the town before stating any amount. |
+| Blame the jugo | Folk belief — wording for a local reviewer. |
+| Return the dish — preferably full | Custom — confirm with a local reviewer. |
+| Peškarija, Split’s fish market | The “no flies” claim is local lore; keep it framed as such. |
+| No swimming at Krka’s waterfalls | Park rule — confirm with the official Krka National Park site before launch. |
+| Skradinski rižot | Dish description — confirm wording with a local reviewer. |
+| The stone-head challenge | Tradition — confirm location wording with a local reviewer. |

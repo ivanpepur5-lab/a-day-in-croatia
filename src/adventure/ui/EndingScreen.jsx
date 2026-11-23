@@ -1,3 +1,4 @@
+/* global __BUILD_ID__ */
 import { useEffect, useMemo, useState } from 'react';
 import Media from '../../ui/components/Media.jsx';
 import TipCard from './TipCard.jsx';
@@ -11,6 +12,20 @@ import { SITE_URL } from '../../config.js';
 import { useCountUp } from '../../ui/hooks.js';
 import { reportCard } from '../engine/report.js';
 import Duje from './Duje.jsx';
+
+/** Plain-text log of a run, for external playtesters to paste into feedback (no personal data). */
+export function playtestLog(state, total, report) {
+  return [
+    `Croatia Adventure playtest log · build ${typeof __BUILD_ID__ === 'string' ? __BUILD_ID__ : 'dev'}`,
+    `Seed: ${state.seed} (${state.mode}) · Ending: ${state.ending} · Score: ${total}`,
+    `Final: €${Math.round(state.money)} · energy ${state.energy} · happiness ${state.happiness} · adventure ${state.adventure} · local ${state.local}`,
+    `Route: ${state.route.join(' → ')}`,
+    `Story title: ${report.title}`,
+    `Events: ${state.seenEvents.join(', ')}`,
+    `Choices: ${state.choices.map((c) => `${c.day}.${c.phase[0]}:${c.id}`).join(' ')}`,
+    `Hidden found: ${(state.secrets ?? []).join(', ') || 'none'} · Tips: ${state.tipsFound.length}`,
+  ].join('\n');
+}
 
 const PART_LABEL = {
   happiness: '🙂 Happiness × 4',
@@ -58,6 +73,7 @@ export default function EndingScreen({ state, daily, progress, onAgain, onCollec
     if (r === 'downloaded') flash('Result card saved as an image');
   };
   const onCopy = async () => flash((await copyText(shareText)) ? 'Result copied' : 'Copy failed');
+  const onCopyLog = async () => flash((await copyText(playtestLog(state, score.total, report))) ? 'Playtest log copied — paste it into your feedback' : 'Copy failed');
 
   const official = state.mode === 'daily' && progress.daily[daily.key]?.seed === state.seed;
   return (
@@ -81,8 +97,22 @@ export default function EndingScreen({ state, daily, progress, onAgain, onCollec
       </section>
 
       <section className="adv-card adv-report" data-testid="adv-report">
-        <h2 className="adv-h2">Holiday report card</h2>
+        <p className="adv-eyebrow">Holiday report card</p>
+        <h2 className="adv-h2 adv-report__title" data-testid="adv-story-title">
+          “{report.title}”
+        </h2>
         <Duje testId="adv-verdict">“{report.verdict}”</Duje>
+        <ol className="adv-diary" data-testid="adv-diary">
+          {report.diary.map((d) => (
+            <li key={d.day}>
+              <b>
+                Day {d.day} · {d.place}
+              </b>
+              <span>{d.text}</span>
+            </li>
+          ))}
+        </ol>
+        <h3 className="adv-h3">Top moments</h3>
         <ol className="adv-highlights" data-testid="adv-highlights">
           {report.highlights.map((h) => (
             <li key={h}>{h}</li>
@@ -207,6 +237,9 @@ export default function EndingScreen({ state, daily, progress, onAgain, onCollec
         </button>
         <button type="button" className="btn btn--ghost btn--block" onClick={onMenu}>
           Back to menu
+        </button>
+        <button type="button" className="btn btn--link" onClick={onCopyLog} data-testid="adv-playtest-log">
+          Playtesting? Copy your run log for feedback
         </button>
       </section>
       {toast && <p className="toast" role="status">{toast}</p>}

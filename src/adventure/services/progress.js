@@ -25,6 +25,7 @@ export function loadProgress() {
     tips: d.tips ?? [], // collected tip ids (across all runs)
     achievements: d.achievements ?? [],
     endings: d.endings ?? [], // endings ever reached
+    secrets: d.secrets ?? [], // hidden discoveries ever found
     daily: d.daily ?? {}, // dateKey → { ending, score, tips, money }
     runs: d.runs ?? 0,
     best: d.best ?? 0,
@@ -33,14 +34,16 @@ export function loadProgress() {
 }
 
 /** Merge newly discovered tips/achievements into the collection. Returns the ids that were new. */
-export function collect({ tips = [], achievements = [] }) {
+export function collect({ tips = [], achievements = [], secrets = [] }) {
   const d = read();
+  const knownS = new Set(d.secrets ?? []);
+  const newSecrets = secrets.filter((x) => !knownS.has(x));
   const known = new Set(d.tips ?? []);
   const newTips = tips.filter((t) => !known.has(t));
   const knownA = new Set(d.achievements ?? []);
   const newAch = achievements.filter((a) => !knownA.has(a));
-  write({ ...d, tips: [...known, ...newTips], achievements: [...knownA, ...newAch] });
-  return { newTips, newAch };
+  write({ ...d, tips: [...known, ...newTips], achievements: [...knownA, ...newAch], secrets: [...knownS, ...newSecrets] });
+  return { newTips, newAch, newSecrets };
 }
 
 export function saveCurrent(state) {

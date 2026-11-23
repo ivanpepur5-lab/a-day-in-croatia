@@ -13,7 +13,11 @@
     "test:e2e": "node scripts/e2e.mjs",
     "og": "node scripts/og.mjs",
     "audit": "node scripts/audit-report.mjs",
-    "audit:check": "node scripts/audit-report.mjs --check"
+    "audit:check": "node scripts/audit-report.mjs --check",
+    "test:e2e:adventure": "node scripts/e2e-adventure.mjs",
+    "sim": "node scripts/adventure-sim.mjs",
+    "endings": "node scripts/adventure-endings.mjs",
+    "script": "node scripts/adventure-script.mjs"
   },
   "engines": {
     "node": ">=20"

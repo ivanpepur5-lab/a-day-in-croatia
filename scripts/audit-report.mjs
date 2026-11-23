@@ -99,8 +99,11 @@ for (const a of places) for (const b of places) {
 u += `\n### Bus journeys without an official fare (estimated in game)\n\n${[...missing].sort().map((m) => `- ${m}`).join('\n')}\n`;
 u += `\n### Always estimated\n\n- **Travel times** for every leg (distance model in \`src/engine/travel.js\`, not timetables).\n- **Time on site** for every location.\n`;
 const editorial = TIPS.filter((t) => t.verification.status === 'editorial');
-u += `\n## Croatia Adventure — editorial tips for periodic review (${editorial.length})\n\nThese tips are general knowledge (culture, language, food, practical habits). They contain no prices, times or schedules (a test enforces this), but a human should re-read them from time to time. Tips with prices or rules use verified sources instead.\n\n| Tip | Category | Text |\n|---|---|---|\n`;
+u += `\n## Croatia Adventure — editorial tips for periodic review (${editorial.length})\n\nThese tips are general knowledge (culture, language, food, practical habits). They contain no prices, times or schedules (a test enforces this), but a human should re-read them from time to time. Tips with prices use verified sources instead; tips stating rules or customs are flagged below.\n\n| Tip | Category | Text |\n|---|---|---|\n`;
 for (const t of editorial) u += `| ${esc(t.title)} | ${TIP_CATEGORIES[t.category].label} | ${esc(t.tip)} |\n`;
+const flagged = editorial.filter((t) => t.verification.review);
+u += `\n### Flagged for review before launch (${flagged.length})\n\nThese editorial tips state a rule, a custom or a local claim. Confirm each with an official source or a local reviewer (see also \`docs/LOCAL_REVIEW.md\`).\n\n| Tip | What to check |\n|---|---|\n`;
+for (const t of flagged) u += `| ${esc(t.title)} | ${esc(t.verification.review)} |\n`;
 writeFileSync(`${root}UNVERIFIED.md`, u);
 
 // ---------------------------------------------------------------- VERIFIED_SOURCES.md

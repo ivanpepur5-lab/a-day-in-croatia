@@ -101,7 +101,7 @@ try {
       if (await page.getByTestId('adv-duje-reaction').count()) dujeReactions++;
       await page.getByTestId('adv-continue').click();
     }
-    check(decisions >= 14 && decisions <= 16, `full five-day loop played (${decisions} decisions)`);
+    check(decisions >= 18 && decisions <= 21, `full five-day loop played (${decisions} decisions: base + 5 × travel, activity, afternoon, evening)`);
     check(nights === 4, `four nights slept (${nights})`);
     check(tipsSeen >= 5, `local tips revealed during play (${tipsSeen})`);
     check(dujeReactions >= decisions - 1, `Duje reacts to (almost) every decision (${dujeReactions}/${decisions})`);
@@ -112,6 +112,11 @@ try {
     const highlights = await page.getByTestId('adv-highlights').locator('li').count();
     check(highlights >= 1 && highlights <= 3, `report card shows ${highlights} highlight(s)`);
     check((await page.getByTestId('adv-verdict').innerText()).length > 20, 'Duje gives a verdict');
+    const storyTitle = await page.getByTestId('adv-story-title').innerText();
+    check(/“.+”/.test(storyTitle), `holiday has its own story title: ${storyTitle}`);
+    const diary = await page.getByTestId('adv-diary').locator('li').count();
+    check(diary === 5, `five-day diary shown (${diary} days)`);
+    check(await page.getByTestId('adv-playtest-log').isVisible(), 'playtest log button available');
     const score = Number(await page.getByTestId('adv-score').getAttribute('data-score'));
     check(score > 0, `final score ${score}`);
     await page.getByTestId('adv-share-preview').waitFor({ timeout: 10000 });
@@ -132,6 +137,7 @@ try {
       const st = await page.getByTestId('adv-share-text').innerText();
       check(!LOCAL.test(st), 'no localhost in share text');
       check(/“.+”/.test(st) && /• /.test(st), 'share text leads with the verdict and highlights');
+      check(/My holiday: “.+”/.test(st), 'share text includes the story title');
     }
 
     // overflow
@@ -143,10 +149,11 @@ try {
     await page.getByTestId('adv-collection-screen').waitFor();
     const unlocked = await page.locator('.adv-tipgrid--album .tipcard:not(.tipcard--locked)').count();
     check(unlocked >= 5, `collection shows unlocked tips (${unlocked})`);
+    check(await page.getByTestId('adv-secrets').isVisible(), 'hidden discoveries album with hints is shown');
     if (width === 390) await page.screenshot({ path: `${SHOTS}adv-6-collection.png` });
     await page.reload();
     await page.getByTestId('adv-collection').waitFor();
-    check(/collection · \d+\/\d+/.test(await page.getByTestId('adv-collection').innerText()), 'collection count persists after reload');
+    check(/tips \d+\/\d+/i.test(await page.getByTestId('adv-collection').innerText()), 'collection count persists after reload');
     check(/replay for fun/.test(await page.getByTestId('adv-daily').innerText()), 'daily result recorded (replay label)');
 
     // resume a run in progress after reload

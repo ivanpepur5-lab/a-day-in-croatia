@@ -7,7 +7,7 @@ import EndingScreen from './ui/EndingScreen.jsx';
 import Collection from './ui/Collection.jsx';
 import Media from '../ui/components/Media.jsx';
 import { PHOTOS } from '../data/photos.js';
-import { DESTINATIONS, START, ACHIEVEMENTS } from './data/story.js';
+import { DESTINATIONS, START, ACHIEVEMENTS, EVENTS } from './data/story.js';
 import { TIPS } from './data/tips.js';
 import { newGame, getStep, choose, computeScore } from './engine/game.js';
 import { loadProgress, collect, saveCurrent, clearCurrent, recordRun } from './services/progress.js';
@@ -23,6 +23,7 @@ const DELTA_META = {
 const DELTA_GOOD = (k, v) => v > 0;
 
 const ACH_BY_ID = Object.fromEntries(ACHIEVEMENTS.map((a) => [a.id, a]));
+const SECRET_TOTAL = EVENTS.filter((e) => e.kind === 'hidden').length;
 
 function randomSeed() {
   return Math.random().toString(36).slice(2, 8).toUpperCase();
@@ -92,7 +93,7 @@ function Title({ progress, daily, onDaily, onFree, onResume, onCollection }) {
           Free play (random holiday)
         </button>
         <button type="button" className="btn btn--link" onClick={onCollection} data-testid="adv-collection">
-          Local tip collection · {progress.tips.length}/{TIPS.length} · achievements {progress.achievements.length}/6
+          Collection · tips {progress.tips.length}/{TIPS.length} · secrets {progress.secrets.length}/{SECRET_TOTAL} · achievements {progress.achievements.length}/6
         </button>
         <p className="adv-disclaimer">
           The story, characters and in-game prices are <strong>fictional</strong>. Local Insider tip cards are{' '}
@@ -104,7 +105,7 @@ function Title({ progress, daily, onDaily, onFree, onResume, onCollection }) {
 }
 
 /* ─────────────────────────────────────────────────── OUTCOME ── */
-function Outcome({ outcome, newTip, newAch, onContinue, last }) {
+function Outcome({ outcome, newTip, newAch, secretCount, newSecret, onContinue, last }) {
   const ref = useRef(null);
   useEffect(() => ref.current?.focus(), []);
   return (
@@ -144,6 +145,11 @@ function Outcome({ outcome, newTip, newAch, onContinue, last }) {
         {outcome.moment && (
           <p className="adv-moment" data-testid="adv-moment">
             📝 Added to your holiday report: <em>{outcome.moment.text}</em>
+          </p>
+        )}
+        {outcome.secret && (
+          <p className="adv-secret-toast" data-testid="adv-secret">
+            🔎 {newSecret ? 'New hidden discovery for your album' : 'Hidden discovery'} · {secretCount} of {SECRET_TOTAL} found so far
           </p>
         )}
         {outcome.tip && (
@@ -186,7 +192,7 @@ function Play({ state, onChoose }) {
         </div>
       </section>
       <section className="adv-story">
-        {step.phase === 'event' ? (
+        {step.phase === 'event' || step.phase === 'evening' ? (
           <>
             <p className={`adv-label ${step.kind ? `adv-label--${step.kind}` : ''}`} data-testid="adv-event-kind">
               {step.kind === 'callback' ? '↩ Consequences of your choices' : step.kind === 'hidden' ? '🔎 Hidden discovery' : 'Story'}
@@ -256,12 +262,13 @@ export default function AdventureApp({ onExit, now = new Date() }) {
   const onChoose = useCallback(
     (id) => {
       const { state: next, outcome } = choose(state, id);
-      const { newTips, newAch } = collect({ tips: next.tipsFound, achievements: next.achievements });
+      const { newTips, newAch, newSecrets } = collect({ tips: next.tipsFound, achievements: next.achievements, secrets: next.secrets ?? [] });
       setPending({
         outcome,
         next,
         newTip: Boolean(outcome.tip && newTips.includes(outcome.tip.id)),
         newAch: outcome.achievements.filter((a) => newAch.includes(a)).map((a) => ACH_BY_ID[a]),
+        newSecret: Boolean(outcome.secret && newSecrets.includes(outcome.secret)),
       });
       setPulse(outcome.deltas);
       setState(next);
@@ -333,6 +340,8 @@ export default function AdventureApp({ onExit, now = new Date() }) {
           outcome={pending.outcome}
           newTip={pending.newTip}
           newAch={pending.newAch}
+          newSecret={pending.newSecret}
+          secretCount={progress.secrets.length}
           last={pending.next.ended}
           onContinue={onContinue}
         />

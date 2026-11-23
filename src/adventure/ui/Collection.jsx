@@ -1,7 +1,10 @@
 import { useState } from 'react';
 import TipCard from './TipCard.jsx';
 import { TIPS, TIP_CATEGORIES } from '../data/tips.js';
-import { ACHIEVEMENTS, ENDINGS } from '../data/story.js';
+import { ACHIEVEMENTS, ENDINGS, EVENTS } from '../data/story.js';
+import { txt } from '../engine/game.js';
+
+const SECRETS = EVENTS.filter((e) => e.kind === 'hidden');
 
 /** The collectible album: tips by category, achievements and endings discovered. */
 export default function Collection({ progress, onBack }) {
@@ -43,6 +46,26 @@ export default function Collection({ progress, onBack }) {
           <TipCard key={t.id} tip={t} locked={!have.has(t.id)} compact />
         ))}
       </div>
+
+      <section className="adv-card" data-testid="adv-secrets">
+        <h2 className="adv-h2">
+          Hidden discoveries · {progress.secrets.length}/{SECRETS.length}
+        </h2>
+        <ul className="adv-secrets">
+          {SECRETS.map((e) => {
+            const found = progress.secrets.includes(e.id);
+            return (
+              <li key={e.id} className={found ? '' : 'is-locked'}>
+                <span aria-hidden="true">{found ? '🔎' : '🔒'}</span>
+                <span>
+                  <b>{found ? txt(e.title, { flags: {}, visited: [] }) : 'Not found yet'}</b>
+                  <small>{e.hint}</small>
+                </span>
+              </li>
+            );
+          })}
+        </ul>
+      </section>
 
       <section className="adv-card">
         <h2 className="adv-h2">Achievements</h2>

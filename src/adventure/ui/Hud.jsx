@@ -1,6 +1,6 @@
 import { DESTINATIONS } from '../data/story.js';
 
-const TIME = { base: 'Departure', travel: 'Morning', activity: 'Afternoon', event: 'Evening', ended: 'Home' };
+const TIME = { base: 'Departure', travel: 'Morning', activity: 'Midday', event: 'Afternoon', evening: 'Evening', ended: 'Home' };
 const face = (h) => (h >= 80 ? '😄' : h >= 60 ? '🙂' : h >= 40 ? '😐' : h >= 25 ? '😕' : '😫');
 
 function Bar({ value, tone, label }) {
